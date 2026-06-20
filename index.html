@@ -1154,7 +1154,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       <div id="d-adr" style="margin-top:1px;"><span class="neu">—</span></div>
     </div>
   </div>
-  <div class="kpi p wide kpi-yoy" style="display:flex;gap:10px;align-items:flex-start;">
+  <div class="kpi p wide" style="display:flex;gap:10px;align-items:flex-start;">
     <div style="flex:1;">
       <div class="kl">住宿收入</div>
       <div class="kv" id="v-rev">—</div>
@@ -2774,7 +2774,7 @@ function buildTabs(){
 }
 
 // ── KPI + restaurant render ───────────────────────────────────
-function fmtRev(v){ const n=parseInt(v); return n>=10000?(n/10000).toFixed(1)+'萬':n.toLocaleString(); }
+function fmtRev(v){ const n=parseInt(v); if(n<10000) return n.toLocaleString(); const w=n/10000; return (n>=1000000?Math.round(w):w.toFixed(1))+'萬'; }
 function fmtDiff(v,unit){
   if(unit!=='元') return v;
   const a=Math.abs(v);
