@@ -619,8 +619,8 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   /* 標準與大字級兩欄時，四張卡內部數值與YoY改上下堆疊，避免橫向擠爆切字 */
   .kpi-yoy{flex-direction:column !important;gap:2px !important;}
   .kpi-yoy>div:last-child{text-align:left !important;width:100%;}
-  /* 底部導覽文字兩行置中 */
-  .ni-l{line-height:1.2 !important;text-align:center;}
+  /* 底部導覽文字兩行置中、字級放大 */
+  .ni-l{line-height:1.2 !important;text-align:center;font-size:var(--fs-label) !important;}
   /* 兩年度合計表：欄寬自適應、數字不截斷、縮排縮字避免擠成一團 */
   .yt{table-layout:auto !important;font-size:calc(11px * var(--fs)) !important;}
   .yt th,.yt td{padding:6px 3px !important;white-space:normal !important;
