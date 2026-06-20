@@ -281,7 +281,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   border-radius:var(--r);border:1px solid var(--bd);}
 .import-toggle{display:flex;align-items:center;justify-content:space-between;
   padding:12px 14px;cursor:pointer;user-select:none;}
-.import-toggle-title{font-size:11px;font-weight:500;color:var(--tx2);
+.import-toggle-title{font-size:var(--fs-body);font-weight:500;color:var(--tx2);
   display:flex;align-items:center;gap:6px;}
 .import-arrow{font-size:12px;color:var(--tx3);transition:transform .25s;}
 .import-arrow.open{transform:rotate(180deg);}
@@ -616,9 +616,11 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   .kg{grid-template-columns:1fr 1fr !important;}
   /* 特大字級時改單欄，避免兩欄擠壓 */
   [data-fs="xl"] .kg{grid-template-columns:1fr !important;}
-  /* 第5點：大字級兩欄時，四張卡內部數值與YoY改上下堆疊，避免橫向擠爆切字 */
-  [data-fs="lg"] .kpi-yoy{flex-direction:column !important;gap:2px !important;}
-  [data-fs="lg"] .kpi-yoy>div:last-child{text-align:left !important;width:100%;}
+  /* 標準與大字級兩欄時，四張卡內部數值與YoY改上下堆疊，避免橫向擠爆切字 */
+  .kpi-yoy{flex-direction:column !important;gap:2px !important;}
+  .kpi-yoy>div:last-child{text-align:left !important;width:100%;}
+  /* 底部導覽文字兩行置中 */
+  .ni-l{line-height:1.2 !important;text-align:center;}
   /* 兩年度合計表：欄寬自適應、數字不截斷、縮排縮字避免擠成一團 */
   .yt{table-layout:auto !important;font-size:calc(11px * var(--fs)) !important;}
   .yt th,.yt td{padding:6px 3px !important;white-space:normal !important;
@@ -646,6 +648,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   .ni.on{background:var(--sf2);}
   .ni-i{display:none !important;}            /* 桌機側欄隱藏 emoji 圖示 */
   .ni-l{font-size:calc(15px * var(--fs)) !important;}
+  .ni-l br{display:none;}
 
   /* 全螢幕覆蓋頁（封面/說明書/檢查）桌機置中收斂 */
   #unitCover,#unitCheckPage,#guidePage{padding-left:240px;}
@@ -1313,7 +1316,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <!-- Import -->
 <div class="import-wrap">
   <div class="import-toggle" onclick="toggleImport()">
-    <div class="import-toggle-title">📥 匯入數據
+    <div class="import-toggle-title">匯入數據
       <span id="importSummary" style="font-weight:400;color:var(--tx3);font-size:var(--fs-sub);margin-left:6px;"></span>
     </div>
     <span class="import-arrow" id="importArrow">▼</span>
@@ -2629,11 +2632,11 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 </div><!-- /page-mkt -->
 
 <div class="bnav">
-  <div class="ni on" id="nav-occ" onclick="switchPage('occ')"><div class="ni-i">📊</div><div class="ni-l">營運分析</div></div>
-  <div class="ni" id="nav-comp" onclick="switchPage('comp')"><div class="ni-i">💰</div><div class="ni-l">競爭房價</div></div>
-  <div class="ni" id="nav-tri" onclick="switchPage('tri')"><div class="ni-i">🚢</div><div class="ni-l">交通概況</div></div>
-  <div class="ni" id="nav-edu" onclick="switchPage('edu')"><div class="ni-i">🌏</div><div class="ni-l">外在環境</div></div>
-  <div class="ni" id="nav-mkt" onclick="switchPage('mkt')"><div class="ni-i">🔍</div><div class="ni-l">產業分析</div></div>
+  <div class="ni on" id="nav-occ" onclick="switchPage('occ')"><div class="ni-l">營運<br>分析</div></div>
+  <div class="ni" id="nav-comp" onclick="switchPage('comp')"><div class="ni-l">競爭<br>房價</div></div>
+  <div class="ni" id="nav-tri" onclick="switchPage('tri')"><div class="ni-l">交通<br>概況</div></div>
+  <div class="ni" id="nav-edu" onclick="switchPage('edu')"><div class="ni-l">外在<br>環境</div></div>
+  <div class="ni" id="nav-mkt" onclick="switchPage('mkt')"><div class="ni-l">產業<br>分析</div></div>
 </div>
 
 <script>
@@ -5242,7 +5245,7 @@ function buildDailyChart(){
   const n=rows.length;
   var _fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
   var _fsc=_fs/1.12;
-  const bW=Math.round(9*_fsc), gap=2, pL=26, pT=Math.round(12*_fsc), pB=Math.round(26*_fsc), H=Math.round(140*_fsc), iH=H-pT-pB;
+  const bW=Math.round(14*_fsc), gap=3, pL=26, pT=Math.round(12*_fsc), pB=Math.round(26*_fsc), H=Math.round(140*_fsc), iH=H-pT-pB;
   const _dfNum=(8*_fsc).toFixed(1);
   const totalW=pL+n*(bW+gap)+10;
   const svg=document.getElementById('dcSvg');
