@@ -194,8 +194,9 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .gi-leg .dot.rest{background:#C8963E;}
 
 /* Daily chart */
-.dc-wrap{overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--sf3) transparent;display:flex;justify-content:center;}
-.dc-wrap>svg{margin:0 auto;}
+.dc-wrap{overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:var(--sf3) transparent;}
+.dc-wrap>svg{display:block;}
+@media (min-width:768px){.dc-wrap{display:flex;justify-content:center;} .t-wrap{display:flex;justify-content:center;}}
 .dc-legend{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;}
 .leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--tx2);}
 .leg-dot{width:8px;height:8px;border-radius:2px;}
@@ -899,7 +900,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       <span style="font-size:var(--fs-sub);" id="syncStatusMsg"></span>
       <button onclick="document.getElementById('cloudSetupPanel').style.display='flex'"
         style="font-size:var(--fs-sub);color:var(--tx3);background:transparent;border:1px solid var(--bd);
-        border-radius:20px;padding:2px 8px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">☁️ 雲端同步</button>
+        border-radius:20px;padding:2px 8px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">雲端同步</button>
     </div>
   </div>
   <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;margin-top:2px;">
@@ -919,7 +920,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   z-index:300;align-items:center;justify-content:center;padding:0 18px;">
   <div style="background:var(--sf);border-radius:var(--r);padding:20px;width:100%;
     max-width:380px;border:1px solid var(--bd2);">
-    <div style="font-size:14px;font-weight:500;color:var(--tx);margin-bottom:4px;">☁️ 雲端同步設定</div>
+    <div style="font-size:14px;font-weight:500;color:var(--tx);margin-bottom:4px;">雲端同步設定</div>
     <div style="font-size:var(--fs-sub);color:var(--tx3);line-height:1.7;margin-bottom:12px;">
       使用 <strong style="color:var(--ac);">Google Apps Script</strong>（你的 Google 帳號即可）：<br>
       1. 前往 <a href="https://script.google.com" target="_blank" style="color:var(--ac);">script.google.com</a> → 建立新專案<br>
@@ -1081,11 +1082,11 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       </div>
     </div>
     <!-- 進度條：上方標今年實際值、條中插去年同期節點 -->
-    <div style="margin:30px 0 8px;position:relative;">
+    <div style="margin:38px 0 8px;position:relative;">
       <!-- 今年實際值（黃色，浮在填色端上方） -->
-      <div id="room-cur-tag" style="position:absolute;top:-22px;transform:translateX(-50%);
+      <div id="room-cur-tag" style="position:absolute;bottom:calc(100% + 8px);transform:translateX(-50%);
         font-family:'DM Mono',monospace;font-size:var(--fs-sub);font-weight:700;color:var(--ac2);
-        white-space:nowrap;transition:left .6s;left:0;">—</div>
+        white-space:nowrap;transition:left .6s;left:0;line-height:1;">—</div>
       <div class="gi-stack" style="height:16px;position:relative;overflow:visible;">
         <div class="gi-stack-seg" id="room-bar" style="width:0%;height:100%;border-radius:8px 0 0 8px;
           background:linear-gradient(90deg,#C8963E,#E8B86D);transition:width .6s;"></div>
@@ -1292,7 +1293,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       <div class="yli"><div class="yld" style="background:#C8963E;"></div><span id="yl1">2026</span></div>
     </div>
   </div>
-  <div class="t-wrap" style="overflow-x:auto;scrollbar-width:thin;display:flex;justify-content:center;">
+  <div class="t-wrap" style="overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;">
     <svg id="tSvg" viewBox="0 0 640 150" style="display:block;"></svg>
   </div>
   <div style="display:flex;justify-content:space-between;margin-top:4px;">
