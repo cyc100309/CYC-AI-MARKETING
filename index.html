@@ -620,7 +620,14 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   .kpi-yoy{flex-direction:column !important;gap:2px !important;}
   .kpi-yoy>div:last-child{text-align:left !important;width:100%;}
   /* 底部導覽文字兩行置中、字級放大 */
-  .ni-l{line-height:1.2 !important;text-align:center;font-size:var(--fs-label) !important;}
+  .ni-l{line-height:1.25 !important;text-align:center;font-size:var(--fs-sub) !important;font-weight:500;}
+  /* 導覽列加高 */
+  .bnav{padding:14px 0 22px !important;}
+  /* 五個分頁之間加分隔線，各自獨立區塊 */
+  .ni{position:relative;padding:2px 0 !important;}
+  .ni+.ni::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+    width:1px;height:60%;background:var(--bd);}
+  .ni.on{background:linear-gradient(to top,rgba(200,150,62,.12),transparent);border-radius:8px;}
   /* 兩年度合計表：欄寬自適應、數字不截斷、縮排縮字避免擠成一團 */
   .yt{table-layout:auto !important;font-size:calc(11px * var(--fs)) !important;}
   .yt th,.yt td{padding:6px 3px !important;white-space:normal !important;
@@ -1147,7 +1154,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       <div id="d-adr" style="margin-top:1px;"><span class="neu">—</span></div>
     </div>
   </div>
-  <div class="kpi p wide" style="display:flex;gap:10px;align-items:flex-start;">
+  <div class="kpi p wide kpi-yoy" style="display:flex;gap:10px;align-items:flex-start;">
     <div style="flex:1;">
       <div class="kl">住宿收入</div>
       <div class="kv" id="v-rev">—</div>
@@ -3076,7 +3083,11 @@ function applyTransportNav(u){
   if(nav){
     nav.style.display=t.enabled?'':'none';
     const lab=nav.querySelector('.ni-l');
-    if(lab&&t.navLabel) lab.textContent=t.navLabel;
+    if(lab&&t.navLabel){
+      var nl=t.navLabel;
+      // 四字標籤自動拆兩行（如 交通概況→交通<br>概況），與其他導覽一致
+      lab.innerHTML = nl.length===4 ? nl.slice(0,2)+'<br>'+nl.slice(2) : nl;
+    }
   }
   // 若目前正停在被隱藏的交通分頁，自動切回營運分析
   if(!t.enabled){
