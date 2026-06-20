@@ -194,7 +194,8 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .gi-leg .dot.rest{background:#C8963E;}
 
 /* Daily chart */
-.dc-wrap{overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--sf3) transparent;}
+.dc-wrap{overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--sf3) transparent;display:flex;justify-content:center;}
+.dc-wrap>svg{margin:0 auto;}
 .dc-legend{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;}
 .leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--tx2);}
 .leg-dot{width:8px;height:8px;border-radius:2px;}
@@ -1282,10 +1283,10 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 </div>
 
 <!-- Trend chart (straight lines) -->
-<div class="lbl"><span>兩年度住宿率折線比較</span></div>
+<div class="lbl"><span>兩年度住宿率月別比較</span></div>
 <div class="tc-card">
   <div class="tc-hdr">
-    <div class="tc-title">房使用率月別折線</div>
+    <div class="tc-title">房使用率月別比較</div>
     <div class="yleg">
       <div class="yli"><div class="yld" style="background:#E8B86D;opacity:.8;"></div><span id="yl2">2025</span></div>
       <div class="yli"><div class="yld" style="background:#C8963E;"></div><span id="yl1">2026</span></div>
@@ -1293,12 +1294,6 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   </div>
   <svg id="tSvg" width="100%" height="160" viewBox="0 0 340 160" preserveAspectRatio="none"></svg>
   <div style="display:flex;justify-content:space-between;margin-top:4px;">
-    <span style="font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;">1月</span>
-    <span style="font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;">3月</span>
-    <span style="font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;">5月</span>
-    <span style="font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;">7月</span>
-    <span style="font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;">9月</span>
-    <span style="font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;">12月</span>
   </div>
 </div>
 
@@ -5242,15 +5237,18 @@ function buildDailyChart(){
     ?`${slot.year}年 ${slot.month}・日別房使用率`
     :(isJT?'本單位尚無逐日資料（上傳 810_3 後顯示）':`示範（請上傳第${dailyViewIdx+1}個月 810_3）`);
   const n=rows.length;
-  const bW=9,gap=2,pL=26,pT=10,pB=26,H=140,iH=H-pT-pB;
+  var _fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
+  var _fsc=_fs/1.12;
+  const bW=Math.round(9*_fsc), gap=2, pL=26, pT=Math.round(12*_fsc), pB=Math.round(26*_fsc), H=Math.round(140*_fsc), iH=H-pT-pB;
+  const _dfNum=(8*_fsc).toFixed(1);
   const totalW=pL+n*(bW+gap)+10;
   const svg=document.getElementById('dcSvg');
-  svg.setAttribute('width',Math.max(totalW,300)); svg.innerHTML='';
+  svg.setAttribute('width',Math.max(totalW,300)); svg.setAttribute('height',H); svg.innerHTML='';
   document.getElementById('dcTitle').textContent=title;
   [25,50,75].forEach(v=>{
     const y=pT+(1-v/100)*iH;
     svg.innerHTML+=`<line x1="${pL}" y1="${y}" x2="${totalW-4}" y2="${y}" stroke="rgba(255,255,255,.05)" stroke-width="1"/>`;
-    svg.innerHTML+=`<text x="${pL-3}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="8" font-family="DM Mono">${v}</text>`;
+    svg.innerHTML+=`<text x="${pL-3}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="${_dfNum}" font-family="DM Mono">${v}</text>`;
   });
   svg.innerHTML+=`<line x1="${pL}" y1="${pT+(1-0.5)*iH}" x2="${totalW-4}" y2="${pT+(1-0.5)*iH}" stroke="rgba(200,150,62,.3)" stroke-width="1" stroke-dasharray="4,3"/>`;
   rows.forEach((d,i)=>{
@@ -5262,11 +5260,11 @@ function buildDailyChart(){
     svg.innerHTML+=`<rect x="${x}" y="${y}" width="${bW}" height="${bH}" fill="${col}" rx="2"/>`;
     if(d.r>0){
       const numCol = d.r>=50 ? 'var(--green)' : 'var(--red)';
-      svg.innerHTML+=`<text x="${x+bW/2}" y="${y-3}" text-anchor="middle" fill="${numCol}" font-size="8" font-weight="500" font-family="DM Mono">${Math.round(d.r)}</text>`;
+      svg.innerHTML+=`<text x="${x+bW/2}" y="${y-3}" text-anchor="middle" fill="${numCol}" font-size="${_dfNum}" font-weight="500" font-family="DM Mono">${Math.round(d.r)}</text>`;
     }
     const dateNum = parseInt(d.d.split('/')[1]);
     const dateCol = d.r===0 ? '#4A6070' : d.r>=50 ? 'var(--green)' : 'var(--red)';
-    svg.innerHTML+=`<text x="${x+bW/2}" y="${H-7}" text-anchor="middle" fill="${dateCol}" font-size="8" font-family="DM Mono">${dateNum}</text>`;
+    svg.innerHTML+=`<text x="${x+bW/2}" y="${H-7}" text-anchor="middle" fill="${dateCol}" font-size="${_dfNum}" font-family="DM Mono">${dateNum}</text>`;
   });
 }
 
@@ -6102,77 +6100,41 @@ function toggleAvail(idx){
 function buildTrendChart(){
   const svg=document.getElementById('tSvg');
   svg.innerHTML='';
-  const W=340,H=160,pt={t:10,b:18,l:24,r:8};
+  var fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
+  var fsc=fs/1.12;
+  const W=640, H=Math.round(150*fsc), pt={t:Math.round(16*fsc),b:Math.round(26*fsc),l:30,r:10};
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  svg.setAttribute('height',H);
   const iW=W-pt.l-pt.r, iH=H-pt.t-pt.b;
-  const xp=i=>pt.l+i/11*iW;
   const yp=v=>pt.t+(1-Math.min(Math.max(v,0),100)/100)*iH;
-
-  // Grid lines
+  const fsNum=(12*fsc).toFixed(1), fsAxis=(11*fsc).toFixed(1);
   [20,40,60,80,100].forEach(v=>{
     const y=yp(v);
-    svg.innerHTML+=`<line x1="${pt.l}" y1="${y}" x2="${W-pt.r}" y2="${y}" stroke="rgba(255,255,255,.05)" stroke-width="1"/>`;
-    svg.innerHTML+=`<text x="${pt.l-3}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="8" font-family="DM Mono">${v}</text>`;
+    svg.innerHTML+='<line x1="'+pt.l+'" y1="'+y+'" x2="'+(W-pt.r)+'" y2="'+y+'" stroke="rgba(255,255,255,.05)" stroke-width="1"/>';
+    svg.innerHTML+='<text x="'+(pt.l-3)+'" y="'+(y+3)+'" text-anchor="end" fill="#4A6070" font-size="'+fsAxis+'" font-family="DM Mono">'+v+'</text>';
   });
-  // 50% target line
-  svg.innerHTML+=`<line x1="${pt.l}" y1="${yp(50)}" x2="${W-pt.r}" y2="${yp(50)}" stroke="rgba(200,150,62,.3)" stroke-width="1" stroke-dasharray="4,3"/>`;
-  svg.innerHTML+=`<text x="${W-pt.r+2}" y="${yp(50)+3}" fill="rgba(200,150,62,.5)" font-size="8">50%</text>`;
-
-  // ── Draw STRAIGHT polyline (no bezier) ──────────────────────
-  function drawPolyline(arr, color, area=false, dashed=false, labelPos='above', compareArr=null){
-    const lastIdx = arr.reduce((a,v,i) => v>0?i:a, -1);
-    if(lastIdx < 0) return;
-
-    // Build straight-line path
-    let points = '';
-    let pathD = '';
-    for(let i=0; i<=lastIdx; i++){
-      const x=xp(i), y=yp(arr[i]||0);
-      if(i===0){ pathD=`M${x.toFixed(1)} ${y.toFixed(1)}`; points=`${x.toFixed(1)},${y.toFixed(1)}`; }
-      else { pathD+=` L${x.toFixed(1)} ${y.toFixed(1)}`; points+=` ${x.toFixed(1)},${y.toFixed(1)}`; }
+  svg.innerHTML+='<line x1="'+pt.l+'" y1="'+yp(50)+'" x2="'+(W-pt.r)+'" y2="'+yp(50)+'" stroke="rgba(200,150,62,.3)" stroke-width="1" stroke-dasharray="4,3"/>';
+  const d25=prevRows.map(r=>r.room||0);
+  const d26=curRows.map(r=>r.room||0);
+  const n=12, slot=iW/n, gap=slot*0.28, bw=(slot-gap*2)/2;
+  const months=['1','2','3','4','5','6','7','8','9','10','11','12'];
+  for(let i=0;i<n;i++){
+    const cx=pt.l+slot*i+slot/2;
+    const xPrev=cx-gap/2-bw, xCur=cx+gap/2;
+    if(d25[i]>0){
+      const h=(d25[i]/100)*iH, y=pt.t+iH-h;
+      svg.innerHTML+='<rect x="'+xPrev.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" fill="#8A6A3A" rx="1.5"/>';
+      svg.innerHTML+='<text x="'+(xPrev+bw/2).toFixed(1)+'" y="'+(y-3).toFixed(1)+'" text-anchor="middle" fill="#A8884E" font-size="'+fsAxis+'" font-family="DM Mono">'+Math.round(d25[i])+'</text>';
     }
-
-    // Area fill
-    if(area){
-      const uid='ag'+color.replace('#','');
-      svg.innerHTML+=`<defs>
-        <linearGradient id="${uid}" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${color}" stop-opacity=".2"/>
-          <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
-        </linearGradient>
-      </defs>`;
-      svg.innerHTML+=`<path d="${pathD} L${xp(lastIdx).toFixed(1)} ${(H-pt.b).toFixed(1)} L${xp(0).toFixed(1)} ${(H-pt.b).toFixed(1)} Z" fill="url(#${uid})"/>`;
+    if(d26[i]>0){
+      const h=(d26[i]/100)*iH, y=pt.t+iH-h;
+      const up=d25[i]>0?d26[i]>=d25[i]:true;
+      const col=d25[i]>0?(up?'#4CAF82':'#E05C5C'):'#C8963E';
+      svg.innerHTML+='<rect x="'+xCur.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+h.toFixed(1)+'" fill="'+col+'" rx="1.5"/>';
+      svg.innerHTML+='<text x="'+(xCur+bw/2).toFixed(1)+'" y="'+(y-3).toFixed(1)+'" text-anchor="middle" fill="'+col+'" font-size="'+fsNum+'" font-weight="700" font-family="DM Mono">'+Math.round(d26[i])+'</text>';
     }
-
-    // Main line
-    svg.innerHTML+=`<polyline points="${points}" fill="none" stroke="${color}" stroke-width="${area?2.5:1.8}" stroke-linecap="round" stroke-linejoin="round" ${dashed?'stroke-dasharray="5,3"':''} opacity="${dashed?.75:1}"/>`;
-
-    // Dots + 每個月標數值（本年標上方、去年標下方，加底框避免兩排數字糊在一起）
-    for(let i=0; i<=lastIdx; i++){
-      if(arr[i]===0 && i>0) continue;
-      const x=xp(i), y=yp(arr[i]||0);
-      const isLast=(i===lastIdx);
-      // 數字顏色：有對照資料（本年）依漲跌綠/紅；否則維持原色（去年淡黃）
-      let txtColor=color, growUp=null;
-      if(compareArr && arr[i]>0 && compareArr[i]>0){ growUp = arr[i]>=compareArr[i]; txtColor = growUp ? '#3DCB8E' : '#E05C5C'; }
-      svg.innerHTML+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${isLast?4:2.3}" fill="${isLast?color:'var(--bg)'}" stroke="${color}" stroke-width="${isLast?0:1.4}"/>`;
-      if(arr[i]>0){
-        const txt=String(Math.round(arr[i]));
-        // 方向：本年依漲跌（成長綠放上方、衰退紅放下方）；去年維持原 labelPos
-        const pos = (growUp===null) ? labelPos : (growUp ? 'above' : 'below');
-        const dy = pos==='above' ? -12 : 16;
-        const ty=y+dy;
-        const w=txt.length*6+6;                       // 底框寬度
-        // 半透明深色底框，墊在數字下方避免被線或另一排數字蓋住
-        svg.innerHTML+=`<rect x="${(x-w/2).toFixed(1)}" y="${(ty-7).toFixed(1)}" width="${w}" height="13" rx="3" fill="var(--bg)" opacity="0.82"/>`;
-        svg.innerHTML+=`<text x="${x.toFixed(1)}" y="${ty.toFixed(1)}" text-anchor="middle" dominant-baseline="central" fill="${txtColor}" font-size="9.5" font-family="DM Mono" font-weight="${isLast?700:600}" opacity="${dashed?.9:1}">${txt}</text>`;
-      }
-    }
+    svg.innerHTML+='<text x="'+cx.toFixed(1)+'" y="'+(H-7).toFixed(1)+'" text-anchor="middle" fill="#6A7E92" font-size="'+fsAxis+'" font-family="DM Mono">'+months[i]+'</text>';
   }
-
-  const d25 = prevRows.map(r=>r.room||0);
-  const d26 = curRows.map(r=>r.room||0);
-  drawPolyline(d25,'#E8B86D',false,true,'below');   // 去年 - 虛線，標下方
-  drawPolyline(d26,'#C8963E',true,false,'above',d25);    // 本年 - 實線；數字依漲跌綠/紅
 }
 
 // ── YoY table (達成率) ───────────────────────────────────────
@@ -8677,6 +8639,11 @@ function buildCountyGrid(){
       b.classList.toggle('on', b.getAttribute('data-set')===v);
     });
     try{localStorage.setItem(KEY,v);}catch(e){}
+    // 字級變更後重繪圖表（高度/字級跟著變）
+    setTimeout(function(){
+      try{ if(typeof buildTrendChart==='function') buildTrendChart(); }catch(e){}
+      try{ if(typeof buildDailyChart==='function') buildDailyChart(); }catch(e){}
+    },30);
   }
   window.setFontScale=apply;
   function build(){
