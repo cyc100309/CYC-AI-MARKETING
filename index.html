@@ -609,9 +609,14 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .fs-pop .fb1{font-size:13px;} .fs-pop .fb2{font-size:16px;} .fs-pop .fb3{font-size:19px;}
 
 /* 解除手機 430px 死鎖：手機維持窄版，桌機放寬 */
-/* 手機（≤767px）：四張 KPI 卡改單欄一行一張 */
+/* 手機（≤767px）：四張 KPI 卡標準/大維持兩欄，特大才改單欄 */
 @media (max-width:767px){
-  .kg{grid-template-columns:1fr !important;}
+  .kg{grid-template-columns:1fr 1fr !important;}
+  /* 特大字級時改單欄，避免兩欄擠壓 */
+  [data-fs="xl"] .kg{grid-template-columns:1fr !important;}
+  /* 第5點：大字級兩欄時，四張卡內部數值與YoY改上下堆疊，避免橫向擠爆切字 */
+  [data-fs="lg"] .kpi-yoy{flex-direction:column !important;gap:2px !important;}
+  [data-fs="lg"] .kpi-yoy>div:last-child{text-align:left !important;width:100%;}
   /* 兩年度合計表：欄寬自適應、數字不截斷、縮排縮字避免擠成一團 */
   .yt{table-layout:auto !important;font-size:calc(11px * var(--fs)) !important;}
   .yt th,.yt td{padding:6px 3px !important;white-space:normal !important;
@@ -961,17 +966,17 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <button id="occ-tab-main" onclick="occView('main',this)"
     style="flex:1;padding:8px 4px;background:var(--ac);border:none;border-radius:20px;
     color:#0F1923;font-size:var(--fs-sub);font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
-    📊 營運數據
+    營運數據
   </button>
   <button id="occ-tab-ord" onclick="occView('ord',this)"
     style="flex:1;padding:8px 4px;background:var(--sf);border:1px solid var(--bd);border-radius:20px;
     color:var(--tx3);font-size:var(--fs-sub);font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
-    🌐 網路訂單
+    網路訂單
   </button>
   <button id="occ-tab-cal" onclick="occView('cal',this)"
     style="flex:1;padding:8px 4px;background:var(--sf);border:1px solid var(--bd);border-radius:20px;
     color:var(--tx3);font-size:var(--fs-sub);font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
-    📅 觀光行事曆
+    觀光行事曆
   </button>
 </div>
 
@@ -1048,13 +1053,13 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div style="display:flex;gap:6px;padding:4px 16px 0;">
   <button id="dept-tab-stay" onclick="deptView('stay',this)"
     style="flex:1;padding:7px 4px;background:var(--ac);border:none;border-radius:18px;
-    color:#0F1923;font-size:var(--fs-sub);font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🛏️ 住宿</button>
+    color:#0F1923;font-size:var(--fs-sub);font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">住宿</button>
   <button id="dept-tab-food" onclick="deptView('food',this)"
     style="flex:1;padding:7px 4px;background:var(--sf);border:1px solid var(--bd);border-radius:18px;
-    color:var(--tx3);font-size:var(--fs-sub);font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🍽️ 餐飲</button>
+    color:var(--tx3);font-size:var(--fs-sub);font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">餐飲</button>
   <button id="dept-tab-venue" onclick="deptView('venue',this)"
     style="flex:1;padding:7px 4px;background:var(--sf);border:1px solid var(--bd);border-radius:18px;
-    color:var(--tx3);font-size:var(--fs-sub);font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🏛️ 場地</button>
+    color:var(--tx3);font-size:var(--fs-sub);font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">場地</button>
 </div>
 
 <div id="dept-stay">
@@ -1074,28 +1079,30 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
         <div class="kv" id="v-yoy" style="font-size:calc(18px * var(--fs));"><span class="neu">—</span></div>
       </div>
     </div>
-    <!-- 中間：橫跨整卡進度條（同收入結構款） -->
-    <div style="margin:12px 0;">
-      <div class="gi-stack" style="height:14px;">
-        <div class="gi-stack-seg" id="room-bar" style="width:0%;background:linear-gradient(90deg,#C8963E,#E8B86D);"></div>
+    <!-- 進度條：上方標今年實際值、條中插去年同期節點 -->
+    <div style="margin:30px 0 8px;position:relative;">
+      <!-- 今年實際值（黃色，浮在填色端上方） -->
+      <div id="room-cur-tag" style="position:absolute;top:-22px;transform:translateX(-50%);
+        font-family:'DM Mono',monospace;font-size:var(--fs-sub);font-weight:700;color:var(--ac2);
+        white-space:nowrap;transition:left .6s;left:0;">—</div>
+      <div class="gi-stack" style="height:16px;position:relative;overflow:visible;">
+        <div class="gi-stack-seg" id="room-bar" style="width:0%;height:100%;border-radius:8px 0 0 8px;
+          background:linear-gradient(90deg,#C8963E,#E8B86D);transition:width .6s;"></div>
+        <!-- 去年同期節點 -->
+        <div id="room-prev-node" style="position:absolute;top:-3px;width:3px;height:22px;
+          background:var(--tx);border-radius:2px;transform:translateX(-50%);left:0;
+          box-shadow:0 0 0 2px var(--sf);transition:left .6s;"></div>
+        <div id="room-prev-tag" style="position:absolute;top:24px;transform:translateX(-50%);
+          font-family:'DM Mono',monospace;font-size:var(--fs-label);color:var(--tx2);
+          white-space:nowrap;transition:left .6s;left:0;">去年 —</div>
       </div>
-      <div style="display:flex;justify-content:space-between;margin-top:5px;">
+      <div style="display:flex;justify-content:space-between;margin-top:6px;">
         <span style="font-size:var(--fs-label);color:var(--tx3);">0%</span>
-        <span style="font-size:var(--fs-label);color:rgba(255,255,255,.35);">目標 50%</span>
         <span style="font-size:var(--fs-label);color:var(--tx3);">100%</span>
       </div>
     </div>
-    <div style="display:flex;gap:14px;align-items:flex-end;">
-      <div style="flex:1;">
-        <div class="kd" id="d-room"><span class="neu">—</span></div>
-      </div>
-      <div style="flex:1;text-align:right;">
-        <span class="kl">去年同期 </span>
-        <span class="kv" id="v-prev-room" style="font-size:calc(15px * var(--fs));"><span class="neu" style="font-size:var(--fs-body);">—</span></span>
-      </div>
-    </div>
   </div>
-  <div class="kpi b" style="display:flex;gap:10px;align-items:flex-start;">
+  <div class="kpi b kpi-yoy" style="display:flex;gap:10px;align-items:flex-start;">
     <div style="flex:1;">
       <div class="kl">住宿人次</div>
       <div class="kv" id="v-guests">—<span class="ku"> 人</span></div>
@@ -1105,7 +1112,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       <div id="d-guests" style="font-family:'DM Mono',monospace;font-size:calc(20px * var(--fs));font-weight:500;line-height:1.1;margin-top:1px;"><span class="neu">—</span></div>
     </div>
   </div>
-  <div class="kpi am" style="display:flex;gap:10px;align-items:flex-start;">
+  <div class="kpi am kpi-yoy" style="display:flex;gap:10px;align-items:flex-start;">
     <div style="flex:1;">
       <div class="kl">房均人數</div>
       <div class="kv" id="v-gpr">—<span class="ku"> 人/房</span></div>
@@ -1115,7 +1122,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       <div id="d-gpr" style="font-family:'DM Mono',monospace;font-size:calc(20px * var(--fs));font-weight:500;line-height:1.1;margin-top:1px;"><span class="neu">—</span></div>
     </div>
   </div>
-  <div class="kpi rd" style="display:flex;gap:10px;align-items:flex-start;">
+  <div class="kpi rd kpi-yoy" style="display:flex;gap:10px;align-items:flex-start;">
     <div style="flex:1;">
       <div class="kl">住房數</div>
       <div class="kv" id="v-stays">—</div>
@@ -1125,7 +1132,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       <div id="d-stays" style="margin-top:1px;"><span class="neu">—</span></div>
     </div>
   </div>
-  <div class="kpi g" style="display:flex;gap:10px;align-items:flex-start;">
+  <div class="kpi g kpi-yoy" style="display:flex;gap:10px;align-items:flex-start;">
     <div style="flex:1;">
       <div class="kl">房均單價</div>
       <div class="kv" id="v-adr">—</div>
@@ -2789,13 +2796,34 @@ function renderMonth(i){
   // Room
   document.getElementById('v-room').innerHTML=(d.room>0?d.room.toFixed(2):'—')+'<span class="ku">%</span>';
   (function(){
+    var cur=Math.min(Math.max(d.room,0),100);
+    var prev=(p&&p.room>0)?Math.min(Math.max(p.room,0),100):null;
     var bar=document.getElementById('room-bar');
-    if(bar) bar.style.width=Math.min(Math.max(d.room,0),100)+'%';
+    var curTag=document.getElementById('room-cur-tag');
+    var node=document.getElementById('room-prev-node');
+    var prevTag=document.getElementById('room-prev-tag');
+    if(bar) bar.style.width=cur+'%';
+    if(curTag){
+      curTag.textContent=d.room>0?cur.toFixed(2)+'%':'—';
+      // 標籤跟著填色端，但夾在 6%~94% 避免貼邊出界
+      curTag.style.left=Math.min(Math.max(cur,6),94)+'%';
+    }
+    if(node&&prevTag){
+      if(prev!==null){
+        node.style.display='';
+        node.style.left=prev+'%';
+        prevTag.style.display='';
+        prevTag.style.left=Math.min(Math.max(prev,8),92)+'%';
+        prevTag.textContent='去年 '+prev.toFixed(2)+'%';
+      }else{
+        node.style.display='none'; prevTag.style.display='none';
+      }
+    }
   })();
-  document.getElementById('d-room').innerHTML=d.room>0
+  (function(){var e=document.getElementById('d-room'); if(e) e.innerHTML=d.room>0
     ?`<span class="${d.room>=50?'up':'dn'}">${d.room>=50?'▲ 達標':'▼ 未達'} 50%</span>`
-    :'<span class="neu">尚無資料</span>';
-  document.getElementById('v-prev-room').innerHTML=(p&&p.room>0)?p.room.toFixed(2)+'<span class="ku">%</span>':'<span class="neu">—</span>';
+    :'<span class="neu">尚無資料</span>';})();
+  (function(){var e=document.getElementById('v-prev-room'); if(e) e.innerHTML=(p&&p.room>0)?p.room.toFixed(2)+'<span class="ku">%</span>':'<span class="neu">—</span>';})();
   if(p&&p.room>0&&d.room>0){
     const yoy=d.room-p.room, up=yoy>=0;
     document.getElementById('v-yoy').innerHTML=`<span class="${up?'up':'dn'}">${up?'+':''}${yoy.toFixed(2)}%</span>`;
