@@ -578,6 +578,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .rt-val{font-size:var(--fs-body) !important;}
 .gi-leg{font-size:var(--fs-label) !important;}
 .gi-leg .dot.venue{background:#4CAF82;}
+.mt{font-size:var(--fs-label) !important;padding:6px 13px !important;}
 
 
 #fsFab{position:fixed;right:14px;bottom:92px;z-index:300;
@@ -608,9 +609,21 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .fs-pop .fb1{font-size:13px;} .fs-pop .fb2{font-size:16px;} .fs-pop .fb3{font-size:19px;}
 
 /* 解除手機 430px 死鎖：手機維持窄版，桌機放寬 */
+/* 手機（≤767px）：四張 KPI 卡改單欄一行一張 */
+@media (max-width:767px){
+  .kg{grid-template-columns:1fr !important;}
+  /* 兩年度合計表：欄寬自適應、數字不截斷、縮排縮字避免擠成一團 */
+  .yt{table-layout:auto !important;font-size:calc(11px * var(--fs)) !important;}
+  .yt th,.yt td{padding:6px 3px !important;white-space:normal !important;
+    overflow:visible !important;text-overflow:clip !important;word-break:break-all;}
+  .yt th:first-child,.yt td:first-child{width:auto !important;}
+  .yt th:nth-child(2),.yt th:nth-child(3),.yt th:nth-child(4){width:auto !important;}
+}
 @media (min-width:768px){
   body{max-width:none !important;padding-left:240px !important;padding-right:0 !important;}
   .app{max-width:1180px;margin:0 auto;padding-bottom:48px !important;}
+  .kg{grid-template-columns:repeat(4,1fr) !important;}
+  .kpi.wide{grid-column:1/-1 !important;}
 
   /* 底部導覽 → 左側固定欄 */
   .bnav{position:fixed !important;left:0 !important;top:0 !important;bottom:0 !important;
@@ -2806,7 +2819,15 @@ function renderMonth(i){
   document.getElementById('v-gpr').innerHTML=(gprCur>0?gprCur.toFixed(2):'—');
   document.getElementById('d-gpr').innerHTML=yoyBig(gprCur,gprPrev,2);
   document.getElementById('v-rev').innerHTML=d.rev>0?fmtRev(d.rev):'—';
-  document.getElementById('d-rev').innerHTML=yoyBig(d.rev,p?.rev);
+  (function(){
+    var el=document.getElementById('d-rev');
+    if(!el) return;
+    var prev=p?.rev;
+    if(!prev||prev===0||!d.rev){ el.innerHTML='<span class="neu" style="font-size:var(--fs-sub);font-family:\'DM Mono\',monospace;">—</span>'; return; }
+    var diff=d.rev-prev, up=diff>=0, a=Math.abs(diff);
+    var v=a>=10000?(a/10000).toFixed(1)+'萬':Math.round(a).toLocaleString();
+    el.innerHTML='<span class="'+(up?'up':'dn')+'" style="font-size:calc(20px * var(--fs));font-weight:500;font-family:\'DM Mono\',monospace;line-height:1.1;">'+(up?'+':'−')+v+'</span>';
+  })();
 
   // 收入結構：住宿 vs 餐飲 vs 場地（三者合計為100%）
   (function(){
@@ -6150,14 +6171,14 @@ function buildYoY(){
     const rateStr=rate!==null?rate.toFixed(1)+'%':'—';
     const up=rate!==null&&rate>=100;
     const fv=v=>{
-      if(u==='元'){const n=parseInt(v);return n>=10000?(n/10000).toFixed(1)+'萬':n.toLocaleString();}
+      if(u==='元'){const n=parseInt(v);return n>=10000?(n/10000).toFixed(1)+'萬':n.toLocaleString()+'元';}
       if(u==='%') return Number(v).toFixed(2);
       return parseInt(v).toLocaleString();
     };
     tb.innerHTML+=`<tr>
       <td>${lbl}</td>
-      <td>${fv(now)}${u==='元'?'元':u}</td>
-      <td style="color:var(--tx3)">${fv(prev)}${u==='元'?'元':u}</td>
+      <td>${fv(now)}${u==='元'?'':u}</td>
+      <td style="color:var(--tx3)">${fv(prev)}${u==='元'?'':u}</td>
       <td class="${rate!==null?(up?'achieve-up':'achieve-dn'):''}">${rateStr}</td>
     </tr>`;
   });
