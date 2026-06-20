@@ -546,17 +546,56 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
    （附加在最後，優先級最高，覆蓋前面舊有衝突規則）
    ════════════════════════════════════════════════════════════ */
 
-/* 字級切換鈕（每頁 header 右上） */
-.fs-switch{display:inline-flex;border:1px solid var(--bd);border-radius:20px;overflow:hidden;vertical-align:middle;}
-.fs-switch button{background:transparent;border:none;border-right:1px solid var(--bd);
-  color:var(--tx3);cursor:pointer;font-family:'Noto Sans TC',sans-serif;
-  padding:5px 11px;line-height:1;transition:all .15s;}
-.fs-switch button:last-child{border-right:none;}
-.fs-switch button.on{background:var(--ac);color:var(--bg);font-weight:700;}
-.fs-switch .fb1{font-size:12px;} .fs-switch .fb2{font-size:15px;} .fs-switch .fb3{font-size:18px;}
+/* ════════════ 改版第二層 step2a：營運頁字級接上變數 ════════════
+   用最高優先級覆蓋，讓 Aa 鈕能整頁等比放大（蓋過前面兩份舊 CSS）*/
+.kl{font-size:var(--fs-label) !important;}
+.kv{font-size:var(--fs-kpi) !important;}
+.ku{font-size:var(--fs-sub) !important;}
+.lbl{font-size:var(--fs-label) !important;}
+.lbl-r{font-size:var(--fs-label) !important;}
+.rc-lbl{font-size:var(--fs-label) !important;}
+.rc-val{font-size:calc(14px * var(--fs)) !important;}
+.rc-sub{font-size:var(--fs-label) !important;}
+.kd{font-size:var(--fs-sub) !important;}
+.ord-kpi-l{font-size:var(--fs-label) !important;}
+.ord-kpi-v{font-size:calc(20px * var(--fs)) !important;}
+.ord-kpi-s{font-size:var(--fs-label) !important;}
+.rc-icon{font-size:calc(15px * var(--fs)) !important;}
+.cfg-lbl{font-size:var(--fs-label) !important;}
+.cfg-input{font-size:var(--fs-body) !important;}
+.ib-title{font-size:var(--fs-body) !important;}
+.ib-sub{font-size:var(--fs-sub) !important;}
+
+
+#fsFab{position:fixed;right:14px;bottom:92px;z-index:300;
+  display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+.fs-fab-btn{height:40px;padding:0 14px;border-radius:20px;cursor:pointer;
+  background:rgba(26,37,53,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--bd2);box-shadow:0 2px 10px rgba(0,0,0,.3);
+  display:flex;align-items:center;gap:5px;
+  color:var(--ac2);font-family:'Noto Sans TC',sans-serif;
+  transition:border-color .15s,color .15s,background .15s;}
+.fs-fab-btn:hover{border-color:var(--ac);color:var(--ac);background:rgba(26,37,53,.95);}
+.fs-fab-btn:active{transform:scale(.97);}
+.fs-fab-a{font-size:18px;font-weight:700;line-height:1;}
+.fs-fab-a2{font-size:13px;font-weight:700;line-height:1;}
+.fs-fab-txt{font-size:12px;color:var(--tx3);letter-spacing:.04em;}
+#fsFab.open .fs-fab-btn{border-color:var(--ac);color:var(--ac);}
+.fs-pop{display:none;flex-direction:column;gap:7px;
+  background:rgba(26,37,53,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--bd2);border-radius:14px;padding:8px;
+  box-shadow:0 8px 28px rgba(0,0,0,.5);min-width:118px;}
+#fsFab.open .fs-pop{display:flex;animation:fsPopIn .16s ease;}
+@keyframes fsPopIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.fs-pop button{background:transparent;border:1px solid var(--bd);border-radius:9px;
+  color:var(--tx2);cursor:pointer;font-family:'Noto Sans TC',sans-serif;
+  padding:10px 14px;text-align:center;transition:all .15s;line-height:1;}
+.fs-pop button:hover{border-color:var(--ac);color:var(--ac);}
+.fs-pop button.on{background:var(--ac);color:var(--bg);border-color:var(--ac);font-weight:700;}
+.fs-pop .fb1{font-size:13px;} .fs-pop .fb2{font-size:16px;} .fs-pop .fb3{font-size:19px;}
 
 /* 解除手機 430px 死鎖：手機維持窄版，桌機放寬 */
-@media (min-width:960px){
+@media (min-width:768px){
   body{max-width:none !important;padding-left:240px !important;padding-right:0 !important;}
   .app{max-width:1180px;margin:0 auto;padding-bottom:48px !important;}
 
@@ -577,6 +616,8 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
   /* 全螢幕覆蓋頁（封面/說明書/檢查）桌機置中收斂 */
   #unitCover,#unitCheckPage,#guidePage{padding-left:240px;}
+  /* 桌機無底部導覽，浮動字級鈕落到右下角 */
+  #fsFab{bottom:28px;right:28px;}
 }
 </style>
 </head>
@@ -806,7 +847,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     </div>
 
     <div style="text-align:center;margin-top:46px;padding-top:22px;border-top:1px solid var(--bd);
-      color:var(--tx3);font-size:11px;font-family:'DM Mono',monospace;letter-spacing:1px;">金門戰地文旅 · 智慧旅遊儀表板 v8.0 · 技術與資源圖說</div>
+      color:var(--tx3);font-size:var(--fs-sub);font-family:'DM Mono',monospace;letter-spacing:1px;">金門戰地文旅 · 智慧旅遊儀表板 v8.0 · 技術與資源圖說</div>
   </div>
   </div>
 </div>
@@ -820,15 +861,15 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <div class="sub" id="hdrSub">救國團金門青年活動中心・住宿分析</div>
     <div style="font-size:9px;color:var(--tx3);opacity:.5;">v8.0</div>
     <div id="dataDateBar" style="display:none;margin-top:4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-      <span style="font-size:10px;color:var(--tx3);font-family:'DM Mono',monospace;" id="dataDateTxt"></span>
-      <button onclick="refreshDisplay()" style="font-size:10px;color:var(--ac2);background:var(--ad);
+      <span style="font-size:var(--fs-sub);color:var(--tx3);font-family:'DM Mono',monospace;" id="dataDateTxt"></span>
+      <button onclick="refreshDisplay()" style="font-size:var(--fs-sub);color:var(--ac2);background:var(--ad);
         border:1px solid var(--bd2);border-radius:20px;padding:2px 9px;cursor:pointer;white-space:nowrap;
         font-family:'Noto Sans TC',sans-serif;">🔄 重新整理</button>
     </div>
     <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
-      <span style="font-size:10px;" id="syncStatusMsg"></span>
+      <span style="font-size:var(--fs-sub);" id="syncStatusMsg"></span>
       <button onclick="document.getElementById('cloudSetupPanel').style.display='flex'"
-        style="font-size:10px;color:var(--tx3);background:transparent;border:1px solid var(--bd);
+        style="font-size:var(--fs-sub);color:var(--tx3);background:transparent;border:1px solid var(--bd);
         border-radius:20px;padding:2px 8px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">☁️ 雲端同步</button>
     </div>
   </div>
@@ -845,41 +886,41 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <div style="background:var(--sf);border-radius:var(--r);padding:20px;width:100%;
     max-width:380px;border:1px solid var(--bd2);">
     <div style="font-size:14px;font-weight:500;color:var(--tx);margin-bottom:4px;">☁️ 雲端同步設定</div>
-    <div style="font-size:11px;color:var(--tx3);line-height:1.7;margin-bottom:12px;">
+    <div style="font-size:var(--fs-sub);color:var(--tx3);line-height:1.7;margin-bottom:12px;">
       使用 <strong style="color:var(--ac);">Google Apps Script</strong>（你的 Google 帳號即可）：<br>
       1. 前往 <a href="https://script.google.com" target="_blank" style="color:var(--ac);">script.google.com</a> → 建立新專案<br>
       2. 貼入本中心提供的程式碼（見說明文件）<br>
       3. 部署 → 網路應用程式 → 複製網址貼入下方
     </div>
     <div style="margin-bottom:10px;">
-      <div style="font-size:10px;color:var(--tx3);margin-bottom:3px;">Apps Script 網址（https://script.google.com/...）</div>
+      <div style="font-size:var(--fs-sub);color:var(--tx3);margin-bottom:3px;">Apps Script 網址（https://script.google.com/...）</div>
       <input id="cloudUrlInput" placeholder="貼上部署後的網址"
         style="width:100%;box-sizing:border-box;background:var(--sf2);border:1px solid var(--bd);
-        border-radius:var(--rs);padding:7px 10px;font-size:11px;color:var(--tx);outline:none;">
+        border-radius:var(--rs);padding:7px 10px;font-size:var(--fs-sub);color:var(--tx);outline:none;">
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px;">
       <button onclick="saveCloudSettings()"
         style="flex:2;background:var(--ac);color:#0F1923;border:none;border-radius:var(--rs);
-        padding:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
+        padding:9px;font-size:var(--fs-body);font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
         ✅ 儲存設定
       </button>
       <button onclick="document.getElementById('cloudSetupPanel').style.display='none'"
         style="flex:1;background:transparent;border:1px solid var(--bd);border-radius:var(--rs);
-        padding:9px;font-size:12px;color:var(--tx3);cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
+        padding:9px;font-size:var(--fs-body);color:var(--tx3);cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
         取消
       </button>
     </div>
     <div style="padding-top:10px;border-top:1px solid var(--bd);">
-      <div style="font-size:10px;color:var(--tx3);margin-bottom:6px;">手動同步：</div>
+      <div style="font-size:var(--fs-sub);color:var(--tx3);margin-bottom:6px;">手動同步：</div>
       <div style="display:flex;gap:6px;">
         <button onclick="pushToCloud()"
           style="flex:1;background:var(--ad);border:1px solid var(--bd2);border-radius:var(--rs);
-          padding:7px;font-size:11px;color:var(--ac2);cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
+          padding:7px;font-size:var(--fs-sub);color:var(--ac2);cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
           ⬆️ 上傳到雲端
         </button>
         <button onclick="pullFromCloud().then(ok=>{ if(ok){ loadSavedOccData(); init(); } showSyncStatus(ok?'✓ 已載入最新資料':'已是最新版本',true); })"
           style="flex:1;background:var(--ad);border:1px solid var(--bd2);border-radius:var(--rs);
-          padding:7px;font-size:11px;color:var(--ac2);cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
+          padding:7px;font-size:var(--fs-sub);color:var(--ac2);cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
           ⬇️ 從雲端載入
         </button>
       </div>
@@ -891,17 +932,17 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div style="display:flex;gap:6px;padding:10px 16px 0;">
   <button id="occ-tab-main" onclick="occView('main',this)"
     style="flex:1;padding:8px 4px;background:var(--ac);border:none;border-radius:20px;
-    color:#0F1923;font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
+    color:#0F1923;font-size:var(--fs-sub);font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
     📊 營運數據
   </button>
   <button id="occ-tab-ord" onclick="occView('ord',this)"
     style="flex:1;padding:8px 4px;background:var(--sf);border:1px solid var(--bd);border-radius:20px;
-    color:var(--tx3);font-size:11px;font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
+    color:var(--tx3);font-size:var(--fs-sub);font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
     🌐 網路訂單
   </button>
   <button id="occ-tab-cal" onclick="occView('cal',this)"
     style="flex:1;padding:8px 4px;background:var(--sf);border:1px solid var(--bd);border-radius:20px;
-    color:var(--tx3);font-size:11px;font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
+    color:var(--tx3);font-size:var(--fs-sub);font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
     📅 觀光行事曆
   </button>
 </div>
@@ -920,7 +961,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <div class="cfg-title">⚙️ 中心設定</div>
     <button onclick="closeCfg();backToCover();" style="width:100%;margin-bottom:14px;padding:10px;
       background:var(--sf2);border:1px solid var(--bd2);border-radius:var(--rs);color:var(--ac2);
-      font-size:12px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
+      font-size:var(--fs-body);cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
       🏠 返回首頁・更換單位
     </button>
     <div class="cfg-field">
@@ -937,7 +978,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     </div>
     <div class="cfg-field">
       <div class="cfg-lbl">AI 行銷建議</div>
-      <div style="font-size:11px;color:var(--tx3);line-height:1.7;">
+      <div style="font-size:var(--fs-sub);color:var(--tx3);line-height:1.7;">
         透過雲端同步自動啟用，無需額外設定。
       </div>
     </div>
@@ -945,7 +986,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       <div class="cfg-lbl">競爭房價 Google 試算表網址</div>
       <input class="cfg-input" id="cfgSheetsUrl"
         placeholder="https://docs.google.com/spreadsheets/d/e/...pub?output=csv"
-        style="font-size:10px;font-family:'DM Mono',monospace;">
+        style="font-size:var(--fs-sub);font-family:'DM Mono',monospace;">
       <div style="font-size:9px;color:var(--tx3);margin-top:3px;">
         試算表需「以CSV格式發布」→ 複製連結貼入此處，切換到競爭房價頁面即自動更新
       </div>
@@ -979,13 +1020,13 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div style="display:flex;gap:6px;padding:4px 16px 0;">
   <button id="dept-tab-stay" onclick="deptView('stay',this)"
     style="flex:1;padding:7px 4px;background:var(--ac);border:none;border-radius:18px;
-    color:#0F1923;font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🛏️ 住宿</button>
+    color:#0F1923;font-size:var(--fs-sub);font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🛏️ 住宿</button>
   <button id="dept-tab-food" onclick="deptView('food',this)"
     style="flex:1;padding:7px 4px;background:var(--sf);border:1px solid var(--bd);border-radius:18px;
-    color:var(--tx3);font-size:11px;font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🍽️ 餐飲</button>
+    color:var(--tx3);font-size:var(--fs-sub);font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🍽️ 餐飲</button>
   <button id="dept-tab-venue" onclick="deptView('venue',this)"
     style="flex:1;padding:7px 4px;background:var(--sf);border:1px solid var(--bd);border-radius:18px;
-    color:var(--tx3);font-size:11px;font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🏛️ 場地</button>
+    color:var(--tx3);font-size:var(--fs-sub);font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">🏛️ 場地</button>
 </div>
 
 <div id="dept-stay">
@@ -1015,7 +1056,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       <div class="kv" id="v-yoy" style="font-size:18px;"><span class="neu">—</span></div>
       <div style="margin-top:12px;">
         <div class="kl">去年同期</div>
-        <div class="kv" id="v-prev-room" style="font-size:15px;"><span class="neu" style="font-size:12px;">—</span></div>
+        <div class="kv" id="v-prev-room" style="font-size:15px;"><span class="neu" style="font-size:var(--fs-body);">—</span></div>
       </div>
     </div>
   </div>
@@ -1158,7 +1199,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <div class="rt-delta" id="vd-total"><span class="neu">—</span></div>
   </div>
 </div>
-<div style="font-size:10px;color:var(--tx3);padding:8px 18px 0;line-height:1.6;" id="venueNote">
+<div style="font-size:var(--fs-sub);color:var(--tx3);padding:8px 18px 0;line-height:1.6;" id="venueNote">
   場地收入計入研習服務。金門 5月起若有研習/會議場次將自動顯示。
 </div>
 </div><!-- /dept-venue -->
@@ -1166,7 +1207,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <!-- Daily chart -->
 <div id="dailyMonthTabs" style="display:flex;gap:6px;flex-wrap:wrap;padding:4px 18px 8px;justify-content:flex-end;"></div>
 <div class="card">
-  <div style="font-size:12px;font-weight:500;color:var(--tx);margin-bottom:10px;" id="dcTitle">2026年 五月・日別房使用率</div>
+  <div style="font-size:var(--fs-body);font-weight:500;color:var(--tx);margin-bottom:10px;" id="dcTitle">2026年 五月・日別房使用率</div>
   <div class="dc-wrap">
     <svg id="dcSvg" height="140" style="display:block;"></svg>
   </div>
@@ -1190,8 +1231,8 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   </div>
   <div id="aiContent"></div>
   <div class="ai-footer">
-    <span id="aiLastUpdate" style="font-size:10px;color:var(--tx3);">每日最多分析一次</span>
-    <button onclick="genAI(true)" style="font-size:10px;color:var(--ac2);background:var(--ad);
+    <span id="aiLastUpdate" style="font-size:var(--fs-sub);color:var(--tx3);">每日最多分析一次</span>
+    <button onclick="genAI(true)" style="font-size:var(--fs-sub);color:var(--ac2);background:var(--ad);
       border:1px solid var(--bd2);border-radius:20px;padding:3px 10px;cursor:pointer;
       font-family:'Noto Sans TC',sans-serif;">🔄 重新分析</button>
   </div>
@@ -1232,7 +1273,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div class="import-wrap">
   <div class="import-toggle" onclick="toggleImport()">
     <div class="import-toggle-title">📥 匯入數據
-      <span id="importSummary" style="font-weight:400;color:var(--tx3);font-size:10px;margin-left:6px;"></span>
+      <span id="importSummary" style="font-weight:400;color:var(--tx3);font-size:var(--fs-sub);margin-left:6px;"></span>
     </div>
     <span class="import-arrow" id="importArrow">▼</span>
   </div>
@@ -1240,10 +1281,10 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <!-- 現有資料狀態列 -->
     <div id="currentDataBar" style="display:none;background:var(--sf2);border-radius:var(--rs);
       padding:8px 10px;margin-bottom:8px;border:1px solid var(--bd);">
-      <div style="font-size:10px;color:var(--tx3);margin-bottom:2px;">目前使用中的資料</div>
+      <div style="font-size:var(--fs-sub);color:var(--tx3);margin-bottom:2px;">目前使用中的資料</div>
       <div style="display:flex;align-items:center;justify-content:space-between;">
-        <div style="font-size:11px;color:var(--green);font-family:'DM Mono',monospace;" id="currentDataDate">—</div>
-        <div style="font-size:10px;color:var(--tx3);">如需更新請重新上傳 ↓</div>
+        <div style="font-size:var(--fs-sub);color:var(--green);font-family:'DM Mono',monospace;" id="currentDataDate">—</div>
+        <div style="font-size:var(--fs-sub);color:var(--tx3);">如需更新請重新上傳 ↓</div>
       </div>
     </div>
     <div class="imp-list">
@@ -1256,7 +1297,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
         </div>
         <div class="ib-st" id="s-twoyear">未匯入</div>
       </label>
-      <div style="font-size:10px;color:var(--tx3);padding:6px 2px 0;
+      <div style="font-size:var(--fs-sub);color:var(--tx3);padding:6px 2px 0;
         font-family:'DM Mono',monospace;letter-spacing:.05em;">
         日別統計 810_3（最多3個月，由近到遠依序上傳）
       </div>
@@ -1295,7 +1336,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 <!-- Sub: 觀光行事曆 -->
 <div id="occ-sub-cal" style="display:none;padding:12px 14px 80px;">
-  <div id="calIntro" style="font-size:11px;color:var(--tx3);margin-bottom:12px;line-height:1.6;">
+  <div id="calIntro" style="font-size:var(--fs-sub);color:var(--tx3);margin-bottom:12px;line-height:1.6;">
     金門全年觀光節慶與假期行事曆，每月日曆下方附當月活動說明，有確定日期者已於日曆上標記。
   </div>
 
@@ -1306,7 +1347,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <div style="margin-top:22px;">
     <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="toggleAnnual()">
       <span>🎯 在地年度大型活動（必注意）</span>
-      <span id="annualArrow" style="font-size:12px;color:var(--tx3);">▼</span>
+      <span id="annualArrow" style="font-size:var(--fs-body);color:var(--tx3);">▼</span>
     </div>
     <div id="annualDesc" style="font-size:9px;color:var(--tx3);margin-bottom:10px;line-height:1.5;">
       金門每年固定登場的重點活動，新進同仁可快速掌握。實際日期每年微調，以官方公告為準。
@@ -1326,11 +1367,11 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       自動更新金門日報地方新聞與快訊。標「疑似活動」者，可手動填入行事曆 Excel。
     </div>
     <div id="kmdnNews" style="display:flex;flex-direction:column;gap:6px;">
-      <div style="font-size:10px;color:var(--tx3);padding:10px;text-align:center;">⏳ 載入在地新聞中...</div>
+      <div style="font-size:var(--fs-sub);color:var(--tx3);padding:10px;text-align:center;">⏳ 載入在地新聞中...</div>
     </div>
     <button id="kmdnRefresh" onclick="fetchKmdnNews()" style="margin-top:8px;width:100%;padding:7px;
       background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx2);
-      font-size:10px;cursor:pointer;">🔄 重新整理新聞</button>
+      font-size:var(--fs-sub);cursor:pointer;">🔄 重新整理新聞</button>
   </div>
 
   <!-- 資料來源快速連結（含大巨蛋賽程的單位顯示，例：劍潭）-->
@@ -1339,13 +1380,13 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <a href="https://www.sportsnet.org.tw/schedule.php" target="_blank" style="text-decoration:none;display:flex;
       align-items:center;justify-content:space-between;background:var(--sf2);border:1px solid var(--bd);
       border-radius:var(--rs);padding:10px 12px;">
-      <span style="font-size:11px;color:var(--tx);">🏃 中華民國路跑協會・賽事行事曆</span>
-      <span style="font-size:11px;color:var(--ac);">前往 →</span></a>
+      <span style="font-size:var(--fs-sub);color:var(--tx);">🏃 中華民國路跑協會・賽事行事曆</span>
+      <span style="font-size:var(--fs-sub);color:var(--ac);">前往 →</span></a>
     <a href="https://www.taipeidome.com.tw/Web/Dome/Calendar/" target="_blank" style="text-decoration:none;display:flex;
       align-items:center;justify-content:space-between;background:var(--sf2);border:1px solid var(--bd);
       border-radius:var(--rs);padding:10px 12px;">
-      <span style="font-size:11px;color:var(--tx);">🏟️ 臺北大巨蛋・最新消息（賽程／活動）</span>
-      <span style="font-size:11px;color:var(--ac);">前往 →</span></a>
+      <span style="font-size:var(--fs-sub);color:var(--tx);">🏟️ 臺北大巨蛋・最新消息（賽程／活動）</span>
+      <span style="font-size:var(--fs-sub);color:var(--ac);">前往 →</span></a>
   </div>
 
   <!-- 頁尾：手動更新提醒（含大巨蛋賽程的單位顯示，例：劍潭）-->
@@ -1362,11 +1403,11 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <!-- Sub: 網路訂單分析 -->
 <div id="occ-sub-ord" style="display:none;padding:12px 14px 80px;">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;">
-    <div style="font-size:11px;color:var(--tx3);line-height:1.6;">
+    <div style="font-size:var(--fs-sub);color:var(--tx3);line-height:1.6;">
       自動彙整各 OTA／官網訂房資料，分析通路占比、提前預訂、取消率與趨勢。
     </div>
     <button onclick="loadOrders(true)" style="flex-shrink:0;padding:5px 10px;background:var(--ad);
-      border:1px solid var(--bd2);border-radius:20px;color:var(--ac2);font-size:10px;cursor:pointer;
+      border:1px solid var(--bd2);border-radius:20px;color:var(--ac2);font-size:var(--fs-sub);cursor:pointer;
       font-family:'Noto Sans TC',sans-serif;white-space:nowrap;">🔄 更新</button>
   </div>
   <div id="ordDataDate" style="font-size:9px;color:var(--tx3);margin-bottom:14px;">資料：—</div>
@@ -1413,7 +1454,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     </div>
   </div>
 
-  <div id="ordLoading" style="font-size:11px;color:var(--tx3);padding:30px 10px;text-align:center;">
+  <div id="ordLoading" style="font-size:var(--fs-sub);color:var(--tx3);padding:30px 10px;text-align:center;">
     ⏳ 載入訂單資料中...
   </div>
 
@@ -8554,21 +8595,31 @@ function buildCountyGrid(){
     var saved='std';
     try{saved=localStorage.getItem(KEY)||'std';}catch(e){}
     document.documentElement.setAttribute('data-fs',saved);
-    // 找每頁 header 右側那組容器（含 yr-b / date-badge 的 flex 容器）
-    document.querySelectorAll('.hdr').forEach(function(hdr){
-      if(hdr.querySelector('.fs-switch')) return;
-      // 右側容器 = hdr 最後一個直接子 div
-      var kids=hdr.children, right=kids[kids.length-1];
-      var sw=document.createElement('div');
-      sw.className='fs-switch';
-      sw.innerHTML='<button class="fb1" data-set="std">標準</button>'+
-                   '<button class="fb2" data-set="lg">大</button>'+
-                   '<button class="fb3" data-set="xl">特大</button>';
-      sw.querySelectorAll('button').forEach(function(b){
-        b.addEventListener('click',function(){apply(b.getAttribute('data-set'));});
+    if(!document.getElementById('fsFab')){
+      var fab=document.createElement('div');
+      fab.id='fsFab';
+      fab.innerHTML=
+        '<div class="fs-pop" id="fsPop">'+
+          '<button class="fb1" data-set="std">標準</button>'+
+          '<button class="fb2" data-set="lg">大</button>'+
+          '<button class="fb3" data-set="xl">特大</button>'+
+        '</div>'+
+        '<button class="fs-fab-btn" id="fsFabBtn" title="調整文字大小" aria-label="調整文字大小">'+
+          '<span class="fs-fab-a">A</span><span class="fs-fab-a2">a</span>'+
+          '<span class="fs-fab-txt">字級</span>'+
+        '</button>';
+      document.body.appendChild(fab);
+      var pop=fab.querySelector('#fsPop');
+      fab.querySelector('#fsFabBtn').addEventListener('click',function(e){
+        e.stopPropagation(); fab.classList.toggle('open');
       });
-      if(right) right.insertBefore(sw, right.firstChild);
-    });
+      pop.querySelectorAll('button').forEach(function(b){
+        b.addEventListener('click',function(e){
+          e.stopPropagation(); apply(b.getAttribute('data-set')); fab.classList.remove('open');
+        });
+      });
+      document.addEventListener('click',function(){ fab.classList.remove('open'); });
+    }
     apply(saved);
   }
   if(document.readyState!=='loading') build();
