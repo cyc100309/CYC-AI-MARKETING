@@ -565,6 +565,19 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .cfg-input{font-size:var(--fs-body) !important;}
 .ib-title{font-size:var(--fs-body) !important;}
 .ib-sub{font-size:var(--fs-sub) !important;}
+/* step2 補：AI 行銷建議內文、兩年度比較 */
+.ai-title{font-size:var(--fs-body) !important;}
+.ai-badge{font-size:var(--fs-label) !important;}
+.ai-text{font-size:var(--fs-body) !important;}
+.ai-num{font-size:var(--fs-sub) !important;}
+.tc-title{font-size:var(--fs-body) !important;}
+.yli{font-size:var(--fs-label) !important;}
+.yt{font-size:var(--fs-sub) !important;}
+.yt th{font-size:var(--fs-label) !important;}
+.rt-lbl{font-size:var(--fs-sub) !important;}
+.rt-val{font-size:var(--fs-body) !important;}
+.gi-leg{font-size:var(--fs-label) !important;}
+.gi-leg .dot.venue{background:#4CAF82;}
 
 
 #fsFab{position:fixed;right:14px;bottom:92px;z-index:300;
@@ -860,11 +873,8 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <div class="logo" id="hdrLogo">金門戰地文旅</div>
     <div class="sub" id="hdrSub">救國團金門青年活動中心・住宿分析</div>
     <div style="font-size:9px;color:var(--tx3);opacity:.5;">v8.0</div>
-    <div id="dataDateBar" style="display:none;margin-top:4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+    <div id="dataDateBar" style="display:none;margin-top:4px;align-items:center;gap:6px;flex-wrap:wrap;">
       <span style="font-size:var(--fs-sub);color:var(--tx3);font-family:'DM Mono',monospace;" id="dataDateTxt"></span>
-      <button onclick="refreshDisplay()" style="font-size:var(--fs-sub);color:var(--ac2);background:var(--ad);
-        border:1px solid var(--bd2);border-radius:20px;padding:2px 9px;cursor:pointer;white-space:nowrap;
-        font-family:'Noto Sans TC',sans-serif;">🔄 重新整理</button>
     </div>
     <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
       <span style="font-size:var(--fs-sub);" id="syncStatusMsg"></span>
@@ -873,10 +883,15 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
         border-radius:20px;padding:2px 8px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">☁️ 雲端同步</button>
     </div>
   </div>
-  <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;margin-top:2px;">
-    <div class="yr-b" id="yrB">2026年</div>
-    <button onclick="openCfg()" style="background:transparent;border:none;cursor:pointer;font-size:18px;opacity:.6;padding:4px;" title="中心設定">⚙️</button>
-    <div class="av" onclick="backToCover()" title="回首頁（單位選擇）" role="button">🏠</div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;margin-top:2px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="yr-b" id="yrB">2026年</div>
+      <button onclick="openCfg()" style="background:transparent;border:none;cursor:pointer;font-size:18px;opacity:.6;padding:4px;" title="中心設定">⚙️</button>
+      <div class="av" onclick="backToCover()" title="回首頁（單位選擇）" role="button">🏠</div>
+    </div>
+    <button onclick="refreshDisplay()" style="font-size:var(--fs-sub);color:var(--ac2);background:var(--ad);
+      border:1px solid var(--bd2);border-radius:20px;padding:3px 12px;cursor:pointer;white-space:nowrap;
+      font-family:'Noto Sans TC',sans-serif;">🔄 重新整理</button>
   </div>
 </div>
 
@@ -1035,28 +1050,35 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <span class="lbl-r" id="kpiSub">2026年・五月</span>
 </div>
 <div class="kg">
-  <div class="kpi r wide" style="display:flex;gap:14px;align-items:flex-start;">
-    <div style="flex:1.3;">
-      <div class="kl">房使用率</div>
-      <div class="kv" id="v-room">—<span class="ku">%</span></div>
-      <div class="kd" id="d-room"><span class="neu">—</span></div>
-      <div style="margin-top:10px;">
-        <div style="height:4px;background:var(--sf3);border-radius:2px;overflow:hidden;">
-          <div id="room-bar" style="height:100%;background:linear-gradient(90deg,#C8963E,#E8B86D);border-radius:2px;transition:width .6s;width:0%;"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;margin-top:3px;">
-          <span style="font-size:9px;color:var(--tx3);">0%</span>
-          <span style="font-size:9px;color:rgba(255,255,255,.2);">目標 50%</span>
-          <span style="font-size:9px;color:var(--tx3);">100%</span>
-        </div>
+  <div class="kpi r wide">
+    <div style="display:flex;gap:14px;align-items:flex-start;">
+      <div style="flex:1;">
+        <div class="kl">房使用率</div>
+        <div class="kv" id="v-room">—<span class="ku">%</span></div>
+      </div>
+      <div style="flex:1;text-align:right;">
+        <div class="kl">YoY 住宿率</div>
+        <div class="kv" id="v-yoy" style="font-size:calc(18px * var(--fs));"><span class="neu">—</span></div>
       </div>
     </div>
-    <div style="flex:1;text-align:right;">
-      <div class="kl">YoY 住宿率</div>
-      <div class="kv" id="v-yoy" style="font-size:18px;"><span class="neu">—</span></div>
-      <div style="margin-top:12px;">
-        <div class="kl">去年同期</div>
-        <div class="kv" id="v-prev-room" style="font-size:15px;"><span class="neu" style="font-size:var(--fs-body);">—</span></div>
+    <!-- 中間：橫跨整卡進度條（同收入結構款） -->
+    <div style="margin:12px 0;">
+      <div class="gi-stack" style="height:14px;">
+        <div class="gi-stack-seg" id="room-bar" style="width:0%;background:linear-gradient(90deg,#C8963E,#E8B86D);"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:5px;">
+        <span style="font-size:var(--fs-label);color:var(--tx3);">0%</span>
+        <span style="font-size:var(--fs-label);color:rgba(255,255,255,.35);">目標 50%</span>
+        <span style="font-size:var(--fs-label);color:var(--tx3);">100%</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:14px;align-items:flex-end;">
+      <div style="flex:1;">
+        <div class="kd" id="d-room"><span class="neu">—</span></div>
+      </div>
+      <div style="flex:1;text-align:right;">
+        <span class="kl">去年同期 </span>
+        <span class="kv" id="v-prev-room" style="font-size:calc(15px * var(--fs));"><span class="neu" style="font-size:var(--fs-body);">—</span></span>
       </div>
     </div>
   </div>
@@ -1066,37 +1088,37 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       <div class="kv" id="v-guests">—<span class="ku"> 人</span></div>
     </div>
     <div style="text-align:right;flex-shrink:0;">
-      <div style="font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.06em;">YoY</div>
-      <div id="d-guests" style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;line-height:1.1;margin-top:1px;"><span class="neu">—</span></div>
+      <div style="font-size:var(--fs-label);color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.06em;">YoY</div>
+      <div id="d-guests" style="font-family:'DM Mono',monospace;font-size:calc(20px * var(--fs));font-weight:500;line-height:1.1;margin-top:1px;"><span class="neu">—</span></div>
     </div>
   </div>
   <div class="kpi am" style="display:flex;gap:10px;align-items:flex-start;">
     <div style="flex:1;">
-      <div class="kl">每房平均人數</div>
+      <div class="kl">房均人數</div>
       <div class="kv" id="v-gpr">—<span class="ku"> 人/房</span></div>
     </div>
     <div style="text-align:right;flex-shrink:0;">
-      <div style="font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.06em;">YoY</div>
-      <div id="d-gpr" style="font-family:'DM Mono',monospace;font-size:20px;font-weight:500;line-height:1.1;margin-top:1px;"><span class="neu">—</span></div>
+      <div style="font-size:var(--fs-label);color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.06em;">YoY</div>
+      <div id="d-gpr" style="font-family:'DM Mono',monospace;font-size:calc(20px * var(--fs));font-weight:500;line-height:1.1;margin-top:1px;"><span class="neu">—</span></div>
     </div>
   </div>
   <div class="kpi rd" style="display:flex;gap:10px;align-items:flex-start;">
     <div style="flex:1;">
       <div class="kl">住房數</div>
-      <div class="kv" id="v-stays">—<span class="ku"> 房晚</span></div>
+      <div class="kv" id="v-stays">—</div>
     </div>
     <div style="text-align:right;flex-shrink:0;">
-      <div style="font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.06em;">YoY</div>
+      <div style="font-size:var(--fs-label);color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.06em;">YoY</div>
       <div id="d-stays" style="margin-top:1px;"><span class="neu">—</span></div>
     </div>
   </div>
   <div class="kpi g" style="display:flex;gap:10px;align-items:flex-start;">
     <div style="flex:1;">
       <div class="kl">房均單價</div>
-      <div class="kv" id="v-adr">—<span class="ku"> 元</span></div>
+      <div class="kv" id="v-adr">—</div>
     </div>
     <div style="text-align:right;flex-shrink:0;">
-      <div style="font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.06em;">YoY</div>
+      <div style="font-size:var(--fs-label);color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.06em;">YoY</div>
       <div id="d-adr" style="margin-top:1px;"><span class="neu">—</span></div>
     </div>
   </div>
@@ -1106,19 +1128,21 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       <div class="kv" id="v-rev">—</div>
     </div>
     <div style="text-align:right;flex-shrink:0;">
-      <div style="font-size:9px;color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.06em;">YoY</div>
+      <div style="font-size:var(--fs-label);color:var(--tx3);font-family:'DM Mono',monospace;letter-spacing:.06em;">YoY</div>
       <div id="d-rev" style="margin-top:1px;"><span class="neu">—</span></div>
     </div>
   </div>
   <div class="kpi wide">
-    <div class="kl" style="margin-bottom:8px;">收入結構（住宿 vs 餐飲）</div>
+    <div class="kl" style="margin-bottom:8px;" id="gi-mix-title">收入結構（住宿 vs 餐飲）</div>
     <div class="gi-stack" id="gi-mix-bar">
       <div class="gi-stack-seg acc" id="gi-mix-acc" style="width:0%;"></div>
       <div class="gi-stack-seg rest" id="gi-mix-rest" style="width:0%;"></div>
+      <div class="gi-stack-seg venue" id="gi-mix-venue" style="width:0%;background:#4CAF82;"></div>
     </div>
     <div class="gi-stack-legend">
       <span class="gi-leg"><i class="dot acc"></i>住宿 <b id="gi-mix-acc-pct">—</b></span>
       <span class="gi-leg"><i class="dot rest"></i>餐飲 <b id="gi-mix-rest-pct">—</b></span>
+      <span class="gi-leg" id="gi-mix-venue-leg"><i class="dot venue"></i>場地 <b id="gi-mix-venue-pct">—</b></span>
     </div>
   </div>
 </div>
@@ -1225,7 +1249,6 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 </div>
 <div class="ai-card">
   <div class="ai-hdr">
-    <span style="font-size:16px;">🤖</span>
     <div class="ai-title">本月行銷建議</div>
     <div class="ai-badge" id="aiBadge">載入中</div>
   </div>
@@ -2742,7 +2765,7 @@ function yoyBig(now,prev,dp=0){
   if(!prev||prev===0||!now) return '<span class="neu" style="font-size:13px;font-family:\'DM Mono\',monospace;">—</span>';
   const diff=now-prev, up=diff>=0;
   const v=dp>0?Math.abs(diff).toFixed(dp):Math.round(Math.abs(diff)).toLocaleString();
-  return `<span class="${up?'up':'dn'}" style="font-size:20px;font-weight:500;font-family:'DM Mono',monospace;line-height:1.1;">${up?'+':'−'}${v}</span>`;
+  return `<span class="${up?'up':'dn'}" style="font-size:calc(20px * var(--fs));font-weight:500;font-family:'DM Mono',monospace;line-height:1.1;">${up?'+':'−'}${v}</span>`;
 }
 
 function renderMonth(i){
@@ -2752,7 +2775,10 @@ function renderMonth(i){
 
   // Room
   document.getElementById('v-room').innerHTML=(d.room>0?d.room.toFixed(2):'—')+'<span class="ku">%</span>';
-  document.getElementById('room-bar').style.width=Math.min(d.room,100)+'%';
+  (function(){
+    var bar=document.getElementById('room-bar');
+    if(bar) bar.style.width=Math.min(Math.max(d.room,0),100)+'%';
+  })();
   document.getElementById('d-room').innerHTML=d.room>0
     ?`<span class="${d.room>=50?'up':'dn'}">${d.room>=50?'▲ 達標':'▼ 未達'} 50%</span>`
     :'<span class="neu">尚無資料</span>';
@@ -2764,7 +2790,7 @@ function renderMonth(i){
 
   // Others
   function setK(id,val,unit,pval){
-    document.getElementById('v-'+id).innerHTML=(val>0?val.toLocaleString():'—')+(val>0?`<span class="ku"> ${unit}</span>`:'');
+    document.getElementById('v-'+id).innerHTML=(val>0?val.toLocaleString():'—');
     if(document.getElementById('d-'+id)) document.getElementById('d-'+id).innerHTML=deltaStr(val,pval,unit);
   }
   setK('stays',d.stays,'房晚',p?.stays);
@@ -2772,27 +2798,40 @@ function renderMonth(i){
   document.getElementById('d-stays').innerHTML=yoyBig(d.stays,p?.stays);
   document.getElementById('d-adr').innerHTML=yoyBig(d.adr,p?.adr);
   // 住宿人次 YoY（右側大字，僅顯示差值）
-  document.getElementById('v-guests').innerHTML=(d.guests>0?d.guests.toLocaleString():'—')+(d.guests>0?'<span class="ku"> 人</span>':'');
+  document.getElementById('v-guests').innerHTML=(d.guests>0?d.guests.toLocaleString():'—');
   document.getElementById('d-guests').innerHTML=yoyBig(d.guests,p?.guests);
   // 每房平均人數（取代原訂房結構分析）
   const gprCur=d.stays>0?d.guests/d.stays:0;
   const gprPrev=(p&&p.stays>0)?p.guests/p.stays:0;
-  document.getElementById('v-gpr').innerHTML=(gprCur>0?gprCur.toFixed(2):'—')+(gprCur>0?'<span class="ku"> 人/房</span>':'');
+  document.getElementById('v-gpr').innerHTML=(gprCur>0?gprCur.toFixed(2):'—');
   document.getElementById('d-gpr').innerHTML=yoyBig(gprCur,gprPrev,2);
-  document.getElementById('v-rev').innerHTML=d.rev>0?fmtRev(d.rev)+'<span class="ku"> 元</span>':'—';
+  document.getElementById('v-rev').innerHTML=d.rev>0?fmtRev(d.rev):'—';
   document.getElementById('d-rev').innerHTML=yoyBig(d.rev,p?.rev);
 
-  // 收入結構：住宿 vs 餐飲（兩者合計為100%）
+  // 收入結構：住宿 vs 餐飲 vs 場地（三者合計為100%）
   (function(){
-    const total=d.rev+d.rest_total;
+    const venueRev=(d.venue&&d.venue.total_r)?d.venue.total_r:0;
+    const total=d.rev+d.rest_total+venueRev;
     const accPct=total>0?Math.round(d.rev/total*100):0;
-    const restPct=total>0?100-accPct:0;
-    const accEl=document.getElementById('gi-mix-acc'), restEl=document.getElementById('gi-mix-rest');
+    const venuePct=total>0?Math.round(venueRev/total*100):0;
+    const restPct=total>0?Math.max(0,100-accPct-venuePct):0;
+    const accEl=document.getElementById('gi-mix-acc'),
+          restEl=document.getElementById('gi-mix-rest'),
+          venueEl=document.getElementById('gi-mix-venue');
     if(accEl) accEl.style.width=accPct+'%';
     if(restEl) restEl.style.width=restPct+'%';
-    const ap=document.getElementById('gi-mix-acc-pct'), rp=document.getElementById('gi-mix-rest-pct');
+    if(venueEl) venueEl.style.width=venuePct+'%';
+    const ap=document.getElementById('gi-mix-acc-pct'),
+          rp=document.getElementById('gi-mix-rest-pct'),
+          vp=document.getElementById('gi-mix-venue-pct');
     if(ap) ap.textContent=total>0?accPct+'%':'—';
     if(rp) rp.textContent=total>0?restPct+'%':'—';
+    if(vp) vp.textContent=total>0?venuePct+'%':'—';
+    // 無場地收入（如金門）時隱藏場地圖例
+    const vleg=document.getElementById('gi-mix-venue-leg');
+    if(vleg) vleg.style.display=venueRev>0?'':'none';
+    const vtitle=document.getElementById('gi-mix-title');
+    if(vtitle) vtitle.textContent=venueRev>0?'收入結構（住宿 vs 餐飲 vs 場地）':'收入結構（住宿 vs 餐飲）';
   })();
 
   // Restaurant（四時段：早/午/晚/消夜）
