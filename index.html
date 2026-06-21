@@ -548,8 +548,8 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   padding:16px 18px 0;}
 .uhdr-l{flex:1;min-width:0;}
 .uhdr-title{font-family:'Bebas Neue','Noto Sans TC',sans-serif;
-  font-size:30px;letter-spacing:.04em;color:var(--ac);line-height:1.1;font-weight:700;}
-.uhdr-sub{font-size:15px;color:var(--tx2);margin-top:3px;line-height:1.3;}
+  font-size:25px;letter-spacing:.02em;color:var(--ac);line-height:1.15;font-weight:700;white-space:nowrap;}
+.uhdr-sub{font-size:14px;color:var(--tx2);margin-top:3px;line-height:1.3;white-space:nowrap;}
 .uhdr-r{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .uhdr-btn{background:transparent;border:none;cursor:pointer;font-size:20px;opacity:.65;padding:4px;}
 .uhdr-btn:hover{opacity:1;}
@@ -644,10 +644,11 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   /* 導覽列加高 */
   .bnav{padding:14px 0 22px !important;}
   /* 五個分頁之間加分隔線，各自獨立區塊 */
-  .ni{position:relative;padding:2px 0 !important;}
-  .ni+.ni::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
-    width:1px;height:60%;background:var(--bd);}
-  .ni.on{background:linear-gradient(to top,rgba(200,150,62,.12),transparent);border-radius:8px;}
+  .ni{position:relative;padding:4px 2px !important;margin:0 2px;}
+  .ni+.ni::before{content:'';position:absolute;left:-2px;top:50%;transform:translateY(-50%);
+    width:1px;height:66%;background:var(--bd2);}
+  .ni.on{background:linear-gradient(to top,rgba(200,150,62,.18),rgba(200,150,62,.04));
+    border-radius:10px;box-shadow:inset 0 0 0 1px var(--bd2);}
   /* 兩年度合計表：欄寬自適應、數字不截斷、縮排縮字避免擠成一團 */
   .yt{table-layout:auto !important;font-size:calc(11px * var(--fs)) !important;}
   .yt th,.yt td{padding:6px 3px !important;white-space:normal !important;
@@ -659,6 +660,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   body{max-width:none !important;padding-left:240px !important;padding-right:0 !important;}
   .app{max-width:1180px;margin:0 auto;padding-bottom:48px !important;}
   .kg{grid-template-columns:repeat(4,1fr) !important;}
+  .uhdr-title{font-size:30px !important;}
   .kpi.wide{grid-column:1/-1 !important;}
 
   /* 底部導覽 → 左側固定欄 */
@@ -1281,7 +1283,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 </div><!-- /dept-venue -->
 
 <!-- Daily chart -->
-<div id="dailyMonthTabs" style="display:flex;gap:6px;flex-wrap:wrap;padding:4px 18px 8px;justify-content:flex-end;"></div>
+<div id="dailyMonthTabs" style="display:flex;gap:8px;flex-wrap:wrap;padding:4px 18px 8px;justify-content:flex-start;"></div>
 <div class="card">
   <div style="font-size:var(--fs-body);font-weight:500;color:var(--tx);margin-bottom:10px;" id="dcTitle">2026年 五月・日別房使用率</div>
   <div class="dc-wrap">
