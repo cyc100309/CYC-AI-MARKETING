@@ -543,6 +543,29 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .ord-btrack{height:8px;background:var(--sf2);border-radius:6px;overflow:hidden;}
 .ord-bfill{height:100%;border-radius:6px;transition:width .5s ease;}
 
+/* ════════ 統一單位 Header（每頁置頂，顯示目前單位）════════ */
+.uhdr{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  padding:16px 18px 0;}
+.uhdr-l{flex:1;min-width:0;}
+.uhdr-title{font-family:'Bebas Neue','Noto Sans TC',sans-serif;
+  font-size:30px;letter-spacing:.04em;color:var(--ac);line-height:1.1;font-weight:700;}
+.uhdr-sub{font-size:15px;color:var(--tx2);margin-top:3px;line-height:1.3;}
+.uhdr-r{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.uhdr-btn{background:transparent;border:none;cursor:pointer;font-size:20px;opacity:.65;padding:4px;}
+.uhdr-btn:hover{opacity:1;}
+.uhdr-yr{font-family:'DM Mono',monospace;font-size:var(--fs-label);color:var(--ac2);
+  background:var(--ad);padding:5px 11px;border-radius:20px;border:1px solid var(--bd2);}
+.uhdr-meta{padding:8px 18px 0;}
+.uhdr-date{font-size:var(--fs-sub);color:var(--tx3);font-family:'DM Mono',monospace;}
+.uhdr-sync{display:flex;align-items:center;gap:8px;padding:6px 18px 0;flex-wrap:wrap;}
+.uhdr-sync-st{font-size:var(--fs-sub);color:var(--tx3);}
+.uhdr-sync-btn{font-size:var(--fs-sub);color:var(--tx3);background:transparent;
+  border:1px solid var(--bd);border-radius:20px;padding:3px 11px;cursor:pointer;
+  font-family:'Noto Sans TC',sans-serif;}
+.uhdr-refresh{font-size:var(--fs-sub);color:var(--ac2);background:var(--ad);
+  border:1px solid var(--bd2);border-radius:20px;padding:3px 11px;cursor:pointer;
+  white-space:nowrap;font-family:'Noto Sans TC',sans-serif;}
+
 /* ════════════════════════════════════════════════════════════
    改版第一層：響應式容器 + 桌機左側欄 + 字級切換鈕
    （附加在最後，優先級最高，覆蓋前面舊有衝突規則）
@@ -1286,7 +1309,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <span id="aiLastUpdate" style="font-size:var(--fs-sub);color:var(--tx3);">每日最多分析一次</span>
     <button onclick="genAI(true)" style="font-size:var(--fs-sub);color:var(--ac2);background:var(--ad);
       border:1px solid var(--bd2);border-radius:20px;padding:3px 10px;cursor:pointer;
-      font-family:'Noto Sans TC',sans-serif;">🔄 重新分析</button>
+      font-family:'Noto Sans TC',sans-serif;">重新分析</button>
   </div>
 </div>
 
@@ -5235,7 +5258,7 @@ function updateDailyMonthSelector(){
     btn.textContent=label;
     btn.onclick=()=>setDailyMonth(i);
     const isActive=i===dailyViewIdx;
-    btn.style.cssText=`font-size:11px;padding:3px 10px;border-radius:20px;cursor:pointer;
+    btn.style.cssText=`font-size:var(--fs-sub);padding:5px 13px;border-radius:20px;cursor:pointer;
       font-family:'Noto Sans TC',sans-serif;border:1px solid ${isActive?'var(--ac)':'var(--bd)'};
       background:${isActive?'var(--ac)':'var(--sf2)'};
       color:${isActive?'#fff':'var(--tx2)'};transition:all .2s;`;
@@ -6605,9 +6628,55 @@ function refreshActivePage(){
     else if(id==='edu'){ try{ fetchTourNews(); }catch(e){} }
   }catch(e){}
 }
+// 統一單位 Header：每個分頁置頂，顯示目前單位（切頁也知道在哪個單位）
+function injectUnitHeaders(){
+  var title=cfg.logo||'青年活動中心';
+  var subName=(cfg.name||'救國團青年活動中心');
+  // 副標：救國團XX青年活動中心‧V8（刪掉住宿分析）
+  var subText=subName+'‧V8';
+  var dateTxt=document.getElementById('dataDateTxt');
+  var dateStr=dateTxt?dateTxt.textContent:'';
+  var syncMsg=document.getElementById('syncStatusMsg');
+  var syncStr=(syncMsg?syncMsg.textContent:'')||'本機已儲存';
+  var yr=(document.getElementById('yrB')?document.getElementById('yrB').textContent:'2026年');
+  ['occ','comp','tri','edu','mkt'].forEach(function(pid){
+    var page=document.getElementById('page-'+pid);
+    if(!page) return;
+    // 隱藏該頁原本的 .hdr（在 .app 內，不限直接子層）
+    var oldHdr=page.querySelector('.hdr');
+    if(oldHdr) oldHdr.style.display='none';
+    // 注入容器放在 .app 內最前面（與內容對齊）
+    var host=page.querySelector('.app')||page;
+    var uh=host.querySelector(':scope > .uhdr-wrap');
+    if(!uh){
+      uh=document.createElement('div');
+      uh.className='uhdr-wrap';
+      host.insertBefore(uh, host.firstChild);
+    }
+    uh.innerHTML=
+      '<div class="uhdr">'+
+        '<div class="uhdr-l">'+
+          '<div class="uhdr-title">'+title+'</div>'+
+          '<div class="uhdr-sub">'+subText+'</div>'+
+        '</div>'+
+        '<div class="uhdr-r">'+
+          '<span class="uhdr-yr">'+yr+'</span>'+
+          '<button class="uhdr-btn" onclick="openCfg()" title="設定">⚙️</button>'+
+          '<button class="uhdr-btn" onclick="backToCover()" title="回首頁">🏠</button>'+
+        '</div>'+
+      '</div>'+
+      (dateStr?'<div class="uhdr-meta"><span class="uhdr-date">'+dateStr+'</span></div>':'')+
+      '<div class="uhdr-sync">'+
+        '<span class="uhdr-sync-st">'+syncStr+'</span>'+
+        '<button class="uhdr-sync-btn" onclick="document.getElementById(\'cloudSetupPanel\').style.display=\'flex\'">雲端同步</button>'+
+        '<button class="uhdr-refresh" onclick="refreshDisplay()">重新整理</button>'+
+      '</div>';
+  });
+}
 function applyCfg(){
   document.getElementById('hdrLogo').textContent=cfg.logo||'青年活動中心';
   document.getElementById('hdrSub').textContent=(cfg.name||'救國團青年活動中心')+'・住宿分析';
+  injectUnitHeaders();
   const show=v=>v?'':'none';
   const rs=document.getElementById('rest-section');
   const rg=document.getElementById('rest-grid');
@@ -7326,7 +7395,7 @@ async function runAITourAnalysis(){
   if(errEl) errEl.style.display='none';
   if(content) content.innerHTML='<div style="color:var(--tx3);text-align:center;padding:8px;">⏳ 生成旅遊趨勢分析中，約需10秒...</div>';
   const now=new Date();
-  const API_KEY=getApiKey(); if(!API_KEY){ if(textEl) textEl.innerHTML='<span style="color:var(--red)">請先在設定中輸入 Anthropic API Key</span>'; if(btn){btn.disabled=false;btn.textContent='✨ 重新分析';} return; }
+  const API_KEY=getApiKey(); if(!API_KEY){ if(textEl) textEl.innerHTML='<span style="color:var(--red)">請先在設定中輸入 Anthropic API Key</span>'; if(btn){btn.disabled=false;btn.textContent='重新分析';} return; }
   try{
     const resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -7385,7 +7454,7 @@ async function runAITourAnalysis(){
     if(errEl){ errEl.textContent='❌ '+e.message; errEl.style.display='block'; }
     console.error('AI Tour Error:',e);
   }
-  if(btn){ btn.disabled=false; btn.textContent='🔍 重新分析'; }
+  if(btn){ btn.disabled=false; btn.textContent='重新分析'; }
 }
 
 function loadAITourResult(){ /* static content */ }
