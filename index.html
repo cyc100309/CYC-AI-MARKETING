@@ -1482,12 +1482,12 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     </div>
     <button onclick="loadOrders(true)" style="flex-shrink:0;padding:5px 10px;background:var(--ad);
       border:1px solid var(--bd2);border-radius:20px;color:var(--ac2);font-size:var(--fs-sub);cursor:pointer;
-      font-family:'Noto Sans TC',sans-serif;white-space:nowrap;">🔄 更新</button>
+      font-family:'Noto Sans TC',sans-serif;white-space:nowrap;">更新</button>
   </div>
-  <div id="ordDataDate" style="font-size:9px;color:var(--tx3);margin-bottom:14px;">資料：—</div>
+  <div id="ordDataDate" style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:14px;">資料：—</div>
 
   <!-- 今日動態（基準：訂房日/收信日 = 今天）— 置於月份選軸上方，不受期間篩選影響 -->
-  <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;"><span>📨 今日動態</span><span class="lbl-r" id="ordTodayDate" style="font-size:9px;color:var(--tx3);">—</span></div>
+  <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;"><span>今日動態</span><span class="lbl-r" id="ordTodayDate" style="font-size:var(--fs-label);color:var(--tx3);">—</span></div>
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
     <div class="ord-kpi"><div class="ord-kpi-l">今日新增</div><div class="ord-kpi-v" id="ordTodayNew" style="color:var(--green);">—</div><div class="ord-kpi-s">筆</div></div>
     <div class="ord-kpi"><div class="ord-kpi-l">今日取消</div><div class="ord-kpi-v" id="ordTodayCancel" style="color:var(--red);">—</div><div class="ord-kpi-s">筆</div></div>
@@ -1529,7 +1529,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   </div>
 
   <div id="ordLoading" style="font-size:var(--fs-sub);color:var(--tx3);padding:30px 10px;text-align:center;">
-    ⏳ 載入訂單資料中...
+    載入訂單資料中...
   </div>
 
   <div id="ordBody" style="display:none;">
@@ -1542,40 +1542,40 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     </div>
 
     <!-- 各通路訂單數 / 營收占比 -->
-    <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;"><span>📊 各通路表現</span><span class="lbl-r" style="font-size:9px;color:var(--tx3);">有效訂單</span></div>
+    <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;"><span>各通路表現</span><span class="lbl-r" style="font-size:var(--fs-label);color:var(--tx3);">有效訂單</span></div>
     <div id="ordChannelBars" style="display:flex;flex-direction:column;gap:9px;margin-bottom:8px;"></div>
-    <div style="font-size:9px;color:var(--tx3);margin-bottom:20px;line-height:1.6;">
+    <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:20px;line-height:1.6;">
       長條左為訂單數占比、右標營收。點通路名可切換營收／訂單數排序。
     </div>
 
     <!-- 各通路平均訂單金額 -->
-    <div class="lbl" style="margin-bottom:10px;padding-left:0;padding-right:0;"><span>💵 各通路平均訂單金額</span></div>
+    <div class="lbl" style="margin-bottom:10px;padding-left:0;padding-right:0;"><span>各通路平均訂單金額</span></div>
     <div id="ordAvgBars" style="display:flex;flex-direction:column;gap:9px;margin-bottom:22px;"></div>
 
     <!-- 提前預訂天數分布 -->
-    <div class="lbl" style="margin-bottom:4px;padding-left:0;padding-right:0;"><span>📅 提前預訂天數分布</span></div>
-    <div style="font-size:9px;color:var(--tx3);margin-bottom:12px;">收信日至入住日的提前天數，反映各客群訂房習慣。</div>
+    <div class="lbl" style="margin-bottom:4px;padding-left:0;padding-right:0;"><span>提前預訂天數分布</span></div>
+    <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:12px;">收信日至入住日的提前天數，反映各客群訂房習慣。</div>
     <svg id="ordLeadChart" viewBox="0 0 360 127" style="width:100%;height:auto;margin-bottom:2px;"></svg>
-    <div id="ordLeadLegend" style="font-size:9px;color:var(--tx3);text-align:center;margin-bottom:22px;line-height:1.6;"></div>
+    <div id="ordLeadLegend" style="font-size:var(--fs-label);color:var(--tx3);text-align:center;margin-bottom:22px;line-height:1.6;"></div>
 
     <!-- 每日新增/取消（跟隨上方月份篩選）— 移到月份趨勢上方 -->
-    <div class="lbl" style="margin-bottom:4px;padding-left:0;padding-right:0;"><span>🗓️ 每日新增／取消</span><span class="lbl-r" id="ordDailyTitle" style="font-size:9px;color:var(--tx3);">—</span></div>
-    <div style="font-size:9px;color:var(--tx3);margin-bottom:12px;">依下訂日統計所選月份每一天的新增與取消訂單數。選季別／累計時則改以月為單位。</div>
+    <div class="lbl" style="margin-bottom:4px;padding-left:0;padding-right:0;"><span>每日新增／取消</span><span class="lbl-r" id="ordDailyTitle" style="font-size:var(--fs-label);color:var(--tx3);">—</span></div>
+    <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:12px;">依下訂日統計所選月份每一天的新增與取消訂單數。選季別／累計時則改以月為單位。</div>
     <svg id="ordDailyChart" viewBox="0 0 360 133" style="width:100%;height:auto;margin-bottom:2px;"></svg>
-    <div id="ordDailyLegend" style="font-size:9px;color:var(--tx3);text-align:center;margin-bottom:22px;line-height:1.6;">
+    <div id="ordDailyLegend" style="font-size:var(--fs-label);color:var(--tx3);text-align:center;margin-bottom:22px;line-height:1.6;">
       <span style="color:var(--green);">▬</span> 新增　<span style="color:var(--red);">▬</span> 取消
     </div>
 
     <!-- 月份趨勢 -->
-    <div class="lbl" style="margin-bottom:4px;padding-left:0;padding-right:0;"><span>📈 月份訂單趨勢</span></div>
-    <div style="font-size:9px;color:var(--tx3);margin-bottom:12px;">依下訂月份統計每月新增訂單數與取消數。</div>
+    <div class="lbl" style="margin-bottom:4px;padding-left:0;padding-right:0;"><span>月份訂單趨勢</span></div>
+    <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:12px;">依下訂月份統計每月新增訂單數與取消數。</div>
     <svg id="ordTrendChart" viewBox="0 0 360 133" style="width:100%;height:auto;margin-bottom:2px;"></svg>
-    <div style="font-size:9px;color:var(--tx3);text-align:center;margin-bottom:22px;">
+    <div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;margin-bottom:22px;">
       <span style="color:var(--ac2);">■</span> 訂單數（新增）　<span style="color:var(--red);">■</span> 取消數
     </div>
 
     <!-- 週間 vs 週末 -->
-    <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;"><span>📆 週間 vs 週末</span><span class="lbl-r" id="ordWkTitle" style="font-size:9px;color:var(--tx3);">—</span></div>
+    <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;"><span>週間 vs 週末</span><span class="lbl-r" id="ordWkTitle" style="font-size:var(--fs-label);color:var(--tx3);">—</span></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
       <div class="ord-kpi">
         <div class="ord-kpi-l" style="margin-bottom:8px;">週間（一～五）</div>
@@ -1606,27 +1606,27 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
         </div>
       </div>
     </div>
-    <div style="font-size:9px;color:var(--tx3);margin-bottom:22px;line-height:1.6;">佔比＝該區間新增（或取消）÷ 全期間新增（或取消）總數。</div>
+    <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:22px;line-height:1.6;">佔比＝該區間新增（或取消）÷ 全期間新增（或取消）總數。</div>
 
     <!-- 今年 vs 去年 逐月折線（YoY，僅多年度資料時顯示） -->
     <div id="ordYoYBlock" style="display:none;">
-      <div class="lbl" style="margin-bottom:4px;"><span>📊 今年 vs 去年・逐月訂房金額</span></div>
-      <div style="font-size:9px;color:var(--tx3);margin-bottom:12px;">同月份（依下訂日）營收年度對比，快速看出旺淡季成長。</div>
+      <div class="lbl" style="margin-bottom:4px;"><span>今年 vs 去年・逐月訂房金額</span></div>
+      <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:12px;">同月份（依下訂日）營收年度對比，快速看出旺淡季成長。</div>
       <svg id="ordYoYChart" viewBox="0 0 360 200" style="width:100%;height:auto;margin-bottom:6px;"></svg>
-      <div id="ordYoYLegend" style="font-size:9px;color:var(--tx3);text-align:center;margin-bottom:22px;"></div>
+      <div id="ordYoYLegend" style="font-size:var(--fs-label);color:var(--tx3);text-align:center;margin-bottom:22px;"></div>
     </div>
 
     <!-- 取消率分通路 -->
-    <div class="lbl" style="margin-bottom:10px;padding-left:0;padding-right:0;"><span>❌ 各通路取消率</span></div>
+    <div class="lbl" style="margin-bottom:10px;padding-left:0;padding-right:0;"><span>各通路取消率</span></div>
     <div id="ordCancelBars" style="display:flex;flex-direction:column;gap:9px;margin-bottom:18px;"></div>
 
-    <div style="font-size:9px;color:var(--tx3);line-height:1.6;background:var(--sf);
+    <div style="font-size:var(--fs-label);color:var(--tx3);line-height:1.6;background:var(--sf);
       border:1px solid var(--bd);border-radius:var(--rs);padding:10px;">
-      💡 資料來源：訂房自動化 Google 試算表（收信解析）。如需更新解析欄位或新增通路，請於試算表調整後按「🔄 更新」。
+      資料來源：訂房自動化 Google 試算表（收信解析）。如需更新解析欄位或新增通路，請於試算表調整後按「更新」。
     </div>
   </div>
 
-  <div id="ordError" style="display:none;font-size:11px;color:var(--red);padding:20px 10px;
+  <div id="ordError" style="display:none;font-size:var(--fs-label);color:var(--red);padding:20px 10px;
     text-align:center;line-height:1.8;"></div>
 </div>
 
