@@ -25,7 +25,7 @@
   --bd:rgba(255,255,255,.07);--bd2:rgba(200,150,62,.25);
   --r:14px;--rs:8px;
   /* ── 字級階梯：由字級切換鈕統一縮放（標準1.12 / 大1.32 / 特大1.55）── */
-  --fs:1.12;
+  --fs:1;
   --fs-kpi:   calc(26px * var(--fs));
   --fs-h1:    calc(22px * var(--fs));
   --fs-h2:    calc(16px * var(--fs));
@@ -35,9 +35,10 @@
   --fs-tab:   calc(14px * var(--fs));
   --fs-nav:   calc(12.5px * var(--fs));
 }
-[data-fs="std"]{--fs:1.12;}
-[data-fs="lg"]{--fs:1.32;}
-[data-fs="xl"]{--fs:1.55;}
+[data-fs="std"]{--fs:1;}
+[data-fs="lg"]{--fs:1.18;}
+[data-fs="xl"]{--fs:1.38;}
+[data-fs="xxl"]{--fs:1.6;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   max-width:430px;margin:0 auto;min-height:100vh;}
@@ -631,14 +632,14 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   padding:10px 14px;text-align:center;transition:all .15s;line-height:1;}
 .fs-pop button:hover{border-color:var(--ac);color:var(--ac);}
 .fs-pop button.on{background:var(--ac);color:var(--bg);border-color:var(--ac);font-weight:700;}
-.fs-pop .fb1{font-size:13px;} .fs-pop .fb2{font-size:16px;} .fs-pop .fb3{font-size:19px;}
+.fs-pop .fb1{font-size:13px;} .fs-pop .fb2{font-size:16px;} .fs-pop .fb3{font-size:19px;} .fs-pop .fb4{font-size:22px;}
 
 /* 解除手機 430px 死鎖：手機維持窄版，桌機放寬 */
 /* 手機（≤767px）：四張 KPI 卡標準/大維持兩欄，特大才改單欄 */
 @media (max-width:767px){
   .kg{grid-template-columns:1fr 1fr !important;}
   /* 特大字級時改單欄，避免兩欄擠壓 */
-  [data-fs="xl"] .kg{grid-template-columns:1fr !important;}
+  [data-fs="xl"] .kg, [data-fs="xxl"] .kg{grid-template-columns:1fr !important;}
   /* 底部導覽文字兩行置中、字級放大 */
   .ni-l{line-height:1.25 !important;text-align:center;font-size:var(--fs-sub) !important;font-weight:500;}
   /* 導覽列加高 */
@@ -5279,22 +5280,26 @@ function buildDailyChart(){
   const n=rows.length;
   var _fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
   var _fsc=_fs/1.12;
-  const bW=Math.round(14*_fsc), gap=3, pL=26, pT=Math.round(12*_fsc), pB=Math.round(26*_fsc), H=Math.round(140*_fsc), iH=H-pT-pB;
+  var _fitMode=window.matchMedia('(min-width:768px)').matches || (document.documentElement.getAttribute('data-fs')||'std')==='std';
+  var _Hbase=_fitMode?260:140;
+  var _bwBase=_fitMode?11:14;
+  const bW=Math.round(_bwBase*_fsc), gap=3, pL=26, pT=Math.round(12*_fsc), pB=Math.round(26*_fsc), H=Math.round(_Hbase*_fsc), iH=H-pT-pB;
   const _dfNum=(8*_fsc).toFixed(1);
   const totalW=pL+n*(bW+gap)+10;
   const svg=document.getElementById('dcSvg');
   var _isDesktop=window.matchMedia('(min-width:768px)').matches;
+  var _curFs=document.documentElement.getAttribute('data-fs')||'std';
   var _vbW=Math.max(totalW,300);
   svg.setAttribute('viewBox','0 0 '+_vbW+' '+H);
   svg.innerHTML='';
-  if(_isDesktop){
-    // 桌機：填滿容器寬度
+  if(_isDesktop || _curFs==='std'){
+    // 桌機 或 標準字級：填滿容器寬度、不捲軸（一頁顯示）
     svg.setAttribute('width','100%');
-    svg.removeAttribute('height');
     svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+    svg.removeAttribute('height');
     svg.style.maxWidth='100%';
   }else{
-    // 手機：實際像素尺寸，字級放大真的變大，塞不下用容器捲軸
+    // 手機放大字級：實際像素尺寸，塞不下用容器捲軸
     svg.setAttribute('width',_vbW);
     svg.setAttribute('height',H);
     svg.removeAttribute('preserveAspectRatio');
@@ -6158,16 +6163,20 @@ function buildTrendChart(){
   svg.innerHTML='';
   var fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
   var fsc=fs/1.12;
-  const W=640, H=Math.round(150*fsc), pt={t:Math.round(16*fsc),b:Math.round(26*fsc),l:30,r:10};
+  var _fitM=window.matchMedia('(min-width:768px)').matches || (document.documentElement.getAttribute('data-fs')||'std')==='std';
+  const W=640, H=Math.round((_fitM?300:150)*fsc), pt={t:Math.round(16*fsc),b:Math.round(26*fsc),l:30,r:10};
   svg.setAttribute('viewBox','0 0 '+W+' '+H);
   var _isDesk=window.matchMedia('(min-width:768px)').matches;
-  if(_isDesk){
+  var _curFs=document.documentElement.getAttribute('data-fs')||'std';
+  if(_isDesk || _curFs==='std'){
     svg.setAttribute('width','100%');
+    svg.setAttribute('preserveAspectRatio','xMidYMid meet');
     svg.removeAttribute('height');
     svg.style.maxWidth='100%';
   }else{
     svg.setAttribute('width',W);
     svg.setAttribute('height',H);
+    svg.removeAttribute('preserveAspectRatio');
     svg.style.maxWidth='none';
   }
   const iW=W-pt.l-pt.r, iH=H-pt.t-pt.b;
@@ -8769,6 +8778,7 @@ function buildCountyGrid(){
           '<button class="fb1" data-set="std">標準</button>'+
           '<button class="fb2" data-set="lg">大</button>'+
           '<button class="fb3" data-set="xl">特大</button>'+
+          '<button class="fb4" data-set="xxl">超大</button>'+
         '</div>'+
         '<button class="fs-fab-btn" id="fsFabBtn" title="調整文字大小" aria-label="調整文字大小">'+
           '<span class="fs-fab-a">A</span><span class="fs-fab-a2">a</span>'+
