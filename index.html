@@ -457,7 +457,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 /* Update time */
 .update-bar{margin:8px 18px 0;display:flex;align-items:center;justify-content:space-between;}
 .update-time{font-size:10px;color:var(--tx3);font-family:'DM Mono',monospace;}
-.update-btn{font-size:11px;color:var(--ac2);background:var(--ad);
+.update-btn{font-size:var(--fs-sub);color:var(--ac2);background:var(--ad);
   border:1px solid var(--bd2);border-radius:20px;padding:4px 12px;cursor:pointer;
   font-family:'Noto Sans TC',sans-serif;}
 
@@ -470,12 +470,12 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .ni.on .ni-i{opacity:1;}.ni.on .ni-l{color:var(--ac);}
 /* 網路訂單分析 */
 .ord-rg{flex-shrink:0;padding:5px 13px;border-radius:20px;border:1px solid var(--bd);
-  background:var(--sf);color:var(--tx3);font-size:11px;cursor:pointer;
+  background:var(--sf);color:var(--tx3);font-size:var(--fs-sub);cursor:pointer;
   font-family:'Noto Sans TC',sans-serif;transition:all .2s;white-space:nowrap;}
 .ord-rg.on{background:var(--ac);color:#0F1923;border-color:var(--ac);font-weight:700;}
 .ord-mwrap{display:flex;align-items:center;gap:0;}
 .ord-marrow{width:28px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;color:var(--tx3);font-size:16px;background:transparent;border:none;transition:color .15s;}
+  cursor:pointer;color:var(--tx3);font-size:calc(16px * var(--fs));background:transparent;border:none;transition:color .15s;}
 .ord-marrow:hover{color:var(--ac);}
 .ord-mrow{flex:1;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 2px;}
 .ord-mrow::-webkit-scrollbar{display:none;}
@@ -538,9 +538,9 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .ord-kpi-v{font-size:20px;font-weight:700;color:var(--ac2);font-family:'DM Mono',monospace;line-height:1.1;}
 .ord-kpi-s{font-size:9px;color:var(--tx3);margin-top:4px;}
 .ord-brow{display:flex;flex-direction:column;gap:4px;}
-.ord-btop{display:flex;align-items:baseline;justify-content:space-between;font-size:11px;}
+.ord-btop{display:flex;align-items:baseline;justify-content:space-between;font-size:var(--fs-label);}
 .ord-bname{color:var(--tx);font-weight:500;}
-.ord-bval{color:var(--tx2);font-family:'DM Mono',monospace;font-size:10px;}
+.ord-bval{color:var(--tx2);font-family:'DM Mono',monospace;font-size:var(--fs-label);}
 .ord-btrack{height:8px;background:var(--sf2);border-radius:6px;overflow:hidden;}
 .ord-bfill{height:100%;border-radius:6px;transition:width .5s ease;}
 
@@ -640,6 +640,9 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   .kg{grid-template-columns:1fr 1fr !important;}
   /* 特大字級時改單欄，避免兩欄擠壓 */
   [data-fs="xl"] .kg, [data-fs="xxl"] .kg{grid-template-columns:1fr !important;}
+  /* 網路訂單頁 KPI 卡：三欄(今日動態)特大時改單欄；兩欄(摘要/週間週末)特大時改單欄 */
+  [data-fs="xl"] .ord-kg3, [data-fs="xxl"] .ord-kg3{grid-template-columns:1fr !important;}
+  [data-fs="xl"] .ord-kg2, [data-fs="xxl"] .ord-kg2{grid-template-columns:1fr !important;}
   /* 底部導覽文字兩行置中、字級放大 */
   .ni-l{line-height:1.25 !important;text-align:center;font-size:var(--fs-sub) !important;font-weight:500;}
   /* 導覽列加高 */
@@ -1488,7 +1491,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
   <!-- 今日動態（基準：訂房日/收信日 = 今天）— 置於月份選軸上方，不受期間篩選影響 -->
   <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;"><span>今日動態</span><span class="lbl-r" id="ordTodayDate" style="font-size:var(--fs-label);color:var(--tx3);">—</span></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+  <div class="ord-kg3" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
     <div class="ord-kpi"><div class="ord-kpi-l">今日新增</div><div class="ord-kpi-v" id="ordTodayNew" style="color:var(--green);">—</div><div class="ord-kpi-s">筆</div></div>
     <div class="ord-kpi"><div class="ord-kpi-l">今日取消</div><div class="ord-kpi-v" id="ordTodayCancel" style="color:var(--red);">—</div><div class="ord-kpi-s">筆</div></div>
     <div class="ord-kpi"><div class="ord-kpi-l">今日訂單總額</div><div class="ord-kpi-v" id="ordTodayRev">—</div><div class="ord-kpi-s">新增訂房</div></div>
@@ -1534,7 +1537,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
   <div id="ordBody" style="display:none;">
     <!-- KPI 摘要 -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+    <div class="ord-kg2" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
       <div class="ord-kpi"><div class="ord-kpi-l">有效訂單</div><div class="ord-kpi-v" id="ordKpiCount">—</div><div class="ord-kpi-s" id="ordKpiSub1">—</div></div>
       <div class="ord-kpi"><div class="ord-kpi-l">訂房總額</div><div class="ord-kpi-v" id="ordKpiRev">—</div><div class="ord-kpi-s" id="ordKpiAdr">—</div></div>
       <div class="ord-kpi"><div class="ord-kpi-l">平均訂單金額</div><div class="ord-kpi-v" id="ordKpiAvg">—</div><div class="ord-kpi-s">每筆有效訂單</div></div>
@@ -1555,13 +1558,13 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <!-- 提前預訂天數分布 -->
     <div class="lbl" style="margin-bottom:4px;padding-left:0;padding-right:0;"><span>提前預訂天數分布</span></div>
     <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:12px;">收信日至入住日的提前天數，反映各客群訂房習慣。</div>
-    <svg id="ordLeadChart" viewBox="0 0 360 127" style="width:100%;height:auto;margin-bottom:2px;"></svg>
+    <div class="ord-chart-scroll" style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:2px;"><svg id="ordLeadChart" viewBox="0 0 360 127" style="width:100%;height:auto;display:block;"></svg></div>
     <div id="ordLeadLegend" style="font-size:var(--fs-label);color:var(--tx3);text-align:center;margin-bottom:22px;line-height:1.6;"></div>
 
     <!-- 每日新增/取消（跟隨上方月份篩選）— 移到月份趨勢上方 -->
     <div class="lbl" style="margin-bottom:4px;padding-left:0;padding-right:0;"><span>每日新增／取消</span><span class="lbl-r" id="ordDailyTitle" style="font-size:var(--fs-label);color:var(--tx3);">—</span></div>
     <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:12px;">依下訂日統計所選月份每一天的新增與取消訂單數。選季別／累計時則改以月為單位。</div>
-    <svg id="ordDailyChart" viewBox="0 0 360 133" style="width:100%;height:auto;margin-bottom:2px;"></svg>
+    <div class="ord-chart-scroll" style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:2px;"><svg id="ordDailyChart" viewBox="0 0 360 133" style="width:100%;height:auto;display:block;"></svg></div>
     <div id="ordDailyLegend" style="font-size:var(--fs-label);color:var(--tx3);text-align:center;margin-bottom:22px;line-height:1.6;">
       <span style="color:var(--green);">▬</span> 新增　<span style="color:var(--red);">▬</span> 取消
     </div>
@@ -1569,14 +1572,14 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <!-- 月份趨勢 -->
     <div class="lbl" style="margin-bottom:4px;padding-left:0;padding-right:0;"><span>月份訂單趨勢</span></div>
     <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:12px;">依下訂月份統計每月新增訂單數與取消數。</div>
-    <svg id="ordTrendChart" viewBox="0 0 360 133" style="width:100%;height:auto;margin-bottom:2px;"></svg>
+    <div class="ord-chart-scroll" style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:2px;"><svg id="ordTrendChart" viewBox="0 0 360 133" style="width:100%;height:auto;display:block;"></svg></div>
     <div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;margin-bottom:22px;">
       <span style="color:var(--ac2);">■</span> 訂單數（新增）　<span style="color:var(--red);">■</span> 取消數
     </div>
 
     <!-- 週間 vs 週末 -->
     <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;"><span>週間 vs 週末</span><span class="lbl-r" id="ordWkTitle" style="font-size:var(--fs-label);color:var(--tx3);">—</span></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+    <div class="ord-kg2" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
       <div class="ord-kpi">
         <div class="ord-kpi-l" style="margin-bottom:8px;">週間（一～五）</div>
         <div style="display:flex;align-items:stretch;">
@@ -1612,7 +1615,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <div id="ordYoYBlock" style="display:none;">
       <div class="lbl" style="margin-bottom:4px;"><span>今年 vs 去年・逐月訂房金額</span></div>
       <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:12px;">同月份（依下訂日）營收年度對比，快速看出旺淡季成長。</div>
-      <svg id="ordYoYChart" viewBox="0 0 360 200" style="width:100%;height:auto;margin-bottom:6px;"></svg>
+      <div class="ord-chart-scroll" style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:6px;"><svg id="ordYoYChart" viewBox="0 0 360 200" style="width:100%;height:auto;display:block;"></svg></div>
       <div id="ordYoYLegend" style="font-size:var(--fs-label);color:var(--tx3);text-align:center;margin-bottom:22px;"></div>
     </div>
 
@@ -3880,6 +3883,7 @@ function renderOrdLeadSummary(lead){
     svg+=`<text x="${x+bw/2}" y="${H-padB+10}" font-size="8.5" fill="var(--tx3)" text-anchor="middle">${lb}</text>`;
   });
   document.getElementById('ordLeadChart').innerHTML=svg;
+  fitOrdSvg('ordLeadChart', W, H, 6);
   const early=counts[4]+counts[5];
   document.getElementById('ordLeadLegend').textContent=
     `提前 15 天以上訂房占 ${(early/tot*100).toFixed(0)}%，當天／3天內占 ${((counts[0]+counts[1])/tot*100).toFixed(0)}%`;
@@ -3982,6 +3986,7 @@ function renderOrdLead(valid){
     svg+=`<text x="${x+bw/2}" y="${H-padB+10}" font-size="8.5" fill="var(--tx3)" text-anchor="middle">${b.l}</text>`;
   });
   document.getElementById('ordLeadChart').innerHTML=svg;
+  fitOrdSvg('ordLeadChart', W, H, 6);
   const early=counts[4]+counts[5];
   document.getElementById('ordLeadLegend').textContent=
     `提前 15 天以上訂房占 ${(early/tot*100).toFixed(0)}%，當天／3天內占 ${((counts[0]+counts[1])/tot*100).toFixed(0)}%`;
@@ -4030,6 +4035,7 @@ function renderOrdTrend(){
     if(hX>0) svg+=`<rect x="${x2}" y="${yBase-hX}" width="${barW}" height="${hX}" rx="1.5" fill="var(--red)"/>`;
   }
   svgEl.innerHTML=svg;
+  fitOrdSvg('ordTrendChart', W, H, 12);
 }
 // 週間 vs 週末（跟隨上方篩選；基準＝訂房日/收信日的星期）
 function renderOrdWeekend(){
@@ -4104,6 +4110,27 @@ async function ordFetchHistoryMonth(ym){
     console.warn('歷史月載入失敗',ym,e.message);
     ORDERS_HISTORY_CACHE[ym]=[]; // 失敗也存空，避免反覆重試
     return [];
+  }
+}
+// 圖表依字級+資料量決定尺寸：資料少塞得下就 100% 自適應；資料多且放大字級則放大像素觸發橫向捲軸
+function fitOrdSvg(id, W, H, dataCount){
+  var el=document.getElementById(id); if(!el) return;
+  var isDesktop=window.matchMedia('(min-width:768px)').matches;
+  var fs=document.documentElement.getAttribute('data-fs')||'std';
+  var scale={std:1,lg:1.18,xl:1.38,xxl:1.6}[fs]||1;
+  // 放大後每筆資料的概略寬度(px)，小於門檻代表塞得下、不需捲軸
+  var perItem=(W*scale)/Math.max(dataCount,1);
+  var needScroll = !isDesktop && fs!=='std' && dataCount>10 && perItem<22;
+  if(needScroll){
+    el.setAttribute('width', Math.round(W*scale));
+    el.setAttribute('height', Math.round(H*scale));
+    el.style.width=Math.round(W*scale)+'px';
+    el.style.maxWidth='none';
+  }else{
+    el.setAttribute('width','100%');
+    el.removeAttribute('height');
+    el.style.width='100%';
+    el.style.maxWidth='100%';
   }
 }
 function renderOrdDaily(){
@@ -4201,9 +4228,7 @@ function renderOrdDaily(){
     }
   });
   svgEl.innerHTML=svg;
-  const totN=newArr.reduce((a,b)=>a+b,0), totC=cancelArr.reduce((a,b)=>a+b,0);
-  document.getElementById('ordDailyLegend').innerHTML=
-    `<span style="color:var(--green);">■</span> 新增 ${totN} 筆　<span style="color:var(--red);">■</span> 取消 ${totC} 筆`;
+  fitOrdSvg('ordDailyChart', W, H, n);
 }
 function renderOrdCancel(all){
   const g=ordGroupBy(all,'sys');
@@ -4249,6 +4274,7 @@ function renderOrdYoYChart(){
   svg+=line(prevArr,'var(--tx3)',true);
   svg+=line(curArr,'var(--ac2)',false);
   document.getElementById('ordYoYChart').innerHTML=svg;
+  fitOrdSvg('ordYoYChart', W, H, 12);
   const curTot=curArr.reduce((a,b)=>a+b,0), prevTot=prevArr.reduce((a,b)=>a+b,0);
   const diff=prevTot?((curTot-prevTot)/prevTot*100):0;
   document.getElementById('ordYoYLegend').innerHTML=
@@ -4261,8 +4287,8 @@ function occView(mode, btn){
   const calBtn=document.getElementById('occ-tab-cal');
   const ordBtn=document.getElementById('occ-tab-ord');
   const mrowWrap=document.querySelector('.mrow-wrap');
-  const onCss='flex:1;padding:8px 4px;background:var(--ac);border:none;border-radius:20px;color:#0F1923;font-size:11px;font-weight:700;cursor:pointer;font-family:\'Noto Sans TC\',sans-serif;';
-  const offCss='flex:1;padding:8px 4px;background:var(--sf);border:1px solid var(--bd);border-radius:20px;color:var(--tx3);font-size:11px;font-weight:500;cursor:pointer;font-family:\'Noto Sans TC\',sans-serif;';
+  const onCss='flex:1;padding:8px 4px;background:var(--ac);border:none;border-radius:20px;color:#0F1923;font-size:var(--fs-sub);font-weight:700;cursor:pointer;font-family:\'Noto Sans TC\',sans-serif;';
+  const offCss='flex:1;padding:8px 4px;background:var(--sf);border:1px solid var(--bd);border-radius:20px;color:var(--tx3);font-size:var(--fs-sub);font-weight:500;cursor:pointer;font-family:\'Noto Sans TC\',sans-serif;';
   mainBtn.style.cssText = (mode==='main')?onCss:offCss;
   calBtn.style.cssText  = (mode==='cal') ?onCss:offCss;
   if(ordBtn) ordBtn.style.cssText = (mode==='ord')?onCss:offCss;
@@ -8763,6 +8789,11 @@ function buildCountyGrid(){
     setTimeout(function(){
       try{ if(typeof buildTrendChart==='function') buildTrendChart(); }catch(e){}
       try{ if(typeof buildDailyChart==='function') buildDailyChart(); }catch(e){}
+      // 若正在看網路訂單子頁，重繪其圖表以套用新字級尺寸
+      try{
+        var ordSub=document.getElementById('occ-sub-ord');
+        if(ordSub && ordSub.style.display!=='none' && typeof renderOrders==='function') renderOrders();
+      }catch(e){}
     },30);
   }
   window.setFontScale=apply;
