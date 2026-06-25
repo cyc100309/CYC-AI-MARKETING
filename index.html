@@ -353,11 +353,16 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 /* Summary cards */
 .sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 18px;}
+/* 競品頁今日市場概況：標準字級 4 欄，字級放大時自動降 2 欄避免擠壓 */
+.sum-grid-comp{grid-template-columns:repeat(4,1fr);}
+[data-fs="lg"] .sum-grid-comp,
+[data-fs="xl"] .sum-grid-comp,
+[data-fs="xxl"] .sum-grid-comp{grid-template-columns:repeat(2,1fr);}
 .sum-card{background:var(--sf);border-radius:var(--rs);padding:10px 10px 8px;
   border:1px solid var(--bd);text-align:center;}
-.sum-lbl{font-size:10px;color:var(--tx3);margin-bottom:5px;}
-.sum-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:var(--tx);}
-.sum-sub{font-size:10px;margin-top:3px;}
+.sum-lbl{font-size:var(--fs-tiny);color:var(--tx3);margin-bottom:5px;}
+.sum-val{font-family:'DM Mono',monospace;font-size:var(--fs-body);font-weight:500;color:var(--tx);}
+.sum-sub{font-size:var(--fs-tiny);margin-top:3px;}
 
 /* Category tabs */
 .cat-tabs{display:flex;gap:6px;padding:14px 18px 0;overflow-x:auto;scrollbar-width:none;}
@@ -1662,7 +1667,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 <!-- Summary -->
 <div class="lbl"><span>今日市場概況</span></div>
-<div class="sum-grid" style="grid-template-columns:repeat(4,1fr);">
+<div class="sum-grid sum-grid-comp">
   <div class="sum-card">
     <div class="sum-lbl">本中心排名</div>
     <div class="sum-val" id="myRank">—</div>
