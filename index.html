@@ -353,9 +353,8 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 /* Summary cards */
 .sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 18px;}
-/* 競品頁今日市場概況：標準字級 4 欄，字級放大時自動降 2 欄避免擠壓 */
+/* 競品頁今日市場概況：標準/大維持 4 欄，僅特大/超大降 2 欄避免擠壓 */
 .sum-grid-comp{grid-template-columns:repeat(4,1fr);}
-[data-fs="lg"] .sum-grid-comp,
 [data-fs="xl"] .sum-grid-comp,
 [data-fs="xxl"] .sum-grid-comp{grid-template-columns:repeat(2,1fr);}
 .sum-card{background:var(--sf);border-radius:var(--rs);padding:10px 10px 8px;
@@ -697,6 +696,17 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   #unitCover,#unitCheckPage,#guidePage{padding-left:240px;}
   /* 桌機無底部導覽，浮動字級鈕落到右下角 */
   #fsFab{bottom:28px;right:28px;}
+
+  /* 競品頁桌機版：空間大，市場概況維持四欄不降欄；圖表與清單文字放大 */
+  .sum-grid-comp{grid-template-columns:repeat(4,1fr) !important;}
+  #page-comp .bar-name{font-size:calc(var(--fs-tiny) * 1.25);min-width:calc(104px * var(--fs));max-width:calc(104px * var(--fs));}
+  #page-comp .bar-val{font-size:calc(var(--fs-mini) * 1.3);}
+  #page-comp .bar-track{height:calc(18px * var(--fs));}
+  #page-comp .sum-val{font-size:calc(var(--fs-body) * 1.2);}
+  #page-comp .sum-lbl,#page-comp .sum-sub{font-size:calc(var(--fs-tiny) * 1.15);}
+  #page-comp .cl-name{font-size:calc(var(--fs-label) * 1.25) !important;}
+  #page-comp .cl-rate{font-size:calc(var(--fs-tiny) * 1.2) !important;}
+  #page-comp .cl-link{font-size:calc(var(--fs-tiny) * 1.1) !important;}
 }
 </style>
 </head>
@@ -5526,11 +5536,11 @@ function buildLists(){
       const agodaUrl=h.agoda+'?checkIn='+fmt(today)+'&los=1&adults=1&rooms=1&currencyCode=TWD';
       const nameCol=h.self?'#FFE234':'var(--tx)';
       const sold=h.avail?'':'<span style="color:var(--red);font-size:var(--fs-mini);margin-left:4px;">售完</span>';
-      cells+=`<div id="item-${idx}" style="background:var(--sf2);border:1px solid ${h.self?'rgba(255,226,52,.35)':'var(--bd)'};border-radius:var(--rs);padding:8px 8px 9px;display:flex;flex-direction:column;gap:5px;min-width:0;">
-        <div style="font-size:var(--fs-label);font-weight:500;color:${nameCol};line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${h.shortLabel||h.name}${sold}</div>
+      cells+=`<div id="item-${idx}" class="cl-card" style="background:var(--sf2);border:1px solid ${h.self?'rgba(255,226,52,.35)':'var(--bd)'};border-radius:var(--rs);padding:8px 8px 9px;display:flex;flex-direction:column;gap:5px;min-width:0;">
+        <div class="cl-name" style="font-size:var(--fs-label);font-weight:500;color:${nameCol};line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${h.shortLabel||h.name}${sold}</div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:4px;">
-          <span style="font-size:var(--fs-tiny);color:var(--tx3);white-space:nowrap;">★ ${h.rating||'—'}</span>
-          <a href="${agodaUrl}" target="_blank" style="font-size:var(--fs-mini);color:var(--ac2,#5BE3B3);text-decoration:none;white-space:nowrap;">Agoda</a>
+          <span class="cl-rate" style="font-size:var(--fs-tiny);color:var(--tx3);white-space:nowrap;">★ ${h.rating||'—'}</span>
+          <a href="${agodaUrl}" target="_blank" class="cl-link" style="font-size:var(--fs-mini);color:var(--ac2,#5BE3B3);text-decoration:none;white-space:nowrap;">Agoda</a>
         </div>
       </div>`;
     });
@@ -5541,7 +5551,7 @@ function buildLists(){
         ${sec.label}
         <span style="font-size:var(--fs-tiny);color:var(--tx3);margin-left:auto;">${hotels.length} 家</span>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">${cells}</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;">${cells}</div>
     </div>`;
   });
 }
@@ -5904,7 +5914,17 @@ function drawInto(boxId, names, opt){
 function drawMultiLineSVG(dates, series, selfVals, opt){
   opt=opt||{};
   const dense=opt.dense, interactive=opt.interactive;
-  const W=320, H=dense?153:120, padL=42, padR=12, padT=12, padB=dense?38:26;
+  // 依目前字級倍率放大 SVG 軸標籤（SVG font-size 不吃 CSS 變數，需手動換算）
+  const _fsMap={std:1, lg:1.18, xl:1.38, xxl:1.6};
+  const _fsK=_fsMap[document.documentElement.getAttribute('data-fs')||'std']||1;
+  const fsAxis=(9*_fsK).toFixed(1);
+  const _nDays=dates.length;
+  // 天數多時加寬 SVG 觸發水平捲動（每天最小像素），少時維持 320 填滿
+  const _SCROLL_FROM=12, _PX_PER_DAY=Math.round(22*_fsK);
+  const _scrollMode=_nDays>_SCROLL_FROM;
+  const padL=42+(_fsK-1)*14, padR=12, padT=12, padB=(dense?38:26)+(_fsK-1)*10;
+  const W=_scrollMode ? (padL+padR+_PX_PER_DAY*(_nDays-1)) : 320;
+  const H=(dense?153:120)+(_fsK-1)*22;
   const innerW=W-padL-padR, innerH=H-padT-padB;
 
   const pool=[];
@@ -5948,19 +5968,19 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   if(opt.tick){
     for(let val=lo; val<=hi+0.5; val+=opt.tick){
       const y=yAt(val);
-      yTicks+=`<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="var(--bd)" stroke-width="0.5" opacity="0.5"/><text x="${padL-6}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="9" fill="var(--tx3)" font-family="DM Mono,monospace">${Math.round(val).toLocaleString()}</text>`;
+      yTicks+=`<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="var(--bd)" stroke-width="0.5" opacity="0.5"/><text x="${padL-6}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="${fsAxis}" fill="var(--tx3)" font-family="DM Mono,monospace">${Math.round(val).toLocaleString()}</text>`;
     }
   }else{
     for(let k=0;k<=2;k++){
       const val=lo+(hi-lo)*k/2, y=yAt(val);
-      yTicks+=`<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="var(--bd)" stroke-width="0.5" opacity="0.5"/><text x="${padL-6}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="9" fill="var(--tx3)" font-family="DM Mono,monospace">${Math.round(val).toLocaleString()}</text>`;
+      yTicks+=`<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="var(--bd)" stroke-width="0.5" opacity="0.5"/><text x="${padL-6}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="${fsAxis}" fill="var(--tx3)" font-family="DM Mono,monospace">${Math.round(val).toLocaleString()}</text>`;
     }
   }
   // x 軸標籤
   let xLabels='';
-  const step=Math.max(1,Math.ceil(n/5));
+  const step=_scrollMode?Math.max(1,Math.round(_nDays/Math.max(5,Math.floor(innerW/(_PX_PER_DAY*3))))):Math.max(1,Math.ceil(n/5));
   for(let i=0;i<n;i+=step){
-    xLabels+=`<text x="${xAt(i).toFixed(1)}" y="${H-(dense?20:8)}" text-anchor="middle" font-size="9" fill="var(--tx3)" font-family="DM Mono,monospace">${dates[i].slice(5)}</text>`;
+    xLabels+=`<text x="${xAt(i).toFixed(1)}" y="${H-(dense?20:8)}" text-anchor="middle" font-size="${fsAxis}" fill="var(--tx3)" font-family="DM Mono,monospace">${dates[i].slice(5)}</text>`;
   }
 
   // 互動模式：每條線加 class + data-key，圖例可點擊凸顯
@@ -5990,9 +6010,13 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   const legendStyle=interactive
     ? 'display:grid;grid-template-columns:repeat(4,1fr);gap:4px 6px;margin-top:8px;font-size:var(--fs-mini);color:var(--tx3);'
     : 'display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:center;margin-top:8px;font-size:var(--fs-tiny);color:var(--tx3);';
-  return `<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMidYMid meet" style="display:block;">
+  const _svg=`<svg viewBox="0 0 ${W} ${H}" width="${_scrollMode?W:'100%'}" height="${_scrollMode?H:'auto'}" preserveAspectRatio="xMidYMid meet" style="display:block;${_scrollMode?'':'width:100%;'}">
     ${yTicks}${lines}${selfLine}${dots}${xLabels}
-  </svg>
+  </svg>`;
+  const _chart=_scrollMode
+    ? `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">${_svg}</div>`
+    : _svg;
+  return `${_chart}
   <div style="${legendStyle}">${legend}</div>${tapHint}`;
 }
 
