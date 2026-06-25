@@ -32,6 +32,8 @@
   --fs-body:  calc(15px * var(--fs));
   --fs-sub:   calc(13px * var(--fs));
   --fs-label: calc(12.5px * var(--fs));
+  --fs-tiny:  calc(10px * var(--fs));
+  --fs-mini:  calc(8px  * var(--fs));
   --fs-tab:   calc(14px * var(--fs));
   --fs-nav:   calc(12.5px * var(--fs));
 }
@@ -1420,16 +1422,16 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     金門全年觀光節慶與假期行事曆，每月日曆下方附當月活動說明，有確定日期者已於日曆上標記。
   </div>
 
-  <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;"><span>📅 年度行事曆</span></div>
+  <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;"><span>年度行事曆</span></div>
   <div id="calGrid" style="display:flex;flex-direction:column;gap:8px;"></div>
 
   <!-- 在地年度大型活動（依單位；常態清單，提醒每年必注意；預設收合） -->
   <div style="margin-top:22px;">
     <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="toggleAnnual()">
-      <span>🎯 在地年度大型活動（必注意）</span>
+      <span>在地年度大型活動（必注意）</span>
       <span id="annualArrow" style="font-size:var(--fs-body);color:var(--tx3);">▼</span>
     </div>
-    <div id="annualDesc" style="font-size:9px;color:var(--tx3);margin-bottom:10px;line-height:1.5;">
+    <div id="annualDesc" style="font-size:var(--fs-tiny);color:var(--tx3);margin-bottom:10px;line-height:1.5;">
       金門每年固定登場的重點活動，新進同仁可快速掌握。實際日期每年微調，以官方公告為準。
     </div>
     <div id="annualEvents" style="display:none;flex-direction:column;gap:7px;"></div>
@@ -1440,40 +1442,40 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <!-- 行事曆下方在地新聞（依單位：金門日報 RSS／劍潭 Google 觀光新聞）— 置於最下方 -->
   <div style="margin-top:22px;">
     <div class="lbl" style="margin-bottom:8px;padding-left:0;padding-right:0;">
-      <span id="calNewsTitle">📰 金門日報・在地新聞</span>
-      <span class="lbl-r" style="font-size:9px;color:var(--tx3);">🔴 標紅=疑似活動</span>
+      <span id="calNewsTitle">金門日報・在地新聞</span>
+      <span class="lbl-r" style="font-size:var(--fs-tiny);color:var(--tx3);">標紅=疑似活動</span>
     </div>
-    <div id="calNewsDesc" style="font-size:9px;color:var(--tx3);margin-bottom:8px;line-height:1.5;">
+    <div id="calNewsDesc" style="font-size:var(--fs-tiny);color:var(--tx3);margin-bottom:8px;line-height:1.5;">
       自動更新金門日報地方新聞與快訊。標「疑似活動」者，可手動填入行事曆 Excel。
     </div>
     <div id="kmdnNews" style="display:flex;flex-direction:column;gap:6px;">
-      <div style="font-size:var(--fs-sub);color:var(--tx3);padding:10px;text-align:center;">⏳ 載入在地新聞中...</div>
+      <div style="font-size:var(--fs-sub);color:var(--tx3);padding:10px;text-align:center;">載入在地新聞中...</div>
     </div>
     <button id="kmdnRefresh" onclick="fetchKmdnNews()" style="margin-top:8px;width:100%;padding:7px;
       background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx2);
-      font-size:var(--fs-sub);cursor:pointer;">🔄 重新整理新聞</button>
+      font-size:var(--fs-sub);cursor:pointer;">重新整理新聞</button>
   </div>
 
   <!-- 資料來源快速連結（含大巨蛋賽程的單位顯示，例：劍潭）-->
   <div id="calSrcBtns" style="margin-top:18px;display:none;flex-direction:column;gap:7px;">
-    <div class="lbl" style="margin-bottom:2px;padding-left:0;padding-right:0;"><span>🔗 賽事／活動官方來源</span></div>
+    <div class="lbl" style="margin-bottom:2px;padding-left:0;padding-right:0;"><span>賽事／活動官方來源</span></div>
     <a href="https://www.sportsnet.org.tw/schedule.php" target="_blank" style="text-decoration:none;display:flex;
       align-items:center;justify-content:space-between;background:var(--sf2);border:1px solid var(--bd);
       border-radius:var(--rs);padding:10px 12px;">
-      <span style="font-size:var(--fs-sub);color:var(--tx);">🏃 中華民國路跑協會・賽事行事曆</span>
+      <span style="font-size:var(--fs-sub);color:var(--tx);">中華民國路跑協會・賽事行事曆</span>
       <span style="font-size:var(--fs-sub);color:var(--ac);">前往 →</span></a>
     <a href="https://www.taipeidome.com.tw/Web/Dome/Calendar/" target="_blank" style="text-decoration:none;display:flex;
       align-items:center;justify-content:space-between;background:var(--sf2);border:1px solid var(--bd);
       border-radius:var(--rs);padding:10px 12px;">
-      <span style="font-size:var(--fs-sub);color:var(--tx);">🏟️ 臺北大巨蛋・最新消息（賽程／活動）</span>
+      <span style="font-size:var(--fs-sub);color:var(--tx);">臺北大巨蛋・最新消息（賽程／活動）</span>
       <span style="font-size:var(--fs-sub);color:var(--ac);">前往 →</span></a>
   </div>
 
   <!-- 頁尾：手動更新提醒（含大巨蛋賽程的單位顯示，例：劍潭）-->
   <div id="calFootNote" style="margin-top:18px;padding:10px 12px;display:none;
     background:var(--sf);border:1px dashed var(--bd2);border-radius:var(--rs);">
-    <div style="font-size:9px;color:var(--tx3);line-height:1.7;">
-      ⚠️ <b>資料更新提醒</b><br>
+    <div style="font-size:var(--fs-tiny);color:var(--tx3);line-height:1.7;">
+      <b>資料更新提醒</b><br>
       大巨蛋中職賽程、演唱會場次、路跑賽事與國定假日均為手動建檔，部分活動日期每年由主辦單位重新公告。<br>
       請於<b>每年球季開打前及年初</b>，透過下方來源連結至臺北大巨蛋、中華民國路跑協會與台北演唱會彙整更新清單，確保資訊正確。
     </div>
@@ -4643,7 +4645,7 @@ function buildCalendar(){
   const leg=document.createElement('div');
   leg.style.cssText='display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;';
   leg.innerHTML=Object.entries(CAL_TYPE).map(([k,v])=>
-    `<div style="display:flex;align-items:center;gap:4px;font-size:9px;color:var(--tx3);">
+    `<div style="display:flex;align-items:center;gap:4px;font-size:var(--fs-tiny);color:var(--tx3);">
       <div style="width:8px;height:8px;border-radius:50%;background:${v.dot};"></div>${v.tag}
     </div>`).join('');
   grid.appendChild(leg);
@@ -4651,10 +4653,10 @@ function buildCalendar(){
   // 逐月：月曆 + 該月活動說明 交錯排列（12個月），依季別分組
   // 季別：春(3-5)／夏(6-8)／秋(9-11)／冬(12,1,2)。當季預設展開，其他季別預設收合。
   const SEASONS=[
-    {key:'spring', name:'🌸 春季',   months:[3,4,5],  color:'#5DD6A5'},
-    {key:'summer', name:'☀️ 夏季',   months:[6,7,8],  color:'#E8893E'},
-    {key:'autumn', name:'🍂 秋季',   months:[9,10,11],color:'#C8963E'},
-    {key:'winter', name:'❄️ 冬季',   months:[12,1,2], color:'#5B9BD5'},
+    {key:'spring', name:'春季',   months:[3,4,5],  color:'#5DD6A5'},
+    {key:'summer', name:'夏季',   months:[6,7,8],  color:'#E8893E'},
+    {key:'autumn', name:'秋季',   months:[9,10,11],color:'#C8963E'},
+    {key:'winter', name:'冬季',   months:[12,1,2], color:'#5B9BD5'},
   ];
   function seasonOfMonth(m){ return SEASONS.find(s=>s.months.includes(m)); }
   const curSeasonKey=seasonOfMonth(CM)?.key;
@@ -4671,11 +4673,11 @@ function buildCalendar(){
     sh.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:11px 14px;cursor:pointer;'+
       'background:var(--sf2);';
     sh.innerHTML=`<div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:14px;font-weight:700;color:${s.color};">${s.name}</span>
-        <span style="font-size:9px;color:var(--tx3);">${s.months.map(m=>m+'月').join('・')}</span>
-        ${isCur?'<span style="font-size:9px;padding:2px 7px;border-radius:10px;background:'+s.color+';color:#0F1923;font-weight:700;">當季</span>':''}
+        <span style="font-size:var(--fs-h2);font-weight:700;color:${s.color};">${s.name}</span>
+        <span style="font-size:var(--fs-tiny);color:var(--tx3);">${s.months.map(m=>m+'月').join('・')}</span>
+        ${isCur?'<span style="font-size:var(--fs-tiny);padding:2px 7px;border-radius:10px;background:'+s.color+';color:#0F1923;font-weight:700;">當季</span>':''}
       </div>
-      <span id="seasonArrow_${s.key}" style="font-size:12px;color:var(--tx3);">${isCur?'▲':'▼'}</span>`;
+      <span id="seasonArrow_${s.key}" style="font-size:var(--fs-sub);color:var(--tx3);">${isCur?'▲':'▼'}</span>`;
     const inner=document.createElement('div');
     inner.id='seasonInner_'+s.key;
     inner.style.cssText='padding:8px 10px 4px;display:'+(isCur?'block':'none')+';';
@@ -4763,11 +4765,11 @@ function buildCalendar(){
     hdr.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;background:var(--sf2);';
     hdr.innerHTML=`
       <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:15px;font-weight:700;color:var(--tx);">${cy}年 ${MN[cm-1]}</span>
-        ${mi===0?'<span style="font-size:9px;padding:2px 7px;border-radius:10px;background:var(--ac);color:#0F1923;font-weight:700;">本月</span>':''}
-        ${hasMajor?'<span style="font-size:9px;padding:1px 6px;border-radius:8px;background:rgba(200,150,62,.2);color:var(--ac);">🔴 大型活動</span>':''}
+        <span style="font-size:var(--fs-h2);font-weight:700;color:var(--tx);">${cy}年 ${MN[cm-1]}</span>
+        ${mi===0?'<span style="font-size:var(--fs-tiny);padding:2px 7px;border-radius:10px;background:var(--ac);color:#0F1923;font-weight:700;">本月</span>':''}
+        ${hasMajor?'<span style="font-size:var(--fs-tiny);padding:1px 6px;border-radius:8px;background:rgba(200,150,62,.2);color:var(--ac);">大型活動</span>':''}
       </div>
-      <span id="calArrow${mi}" style="font-size:12px;color:var(--tx3);transition:.2s;">${isOpen?'▲':'▼'}</span>`;
+      <span id="calArrow${mi}" style="font-size:var(--fs-sub);color:var(--tx3);transition:.2s;">${isOpen?'▲':'▼'}</span>`;
 
     // 內容（月曆 + 活動說明）
     const body=document.createElement('div');
@@ -4776,7 +4778,7 @@ function buildCalendar(){
 
     // 1) 迷你月曆
     let g=`<div style="padding:10px 12px 6px;"><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px;">`;
-    DNAMES.forEach((d,i)=>g+=`<div style="text-align:center;font-size:9px;color:${i===0?'#E05C5C':i===6?'#3B82F6':'var(--tx3)'};padding:2px 0;">${d}</div>`);
+    DNAMES.forEach((d,i)=>g+=`<div style="text-align:center;font-size:var(--fs-tiny);color:${i===0?'#E05C5C':i===6?'#3B82F6':'var(--tx3)'};padding:2px 0;">${d}</div>`);
     g+=`</div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;">`;
     for(let i=0;i<startWk;i++) g+=`<div></div>`;
     for(let dd=1;dd<=lastDay;dd++){
@@ -4803,35 +4805,34 @@ function buildCalendar(){
       } else if(wk===0){
         col='rgba(224,92,92,.7)';
       }
-      // 已預訂率著色（綠：越滿越深；無事件背景時套用）
+      // 已預訂率著色：背景沿用原本邏輯，分級顏色只套用在「日期數字」文字上
       const occ=occByDay[dd];
-      let occText='';
       if(occ!==undefined){
         if(bg==='transparent'){
           const a=Math.max(0.04, Math.min(occ/100,1)*0.18);
           bg=`rgba(16,185,129,${a.toFixed(2)})`;
         }
         // 住宿率分級顏色：≤30灰 / 31-50黃 / 51-80橘 / 81-100紅
-        let occColor;
-        if(occ<=30) occColor='#9AA5B1';
-        else if(occ<=50) occColor='#E8C547';
-        else if(occ<=80) occColor='#E8893E';
-        else occColor='#E0544E';
-        if(isToday) occColor='#0F1923';
-        occText=`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:13px;font-weight:700;color:${occColor};font-family:'DM Mono',monospace;line-height:1;">${Math.round(occ)}</div>`;
+        // 套在日期數字文字色（col），但今天維持深色字配金底，不被覆寫
+        if(!isToday){
+          if(occ<=30) col='#9AA5B1';
+          else if(occ<=50) col='#E8C547';
+          else if(occ<=80) col='#E8893E';
+          else col='#E0544E';
+          fw='700';
+        }
       }
       const dotColor=isMajor?'var(--ac)':isSport?'var(--red)':isHol?'var(--green)':'var(--blue)';
-      g+=`<div style="padding:2px;border-radius:4px;background:${bg};position:relative;height:36px;">
-        <span style="position:absolute;top:2px;left:4px;font-size:12px;color:${col};font-weight:${isToday?'700':'500'};line-height:1;">${dd}</span>
-        ${occText}
-        ${hasDot?`<div style="position:absolute;bottom:3px;right:3px;width:7px;height:7px;border-radius:50%;background:${dotColor};"></div>`:''}
+      g+=`<div style="padding:2px;border-radius:4px;background:${bg};position:relative;height:calc(36px * var(--fs));">
+        <span style="position:absolute;top:2px;left:4px;font-size:calc(13px * var(--fs));color:${col};font-weight:${isToday?'700':fw};line-height:1;">${dd}</span>
+        ${hasDot?`<div style="position:absolute;bottom:3px;right:3px;width:calc(7px * var(--fs));height:calc(7px * var(--fs));border-radius:50%;background:${dotColor};"></div>`:''}
       </div>`;
     }
     g+=`</div>`;
     // 已預訂率圖例（僅該月有資料時顯示）
     if(hasOcc){
-      g+=`<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:8px;color:var(--tx3);flex-wrap:wrap;">
-        <span style="color:var(--tx2);">已預訂率%</span>
+      g+=`<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:var(--fs-mini);color:var(--tx3);flex-wrap:wrap;">
+        <span style="color:var(--tx2);">日期色＝已預訂率%</span>
         <span style="display:flex;align-items:center;gap:3px;"><b style="color:#9AA5B1;font-family:'DM Mono',monospace;">●</b>≤30</span>
         <span style="display:flex;align-items:center;gap:3px;"><b style="color:#E8C547;font-family:'DM Mono',monospace;">●</b>31–50</span>
         <span style="display:flex;align-items:center;gap:3px;"><b style="color:#E8893E;font-family:'DM Mono',monospace;">●</b>51–80</span>
@@ -4839,7 +4840,7 @@ function buildCalendar(){
       </div>`;
     }
     // 日期底色圖例
-    g+=`<div style="display:flex;align-items:center;gap:8px;margin-top:6px;font-size:8px;color:var(--tx3);flex-wrap:wrap;">
+    g+=`<div style="display:flex;align-items:center;gap:8px;margin-top:6px;font-size:var(--fs-mini);color:var(--tx3);flex-wrap:wrap;">
       <span style="display:flex;align-items:center;gap:3px;"><i style="width:10px;height:10px;border-radius:2px;background:rgba(224,92,92,.32);display:inline-block;"></i>連假/週六</span>
       <span style="display:flex;align-items:center;gap:3px;"><i style="width:10px;height:10px;border-radius:2px;background:rgba(224,92,92,.16);display:inline-block;"></i>連假末日</span>
       <span style="display:flex;align-items:center;gap:3px;"><i style="width:10px;height:10px;border-radius:2px;background:rgba(16,185,129,.18);display:inline-block;"></i>週間假日/體育</span>
@@ -4856,15 +4857,15 @@ function buildCalendar(){
         evHTML+=`<div style="padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);">
           <div style="display:flex;align-items:center;gap:7px;">
             <div style="width:7px;height:7px;border-radius:50%;background:${t.dot};flex-shrink:0;"></div>
-            <span style="font-size:12px;font-weight:600;color:var(--tx);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${e.name}</span>
-            <span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--tx2);flex-shrink:0;">${dateStr}</span>
-            <span style="font-size:9px;padding:1px 6px;border-radius:6px;background:${t.bg};color:${t.dot};border:1px solid ${t.border};flex-shrink:0;width:52px;text-align:center;">${t.tag}</span>
+            <span style="font-size:var(--fs-sub);font-weight:600;color:var(--tx);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${e.name}</span>
+            <span style="font-size:var(--fs-tiny);font-family:'DM Mono',monospace;color:var(--tx2);flex-shrink:0;">${dateStr}</span>
+            <span style="font-size:var(--fs-mini);padding:1px 6px;border-radius:6px;background:${t.bg};color:${t.dot};border:1px solid ${t.border};flex-shrink:0;min-width:52px;text-align:center;">${t.tag}</span>
           </div>
-          ${e.note?`<div style="font-size:10px;color:var(--tx3);margin-top:3px;padding-left:14px;line-height:1.5;">${e.note}${e.src?` ·${e.src}`:''}</div>`:''}
+          ${e.note?`<div style="font-size:var(--fs-tiny);color:var(--tx3);margin-top:3px;padding-left:14px;line-height:1.5;">${e.note}${e.src?` ·${e.src}`:''}</div>`:''}
         </div>`;
       });
     } else {
-      evHTML+='<div style="font-size:10px;color:var(--tx3);padding:8px 0;">本月暫無登錄活動</div>';
+      evHTML+='<div style="font-size:var(--fs-tiny);color:var(--tx3);padding:8px 0;">本月暫無登錄活動</div>';
     }
     evHTML+='</div>';
 
@@ -5018,11 +5019,11 @@ function renderAnnualEvents(){
   }
   box.innerHTML=annualEvents().map(e=>{
     const t=CAL_TYPE[e.type]||CAL_TYPE.cultural;
-    const inner=`<span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--ac2);
-        flex-shrink:0;width:56px;text-align:center;padding-top:1px;">${e.month}</span>
+    const inner=`<span style="font-size:var(--fs-tiny);font-family:'DM Mono',monospace;color:var(--ac2);
+        flex-shrink:0;min-width:56px;text-align:center;padding-top:1px;">${e.month}</span>
       <div style="flex:1;min-width:0;">
-        <div style="font-size:12px;font-weight:600;color:var(--tx);">${e.name}${e.link?' <span style=\"font-size:10px;color:var(--ac);\">↗</span>':''}</div>
-        <div style="font-size:10px;color:var(--tx3);margin-top:2px;line-height:1.5;">${e.note}</div>
+        <div style="font-size:var(--fs-sub);font-weight:600;color:var(--tx);">${e.name}${e.link?' <span style=\"font-size:var(--fs-tiny);color:var(--ac);\">↗</span>':''}</div>
+        <div style="font-size:var(--fs-tiny);color:var(--tx3);margin-top:2px;line-height:1.5;">${e.note}</div>
       </div>`;
     const style=`display:flex;gap:9px;align-items:flex-start;background:var(--sf);
       border:1px solid var(--bd);border-left:3px solid ${t.dot};border-radius:var(--rs);padding:9px 11px;`;
@@ -5051,7 +5052,7 @@ function applyCalNewsLabels(){
   const nc=(typeof unitCfg==='function'?unitCfg().calNews:null)||null;
   const titleEl=document.getElementById('calNewsTitle');
   const descEl=document.getElementById('calNewsDesc');
-  if(titleEl && nc?.title) titleEl.textContent='📰 '+nc.title;
+  if(titleEl && nc?.title) titleEl.textContent=nc.title;
   if(descEl && nc?.desc) descEl.textContent=nc.desc;
 }
 
@@ -5070,10 +5071,10 @@ function newsCardHtml(a){
     background:${act?'rgba(224,92,92,.08)':'var(--sf)'};border:1px solid ${act?'rgba(224,92,92,.3)':'var(--bd)'};
     border-radius:var(--rs);padding:8px 10px;">
     <div style="display:flex;align-items:flex-start;gap:6px;">
-      ${act?'<span style="font-size:8px;color:var(--red);flex-shrink:0;margin-top:2px;">🔴</span>':'<span style="width:8px;flex-shrink:0;"></span>'}
-      <span style="font-size:11px;color:var(--tx);line-height:1.5;flex:1;">${a.title}</span>
+      ${act?'<span style="width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:5px;"></span>':'<span style="width:7px;flex-shrink:0;"></span>'}
+      <span style="font-size:var(--fs-sub);color:var(--tx);line-height:1.5;flex:1;">${a.title}</span>
     </div>
-    <div style="font-size:9px;color:var(--tx3);margin-top:3px;padding-left:14px;">${a.cat}${a.dateStr?' · '+a.dateStr:''}${act?' · 疑似活動':''}</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx3);margin-top:3px;padding-left:13px;">${a.cat}${a.dateStr?' · '+a.dateStr:''}${act?' · 疑似活動':''}</div>
   </a>`;
 }
 function renderCalNews(box,uniq){
@@ -5088,12 +5089,12 @@ function renderCalNews(box,uniq){
   if(!recent.length){ shown=uniq.slice(0,5); hidden=uniq.slice(5); }
   const shownHtml=shown.length
     ? shown.map(newsCardHtml).join('')
-    : '<div style="font-size:10px;color:var(--tx3);padding:8px;text-align:center;">近三天暫無新聞</div>';
+    : '<div style="font-size:var(--fs-tiny);color:var(--tx3);padding:8px;text-align:center;">近三天暫無新聞</div>';
   const hiddenHtml=hidden.length
     ? `<div id="calNewsMore" style="display:none;flex-direction:column;gap:6px;margin-top:6px;">${hidden.map(newsCardHtml).join('')}</div>
        <button onclick="(function(){var m=document.getElementById('calNewsMore');var b=document.getElementById('calNewsMoreBtn');var o=m.style.display==='none';m.style.display=o?'flex':'none';b.textContent=o?'▲ 收合較早新聞':'▼ 顯示較早新聞（${hidden.length}）';})()"
          id="calNewsMoreBtn" style="margin-top:6px;width:100%;padding:6px;background:var(--sf2);
-         border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx2);font-size:10px;cursor:pointer;">▼ 顯示較早新聞（${hidden.length}）</button>`
+         border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx2);font-size:var(--fs-tiny);cursor:pointer;">▼ 顯示較早新聞（${hidden.length}）</button>`
     : '';
   box.innerHTML=shownHtml+hiddenHtml;
 }
@@ -5103,7 +5104,7 @@ async function fetchRssCalNews(nc){
   const box=document.getElementById('kmdnNews');
   if(!box) return;
   const feeds=(nc&&nc.feeds)||[];
-  box.innerHTML='<div style="font-size:10px;color:var(--tx3);padding:10px;text-align:center;">⏳ 載入在地新聞中...</div>';
+  box.innerHTML='<div style="font-size:var(--fs-tiny);color:var(--tx3);padding:10px;text-align:center;">載入在地新聞中...</div>';
   const all=[];
   for(const feed of feeds){
     try{
@@ -5123,7 +5124,7 @@ async function fetchRssCalNews(nc){
     }catch(e){ /* 略過失敗的 feed */ }
   }
   if(!all.length){
-    box.innerHTML='<div style="font-size:10px;color:var(--tx3);padding:10px;text-align:center;line-height:1.6;">暫時無法載入新聞<br>（免費代理可能繁忙，請按重新整理）</div>';
+    box.innerHTML='<div style="font-size:var(--fs-tiny);color:var(--tx3);padding:10px;text-align:center;line-height:1.6;">暫時無法載入新聞<br>（免費代理可能繁忙，請按重新整理）</div>';
     return;
   }
   const seen=new Set(), uniq=[];
@@ -5136,7 +5137,7 @@ async function fetchGoogleCalNews(nc){
   const box=document.getElementById('kmdnNews');
   if(!box) return;
   const queries=(nc&&nc.queries)||[];
-  box.innerHTML='<div style="font-size:10px;color:var(--tx3);padding:10px;text-align:center;">⏳ 載入觀光新聞中...</div>';
+  box.innerHTML='<div style="font-size:var(--fs-tiny);color:var(--tx3);padding:10px;text-align:center;">載入觀光新聞中...</div>';
   const all=[];
   for(const cat of queries){
     try{
@@ -5161,7 +5162,7 @@ async function fetchGoogleCalNews(nc){
   if(!all.length){
     box.innerHTML=`<a href="https://news.google.com/search?q=${encodeURIComponent('台北 旅遊 觀光')}&hl=zh-TW" target="_blank"
       style="text-decoration:none;display:block;background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:10px;text-align:center;">
-      <span style="font-size:10px;color:var(--tx2);">暫時無法載入，點此查看 Google 觀光新聞 →</span></a>`;
+      <span style="font-size:var(--fs-tiny);color:var(--tx2);">暫時無法載入，點此查看 Google 觀光新聞 →</span></a>`;
     return;
   }
   const seen=new Set(), uniq=[];
