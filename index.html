@@ -585,7 +585,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .kd{font-size:var(--fs-sub) !important;}
 .ord-kpi-l{font-size:var(--fs-label) !important;}
 .ord-kpi-v{font-size:calc(20px * var(--fs)) !important;}
-.ord-kpi-s{font-size:var(--fs-label) !important;}
+.ord-kpi-s{font-size:var(--fs-label) !important;word-break:keep-all;overflow-wrap:break-word;line-height:1.5;}
 .rc-icon{font-size:calc(15px * var(--fs)) !important;}
 .cfg-lbl{font-size:var(--fs-label) !important;}
 .cfg-input{font-size:var(--fs-body) !important;}
@@ -640,9 +640,12 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   .kg{grid-template-columns:1fr 1fr !important;}
   /* 特大字級時改單欄，避免兩欄擠壓 */
   [data-fs="xl"] .kg, [data-fs="xxl"] .kg{grid-template-columns:1fr !important;}
-  /* 網路訂單頁 KPI 卡：三欄(今日動態)特大時改單欄；兩欄(摘要/週間週末)特大時改單欄 */
-  [data-fs="xl"] .ord-kg3, [data-fs="xxl"] .ord-kg3{grid-template-columns:1fr !important;}
-  [data-fs="xl"] .ord-kg2, [data-fs="xxl"] .ord-kg2{grid-template-columns:1fr !important;}
+  /* 網路訂單頁 KPI 卡特大字級排版 */
+  /* 今日動態三張：新增+取消同一行兩欄、訂單總額獨立整行 */
+  [data-fs="xl"] .ord-kg3, [data-fs="xxl"] .ord-kg3{grid-template-columns:1fr 1fr !important;}
+  [data-fs="xl"] .ord-kg3 > :nth-child(3), [data-fs="xxl"] .ord-kg3 > :nth-child(3){grid-column:1 / -1 !important;}
+  /* 有效訂單四張：維持兩欄兩行（內容字級已隨變數放大） */
+  [data-fs="xl"] .ord-kg2, [data-fs="xxl"] .ord-kg2{grid-template-columns:1fr 1fr !important;}
   /* 底部導覽文字兩行置中、字級放大 */
   .ni-l{line-height:1.25 !important;text-align:center;font-size:var(--fs-sub) !important;font-weight:500;}
   /* 導覽列加高 */
@@ -3763,13 +3766,13 @@ function renderOrders(){
   const yoy=(n,p,inv)=>prev?ordYoY(n,p,inv):'';
 
   document.getElementById('ordKpiCount').innerHTML=cur.count.toLocaleString()+(prev?yoy(cur.count,prev.count):'');
-  document.getElementById('ordKpiSub1').textContent=cur.nights?`${cur.nights.toLocaleString()} 房晚・平均 ${cur.npo.toFixed(1)} 晚`:'—';
+  document.getElementById('ordKpiSub1').innerHTML=cur.nights?`${cur.nights.toLocaleString()} 房晚・<wbr><span style="white-space:nowrap;">平均 ${cur.npo.toFixed(1)} 晚</span>`:'—';
   document.getElementById('ordKpiRev').innerHTML=fmtRev(cur.rev)+(prev?yoy(cur.rev,prev.rev):'');
   document.getElementById('ordKpiAdr').textContent=cur.adr?`房均 ${Math.round(cur.adr).toLocaleString()} 元`:'—';
   document.getElementById('ordKpiAvg').innerHTML=(cur.avg?Math.round(cur.avg).toLocaleString()+' 元':'—')+(prev?yoy(cur.avg,prev.avg):'');
   document.getElementById('ordKpiCancel').innerHTML=cur.cancelRate.toFixed(1)+'%'+(prev?yoy(cur.cancelRate,prev.cancelRate,true):'');
-  const camt=cur.cancelAmt?`・沖掉 ${fmtRev(Math.abs(cur.cancelAmt))}`:'';
-  document.getElementById('ordKpiCancelSub').innerHTML=`${cur.cancelN}/${cur.total} 筆<span style="color:var(--red);">${camt}</span>`;
+  const camt=cur.cancelAmt?`・<wbr><span style="color:var(--red);white-space:nowrap;">沖掉 ${fmtRev(Math.abs(cur.cancelAmt))}</span>`:'';
+  document.getElementById('ordKpiCancelSub').innerHTML=`${cur.cancelN}/${cur.total} 筆${camt}`;
 
   const valid=all.filter(o=>!o.cancel);
   const prevValid=(ordYear&&prev)?ordFiltered(ordYear-1).filter(o=>!o.cancel):null;
@@ -3822,8 +3825,8 @@ function renderOrdersSummary(){
   document.getElementById('ordKpiAdr').textContent='—';
   document.getElementById('ordKpiAvg').innerHTML=avg?Math.round(avg).toLocaleString()+' 元':'—';
   document.getElementById('ordKpiCancel').innerHTML=cancelRate.toFixed(1)+'%';
-  const camt=cancAmt?`・沖掉 ${fmtRev(Math.abs(cancAmt))}`:'';
-  document.getElementById('ordKpiCancelSub').innerHTML=`${cancN}/${total} 筆<span style="color:var(--red);">${camt}</span>`;
+  const camt=cancAmt?`・<wbr><span style="color:var(--red);white-space:nowrap;">沖掉 ${fmtRev(Math.abs(cancAmt))}</span>`:'';
+  document.getElementById('ordKpiCancelSub').innerHTML=`${cancN}/${total} 筆${camt}`;
   // 通路占比（用新增筆數與營收）
   renderOrdChannelsSummary(ch,newN,rev);
   // 平均金額（彙整無逐通路營收細分，用總平均近似——以新增數與營收估）
@@ -3971,7 +3974,9 @@ function renderOrdLead(valid){
   const counts=buckets.map(b=>valid.filter(o=>o.lead>=b.min&&o.lead<=b.max).length);
   const maxC=Math.max(...counts,1);
   const tot=counts.reduce((a,b)=>a+b,0)||1;
-  const W=360,H=127,padL=8,padR=8,padB=14,padT=26;
+  const fsc=ordFsc();  // 字級係數
+  const W=360,H=Math.round(127*fsc),padL=8,padR=8,padB=Math.round(14*fsc),padT=Math.round(26*fsc);
+  const f1=(10*fsc).toFixed(1),f2=(8*fsc).toFixed(1),f3=(8.5*fsc).toFixed(1);
   const bw=(W-padL-padR)/buckets.length;
   let svg='';
   buckets.forEach((b,i)=>{
@@ -3980,12 +3985,14 @@ function renderOrdLead(valid){
     const pct=(counts[i]/tot*100).toFixed(0);
     svg+=`<rect x="${x+bw*0.15}" y="${y}" width="${bw*0.7}" height="${h}" rx="3" fill="var(--ac)" opacity="0.85"/>`;
     if(counts[i]>0){
-      svg+=`<text x="${x+bw/2}" y="${y-12}" font-size="10" fill="var(--ac2)" text-anchor="middle" font-family="DM Mono" font-weight="700">${pct}%</text>`;
-      svg+=`<text x="${x+bw/2}" y="${y-3}" font-size="8" fill="var(--tx3)" text-anchor="middle" font-family="DM Mono">${counts[i]} 筆</text>`;
+      svg+=`<text x="${x+bw/2}" y="${y-12*fsc}" font-size="${f1}" fill="var(--ac2)" text-anchor="middle" font-family="DM Mono" font-weight="700">${pct}%</text>`;
+      svg+=`<text x="${x+bw/2}" y="${y-3}" font-size="${f2}" fill="var(--tx3)" text-anchor="middle" font-family="DM Mono">${counts[i]} 筆</text>`;
     }
-    svg+=`<text x="${x+bw/2}" y="${H-padB+10}" font-size="8.5" fill="var(--tx3)" text-anchor="middle">${b.l}</text>`;
+    svg+=`<text x="${x+bw/2}" y="${H-padB+10*fsc}" font-size="${f3}" fill="var(--tx3)" text-anchor="middle">${b.l}</text>`;
   });
-  document.getElementById('ordLeadChart').innerHTML=svg;
+  const le=document.getElementById('ordLeadChart');
+  le.setAttribute('viewBox','0 0 '+W+' '+H);
+  le.innerHTML=svg;
   fitOrdSvg('ordLeadChart', W, H, 6);
   const early=counts[4]+counts[5];
   document.getElementById('ordLeadLegend').textContent=
@@ -4016,24 +4023,27 @@ function renderOrdTrend(){
     });
   }
   const svgEl=document.getElementById('ordTrendChart');
-  const W=360,H=133,padL=24,padR=14,padB=14,padT=16;
+  const fsc=ordFsc();
+  const W=360,H=Math.round(133*fsc),padL=Math.round(24*fsc),padR=14,padB=Math.round(14*fsc),padT=16;
+  const fAx=(8*fsc).toFixed(1);
   const maxV=Math.max(...counts.filter(v=>v!=null),...cancels.filter(v=>v!=null),1);
   const groupW=(W-padL-padR)/12;
   const barW=Math.min(groupW*0.4,14), gap=2;
   const yBase=H-padB;
   let svg='';
   svg+=`<line x1="${padL}" y1="${yBase}" x2="${W-padR}" y2="${yBase}" stroke="var(--bd)" stroke-width="1"/>`;
-  svg+=`<text x="${padL-4}" y="${yBase-(H-padB-padT)+3}" font-size="8" fill="var(--tx3)" text-anchor="end" font-family="DM Mono">${maxV}</text>`;
-  svg+=`<text x="${padL-4}" y="${yBase+3}" font-size="8" fill="var(--tx3)" text-anchor="end" font-family="DM Mono">0</text>`;
+  svg+=`<text x="${padL-4}" y="${yBase-(H-padB-padT)+3}" font-size="${fAx}" fill="var(--tx3)" text-anchor="end" font-family="DM Mono">${maxV}</text>`;
+  svg+=`<text x="${padL-4}" y="${yBase+3}" font-size="${fAx}" fill="var(--tx3)" text-anchor="end" font-family="DM Mono">0</text>`;
   for(let i=0;i<12;i++){
     const cx=padL+groupW*i+groupW/2;
-    svg+=`<text x="${cx}" y="${H-padB+12}" font-size="8" fill="var(--tx3)" text-anchor="middle">${i+1}</text>`;
+    svg+=`<text x="${cx}" y="${H-padB+12}" font-size="${fAx}" fill="var(--tx3)" text-anchor="middle">${i+1}</text>`;
     if(counts[i]==null) continue;  // 未到月份不畫
     const x1=cx-barW-gap/2, x2=cx+gap/2;
     const hC=(counts[i]/maxV)*(H-padB-padT), hX=(cancels[i]/maxV)*(H-padB-padT);
     if(hC>0) svg+=`<rect x="${x1}" y="${yBase-hC}" width="${barW}" height="${hC}" rx="1.5" fill="var(--ac2)"/>`;
     if(hX>0) svg+=`<rect x="${x2}" y="${yBase-hX}" width="${barW}" height="${hX}" rx="1.5" fill="var(--red)"/>`;
   }
+  svgEl.setAttribute('viewBox','0 0 '+W+' '+H);
   svgEl.innerHTML=svg;
   fitOrdSvg('ordTrendChart', W, H, 12);
 }
@@ -4112,6 +4122,13 @@ async function ordFetchHistoryMonth(ym){
     return [];
   }
 }
+// 取得目前字級係數（手機才放大圖表內文字；桌機維持原樣避免過大）
+function ordFsc(){
+  var isDesktop=window.matchMedia('(min-width:768px)').matches;
+  if(isDesktop) return 1;
+  var fs=document.documentElement.getAttribute('data-fs')||'std';
+  return {std:1,lg:1.18,xl:1.38,xxl:1.6}[fs]||1;
+}
 // 圖表依字級+資料量決定尺寸：資料少塞得下就 100% 自適應；資料多且放大字級則放大像素觸發橫向捲軸
 function fitOrdSvg(id, W, H, dataCount){
   var el=document.getElementById(id); if(!el) return;
@@ -4181,14 +4198,16 @@ function renderOrdDaily(){
   }
   const n=labels.length;
   const isDaily=(ordRange&&ordRange[0]==='m');  // 逐日資料點多，長條較細
-  const W=360,H=133,padL=24,padR=14,padB=14,padT=16;
+  const fsc=ordFsc();
+  const W=360,H=Math.round(133*fsc),padL=Math.round(24*fsc),padR=14,padB=Math.round(14*fsc),padT=16;
+  const fAx=(8*fsc).toFixed(1),fNum=(7.5*fsc).toFixed(1),fDay=(6.5*fsc).toFixed(1),fMon=(8*fsc).toFixed(1);
   const maxV=Math.max(...newArr,...cancelArr,1);
   const yAt=v=>H-padB-(v/maxV)*(H-padB-padT);
   let svg='';
   // y 軸基準線 + 0/max 刻度
   svg+=`<line x1="${padL}" y1="${yAt(0)}" x2="${W-padR}" y2="${yAt(0)}" stroke="var(--bd)" stroke-width="1"/>`;
-  svg+=`<text x="${padL-4}" y="${yAt(maxV)+3}" font-size="8" fill="var(--tx3)" text-anchor="end" font-family="DM Mono">${maxV}</text>`;
-  svg+=`<text x="${padL-4}" y="${yAt(0)+3}" font-size="8" fill="var(--tx3)" text-anchor="end" font-family="DM Mono">0</text>`;
+  svg+=`<text x="${padL-4}" y="${yAt(maxV)+3}" font-size="${fAx}" fill="var(--tx3)" text-anchor="end" font-family="DM Mono">${maxV}</text>`;
+  svg+=`<text x="${padL-4}" y="${yAt(0)+3}" font-size="${fAx}" fill="var(--tx3)" text-anchor="end" font-family="DM Mono">0</text>`;
 
   // ── 分組長條（每組 新增綠 + 取消紅）──
   const groupW=(W-padL-padR)/n;
@@ -4213,8 +4232,8 @@ function renderOrdDaily(){
     if(hN>0) svg+=`<rect x="${x1}" y="${H-padB-hN}" width="${barW}" height="${hN}" rx="1.5" fill="var(--green)"/>`;
     if(hC>0) svg+=`<rect x="${x2}" y="${H-padB-hC}" width="${barW}" height="${hC}" rx="1.5" fill="var(--red)"/>`;
     if(showNum){
-      if(newArr[i]>0) svg+=`<text x="${x1+barW/2}" y="${H-padB-hN-3}" font-size="7.5" fill="var(--green)" text-anchor="middle" font-family="DM Mono">${newArr[i]}</text>`;
-      if(cancelArr[i]>0) svg+=`<text x="${x2+barW/2}" y="${H-padB-hC-3}" font-size="7.5" fill="var(--red)" text-anchor="middle" font-family="DM Mono">${cancelArr[i]}</text>`;
+      if(newArr[i]>0) svg+=`<text x="${x1+barW/2}" y="${H-padB-hN-3}" font-size="${fNum}" fill="var(--green)" text-anchor="middle" font-family="DM Mono">${newArr[i]}</text>`;
+      if(cancelArr[i]>0) svg+=`<text x="${x2+barW/2}" y="${H-padB-hC-3}" font-size="${fNum}" fill="var(--red)" text-anchor="middle" font-family="DM Mono">${cancelArr[i]}</text>`;
     }
     if(isDaily){
       // 逐日：每天都標日期，週六日用強調色
@@ -4222,11 +4241,12 @@ function renderOrdDaily(){
       const weekend=(dow===0||dow===6);
       const col=weekend?'var(--ac2)':'var(--tx3)';
       const fw=weekend?'700':'400';
-      svg+=`<text x="${cx}" y="${H-padB+11}" font-size="6.5" fill="${col}" font-weight="${fw}" text-anchor="middle" font-family="DM Mono">${lb}</text>`;
+      svg+=`<text x="${cx}" y="${H-padB+11}" font-size="${fDay}" fill="${col}" font-weight="${fw}" text-anchor="middle" font-family="DM Mono">${lb}</text>`;
     }else{
-      if(i%labelStep===0||i===n-1) svg+=`<text x="${cx}" y="${H-padB+12}" font-size="8" fill="var(--tx3)" text-anchor="middle">${lb}</text>`;
+      if(i%labelStep===0||i===n-1) svg+=`<text x="${cx}" y="${H-padB+12}" font-size="${fMon}" fill="var(--tx3)" text-anchor="middle">${lb}</text>`;
     }
   });
+  svgEl.setAttribute('viewBox','0 0 '+W+' '+H);
   svgEl.innerHTML=svg;
   fitOrdSvg('ordDailyChart', W, H, n);
 }
