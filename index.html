@@ -4201,14 +4201,24 @@ function renderOrdDaily(){
   }
   const n=labels.length;
   const isDaily=(ordRange&&ordRange[0]==='m');  // 逐日資料點多，長條較細
+  const fs=document.documentElement.getAttribute('data-fs')||'std';
+  const isDesktop=window.matchMedia('(min-width:768px)').matches;
+  const lvl=isDesktop?'std':fs;  // 桌機維持標準，不加寬
   const fsc=ordFsc();
+  // 四個字級各自的：每天座標寬 perDay、日期字 fDay、長條數字 fNum、軸字 fAx
+  const TBL={
+    std:{per:0,  day:6.5, num:7.5, ax:8 },   // per:0 代表不加寬，維持 360 自適應
+    lg :{per:20, day:10,  num:11,  ax:10},
+    xl :{per:24, day:12,  num:13,  ax:11},
+    xxl:{per:28, day:14,  num:15,  ax:12}
+  };
+  const T=TBL[lvl]||TBL.std;
   const padL=Math.round(24*fsc),padR=14,padB=Math.round(14*fsc),padT=16;
-  // 放大字級且天數多時，viewBox 加寬讓每天有足夠橫向間距（配合外層捲軸）
-  const widen=(fsc>1 && isDaily && n>10);
-  const perDay=22;  // 每天座標寬
-  const W=widen?Math.max(360, Math.round(padL+padR+perDay*n)):360;
+  // 資料多(逐日>10天)且非標準級才加寬，配合外層捲軸
+  const widen=(T.per>0 && isDaily && n>10);
+  const W=widen?Math.round(padL+padR+T.per*n):360;
   const H=Math.round(133*fsc);
-  const fAx=(8*fsc).toFixed(1),fNum=(7.5*fsc).toFixed(1),fDay=(6.5*fsc).toFixed(1),fMon=(8*fsc).toFixed(1);
+  const fAx=T.ax.toFixed(1),fNum=T.num.toFixed(1),fDay=T.day.toFixed(1),fMon=(8*fsc).toFixed(1);
   const maxV=Math.max(...newArr,...cancelArr,1);
   const yAt=v=>H-padB-(v/maxV)*(H-padB-padT);
   let svg='';
