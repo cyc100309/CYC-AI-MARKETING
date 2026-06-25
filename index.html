@@ -5914,17 +5914,18 @@ function drawInto(boxId, names, opt){
 function drawMultiLineSVG(dates, series, selfVals, opt){
   opt=opt||{};
   const dense=opt.dense, interactive=opt.interactive;
-  // 依目前字級倍率放大 SVG 軸標籤（SVG font-size 不吃 CSS 變數，需手動換算）
-  const _fsMap={std:1, lg:1.18, xl:1.38, xxl:1.6};
+  // 字級放大：viewBox 總尺寸固定（顯示比例不變），只放大字與留白，內容繪圖區相應縮小
+  const _fsMap={std:1, lg:1.15, xl:1.3, xxl:1.45};
   const _fsK=_fsMap[document.documentElement.getAttribute('data-fs')||'std']||1;
-  const fsAxis=(9*_fsK).toFixed(1);
   const _nDays=dates.length;
-  // 天數多時加寬 SVG 觸發水平捲動（每天最小像素），少時維持 320 填滿
-  const _SCROLL_FROM=12, _PX_PER_DAY=Math.round(22*_fsK);
+  const fsAxis=(9*_fsK).toFixed(1);
+  // 天數多時加寬 SVG 觸發水平捲動（每天固定像素），少時維持 320 viewBox 填滿容器
+  const _SCROLL_FROM=12, _PX_PER_DAY=22;
   const _scrollMode=_nDays>_SCROLL_FROM;
-  const padL=42+(_fsK-1)*14, padR=12, padT=12, padB=(dense?38:26)+(_fsK-1)*10;
+  // 留白隨字級加大，留空間給變大的軸標籤；W/H 總尺寸固定維持顯示比例
+  const padL=42+(_fsK-1)*22, padR=12, padT=12, padB=(dense?38:26)+(_fsK-1)*16;
   const W=_scrollMode ? (padL+padR+_PX_PER_DAY*(_nDays-1)) : 320;
-  const H=(dense?153:120)+(_fsK-1)*22;
+  const H=(dense?153:120)+(_fsK-1)*20;
   const innerW=W-padL-padR, innerH=H-padT-padB;
 
   const pool=[];
@@ -6015,7 +6016,7 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   </svg>`;
   const _chart=_scrollMode
     ? `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">${_svg}</div>`
-    : _svg;
+    : `<div style="max-width:560px;margin:0 auto;">${_svg}</div>`;
   return `${_chart}
   <div style="${legendStyle}">${legend}</div>${tapHint}`;
 }
