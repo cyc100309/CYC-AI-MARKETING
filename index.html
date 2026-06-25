@@ -214,15 +214,15 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .comp-row-item{display:flex;align-items:center;gap:8px;
   background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:8px 10px;}
 .comp-row-item.self{border-color:#FFE234;background:rgba(255,226,52,.1);}
-.comp-row-name{font-size:12px;font-weight:500;color:var(--tx);}
+.comp-row-name{font-size:var(--fs-label);font-weight:500;color:var(--tx);}
 .comp-row-item.self .comp-row-name{color:#FFE234;}
-.comp-row-note{font-size:10px;color:var(--tx3);margin-top:1px;line-height:1.4;}
-.comp-row-price{font-family:'DM Mono',monospace;font-size:13px;
+.comp-row-note{font-size:var(--fs-tiny);color:var(--tx3);margin-top:1px;line-height:1.4;}
+.comp-row-price{font-family:'DM Mono',monospace;font-size:var(--fs-sub);
   font-weight:500;color:var(--tx);white-space:nowrap;}
 .comp-row-item.self .comp-row-price{color:#FFE234;}
-.comp-row-status{font-size:10px;white-space:nowrap;}
+.comp-row-status{font-size:var(--fs-tiny);white-space:nowrap;}
 .comp-price-input{width:72px;background:var(--sf3);border:1px solid var(--bd2);
-  border-radius:4px;padding:3px 6px;font-size:12px;color:var(--tx);
+  border-radius:4px;padding:3px 6px;font-size:var(--fs-label);color:var(--tx);
   font-family:'DM Mono',monospace;text-align:right;outline:none;}
 .comp-price-input:focus{border-color:var(--ac);}
 .agoda-link{font-size:10px;color:var(--blue);text-decoration:none;
@@ -362,7 +362,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 /* Category tabs */
 .cat-tabs{display:flex;gap:6px;padding:14px 18px 0;overflow-x:auto;scrollbar-width:none;}
 .cat-tabs::-webkit-scrollbar{display:none;}
-.cat-tab{font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid var(--bd);
+.cat-tab{font-size:var(--fs-label);padding:5px 12px;border-radius:20px;border:1px solid var(--bd);
   color:var(--tx2);background:transparent;cursor:pointer;flex-shrink:0;
   font-family:'Noto Sans TC',sans-serif;transition:all .2s;}
 .cat-tab.on{background:var(--ac);color:#0F1923;border-color:var(--ac);font-weight:700;}
@@ -370,20 +370,20 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 /* Chart */
 .chart-card{margin:10px 18px 0;background:var(--sf);border-radius:var(--r);
   padding:14px;border:1px solid var(--bd);}
-.chart-title{font-size:12px;font-weight:500;color:var(--tx);margin-bottom:12px;
+.chart-title{font-size:var(--fs-label);font-weight:500;color:var(--tx);margin-bottom:12px;
   display:flex;align-items:center;justify-content:flex-start;}
 .env-tab{flex:1;padding:8px 4px;background:transparent;border:none;border-bottom:2px solid transparent;
   color:var(--tx3);font-size:11px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;font-weight:400;}
 .env-tab.on{color:var(--ac);border-bottom-color:var(--ac);font-weight:600;}
 .env-sub{padding:0;}
 .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
-.bar-name{font-size:10px;color:var(--tx2);min-width:84px;max-width:84px;text-align:right;
+.bar-name{font-size:var(--fs-tiny);color:var(--tx2);min-width:calc(84px * var(--fs));max-width:calc(84px * var(--fs));text-align:right;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.bar-track{flex:1;height:14px;background:var(--sf3);border-radius:3px;overflow:hidden;
+.bar-track{flex:1;height:calc(14px * var(--fs));background:var(--sf3);border-radius:3px;overflow:hidden;
   position:relative;}
 .bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;
   padding-right:4px;justify-content:flex-end;transition:width .5s;}
-.bar-val{font-size:9px;font-family:'DM Mono',monospace;color:rgba(255,255,255,.8);
+.bar-val{font-size:var(--fs-mini);font-family:'DM Mono',monospace;color:rgba(255,255,255,.8);
   white-space:nowrap;}
 .bar-row.self .bar-name{color:#FFE234;font-weight:500;}
 .bar-fill.soldout-fill{background:repeating-linear-gradient(45deg,
@@ -395,7 +395,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 /* Competitor list */
 .comp-section{margin:10px 18px 0;}
-.section-hdr{font-size:11px;color:var(--tx3);padding:8px 0 5px;
+.section-hdr{font-size:var(--fs-label);color:var(--tx3);padding:8px 0 5px;
   border-bottom:1px solid var(--bd);margin-bottom:6px;
   display:flex;align-items:center;gap:6px;}
 .section-dot{width:8px;height:8px;border-radius:50%;}
@@ -405,20 +405,20 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .comp-item.self{border-color:#FFE234;background:rgba(255,226,52,.1);}
 .comp-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
 .comp-rank{width:20px;height:20px;border-radius:50%;background:var(--sf2);
-  font-size:10px;font-family:'DM Mono',monospace;color:var(--tx2);
+  font-size:var(--fs-tiny);font-family:'DM Mono',monospace;color:var(--tx2);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .comp-item.self .comp-rank{background:#FFE234;color:#0F1923;font-weight:700;}
-.comp-name{font-size:12px;font-weight:500;color:var(--tx);flex:1;}
+.comp-name{font-size:var(--fs-label);font-weight:500;color:var(--tx);flex:1;}
 .comp-item.self .comp-name{color:#FFE234;}
-.comp-type{font-size:10px;padding:2px 7px;border-radius:20px;
+.comp-type{font-size:var(--fs-tiny);padding:2px 7px;border-radius:20px;
   background:var(--sf2);color:var(--tx3);}
 .comp-bottom{display:flex;align-items:center;gap:8px;}
 .price-input-wrap{flex:1;display:flex;align-items:center;gap:4px;}
 .price-input{background:var(--sf2);border:1px solid var(--bd2);border-radius:6px;
-  padding:5px 8px;font-size:13px;color:var(--tx);font-family:'DM Mono',monospace;
+  padding:5px 8px;font-size:var(--fs-sub);color:var(--tx);font-family:'DM Mono',monospace;
   text-align:right;outline:none;width:90px;}
 .price-input:focus{border-color:var(--ac);}
-.price-unit{font-size:11px;color:var(--tx3);}
+.price-unit{font-size:var(--fs-label);color:var(--tx3);}
 .comp-item.self .price-input{color:#FFE234;font-weight:500;}
 .avail-toggle{display:flex;align-items:center;gap:4px;cursor:pointer;}
 .avail-toggle{display:flex;align-items:center;gap:4px;cursor:pointer;
@@ -427,13 +427,13 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .avail-dot{width:8px;height:8px;border-radius:50%;transition:background .2s;flex-shrink:0;}
 .avail-dot.on{background:var(--green);}
 .avail-dot.off{background:var(--red);}
-.avail-lbl{font-size:10px;color:var(--tx3);}
+.avail-lbl{font-size:var(--fs-tiny);color:var(--tx3);}
 .avail-toggle.sold-out .avail-lbl{color:var(--red);font-weight:500;}
 /* Sold out overlay on card */
 .comp-item.sold{opacity:.75;position:relative;}
 .sold-badge{position:absolute;top:50%;right:14px;left:auto;transform:translateY(-50%);
   background:rgba(224,92,92,.92);color:#fff;
-  font-size:12px;font-weight:700;padding:5px 14px;border-radius:30px;
+  font-size:var(--fs-label);font-weight:700;padding:5px 14px;border-radius:30px;
   letter-spacing:.08em;white-space:nowrap;
   box-shadow:0 2px 12px rgba(224,92,92,.4);
   backdrop-filter:blur(2px);z-index:2;}
@@ -1656,7 +1656,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   </div>
   <div style="text-align:right;">
     <div class="date-badge" id="todayDate"></div>
-    <div style="font-size:9px;color:var(--tx3);margin-top:4px;font-family:'DM Mono',monospace;" id="dataUpdateBadge">資料：—</div>
+    <div style="font-size:var(--fs-mini);color:var(--tx3);margin-top:4px;font-family:'DM Mono',monospace;" id="dataUpdateBadge">資料：—</div>
   </div>
 </div>
 
@@ -1680,7 +1680,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   </div>
   <div class="sum-card">
     <div class="sum-lbl">本中心定價</div>
-    <div class="sum-val" id="selfPrice" style="color:var(--ac);font-size:13px;">—</div>
+    <div class="sum-val" id="selfPrice" style="color:var(--ac);font-size:var(--fs-sub);">—</div>
     <div class="sum-sub" id="pricePosi" style="color:var(--green);">—</div>
   </div>
 </div>
@@ -1690,9 +1690,9 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div class="update-bar">
   <div>
     <div class="update-time" id="updateTime">尚未更新今日房價</div>
-    <div style="font-size:10px;color:var(--tx3);margin-top:2px;">資料來源：Agoda 最愛清單</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx3);margin-top:2px;">資料來源：Agoda 最愛清單</div>
   </div>
-  <button class="update-btn" onclick="document.getElementById('csvModal').style.display='flex'">📥 上傳房價資料</button>
+  <button class="update-btn" onclick="document.getElementById('csvModal').style.display='flex'">上傳房價資料</button>
 </div>
 
 <!-- CSV Upload Modal -->
@@ -1700,29 +1700,28 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   z-index:200;align-items:center;justify-content:center;padding:0 18px;">
   <div style="background:var(--sf);border-radius:var(--r);padding:20px;
     border:1px solid var(--bd2);width:100%;max-width:400px;">
-    <div style="font-size:14px;font-weight:500;color:var(--tx);margin-bottom:4px;">📊 匯入競爭對手房價</div>
-    <div style="font-size:11px;color:var(--tx3);margin-bottom:14px;line-height:1.7;">
+    <div style="font-size:var(--fs-tab);font-weight:500;color:var(--tx);margin-bottom:4px;">匯入競爭對手房價</div>
+    <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:14px;line-height:1.7;">
       從 Thunderbit 或 Google Sheets 下載 CSV，上傳後自動更新全部房價
     </div>
 
     <!-- 清除資料：上傳前先清空，避免售完飯店殘留舊價 -->
     <button onclick="clearCompData()"
       style="width:100%;margin-bottom:12px;background:transparent;border:1px solid var(--red,#E05C5C);
-      border-radius:var(--rs);padding:9px;font-size:12px;font-weight:500;color:var(--red,#E05C5C);
+      border-radius:var(--rs);padding:9px;font-size:var(--fs-label);font-weight:500;color:var(--red,#E05C5C);
       cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
-      🗑️ 清除目前房價資料（上傳前建議先清除）
+      清除目前房價資料（上傳前建議先清除）
     </button>
 
     <!-- Method 1: CSV file upload -->
     <div style="background:var(--sf2);border-radius:var(--rs);padding:12px;margin-bottom:10px;">
-      <div style="font-size:11px;color:var(--ac2);font-weight:500;margin-bottom:8px;">方法① 上傳 CSV 檔案（最穩定）</div>
+      <div style="font-size:var(--fs-label);color:var(--ac2);font-weight:500;margin-bottom:8px;">方法① 上傳 CSV 檔案（最穩定）</div>
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;
         background:var(--sf3);border:1px dashed var(--bd2);border-radius:var(--rs);
         padding:10px 12px;">
-        <span style="font-size:20px;">📁</span>
         <div>
-          <div style="font-size:12px;color:var(--tx);">點擊選擇 CSV 檔案</div>
-          <div style="font-size:10px;color:var(--tx3);">從 Thunderbit 或 Sheets 下載的 .csv</div>
+          <div style="font-size:var(--fs-label);color:var(--tx);">點擊選擇 CSV 檔案</div>
+          <div style="font-size:var(--fs-tiny);color:var(--tx3);">從 Thunderbit 或 Sheets 下載的 .csv</div>
         </div>
         <input type="file" id="csvFile" accept=".csv,.tsv,.txt" style="display:none"
           onchange="importCSVFile(this)">
@@ -1731,23 +1730,23 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
     <!-- Method 2: Paste CSV text -->
     <div style="background:var(--sf2);border-radius:var(--rs);padding:12px;margin-bottom:10px;">
-      <div style="font-size:11px;color:var(--ac2);font-weight:500;margin-bottom:8px;">方法② 直接貼上資料（複製自 Sheets）</div>
+      <div style="font-size:var(--fs-label);color:var(--ac2);font-weight:500;margin-bottom:8px;">方法② 直接貼上資料（複製自 Sheets）</div>
       <textarea id="csvPaste" rows="4" placeholder="在 Google Sheets 全選複製，貼到這裡..."
         style="width:100%;background:var(--sf3);border:1px solid var(--bd);border-radius:var(--rs);
-        padding:8px;font-size:11px;color:var(--tx);font-family:'DM Mono',monospace;
+        padding:8px;font-size:var(--fs-label);color:var(--tx);font-family:'DM Mono',monospace;
         resize:none;outline:none;line-height:1.5;"></textarea>
       <button onclick="importCSVText()"
         style="width:100%;margin-top:8px;background:var(--ac);color:#0F1923;border:none;
-        border-radius:var(--rs);padding:9px;font-size:12px;font-weight:700;cursor:pointer;
+        border-radius:var(--rs);padding:9px;font-size:var(--fs-label);font-weight:700;cursor:pointer;
         font-family:'Noto Sans TC',sans-serif;">
-        ✅ 匯入並更新房價
+        匯入並更新房價
       </button>
     </div>
 
-    <div id="csvStatus" style="font-size:11px;text-align:center;min-height:16px;"></div>
+    <div id="csvStatus" style="font-size:var(--fs-label);text-align:center;min-height:16px;"></div>
     <button onclick="document.getElementById('csvModal').style.display='none'"
       style="width:100%;margin-top:10px;background:transparent;border:1px solid var(--bd);
-      border-radius:var(--rs);padding:8px;font-size:12px;color:var(--tx3);cursor:pointer;
+      border-radius:var(--rs);padding:8px;font-size:var(--fs-label);color:var(--tx3);cursor:pointer;
       font-family:'Noto Sans TC',sans-serif;">
       關閉
     </button>
@@ -1761,16 +1760,16 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div class="chart-card">
   <div class="chart-title">
     <span>今日房價比較</span>
-    <span style="font-size:10px;color:var(--tx3);">輸入房價後自動更新</span>
+    <span style="font-size:var(--fs-tiny);color:var(--tx3);">輸入房價後自動更新</span>
   </div>
   <div id="barChart"></div>
 </div>
 
 <!-- 歷史價格走勢（本中心獨立 + 三價位分類 + 14家總圖） -->
-<div class="lbl" style="margin-top:18px;"><span>價格走勢追蹤</span><span id="histSubInfo" style="font-size:9px;color:var(--tx3);text-transform:none;letter-spacing:0;">累積每日上傳紀錄</span></div>
+<div class="lbl" style="margin-top:18px;"><span>價格走勢追蹤</span><span id="histSubInfo" style="font-size:var(--fs-mini);color:var(--tx3);text-transform:none;letter-spacing:0;">累積每日上傳紀錄</span></div>
 
 <div class="chart-card" id="histCardSelf">
-  <div class="chart-title"><span>🎖️ 本中心定價走勢</span></div>
+  <div class="chart-title"><span>本中心定價走勢</span></div>
   <div id="histChartSelf"></div>
 </div>
 
@@ -1790,7 +1789,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 </div>
 
 <div class="chart-card" id="histCardAll">
-  <div class="chart-title"><span id="histAllTitle">全部總覽</span><span style="font-size:10px;color:var(--tx3);">含本中心</span></div>
+  <div class="chart-title"><span id="histAllTitle">全部總覽</span><span style="font-size:var(--fs-tiny);color:var(--tx3);">含本中心</span></div>
   <div id="histChartAll"></div>
 </div>
 
@@ -5466,31 +5465,31 @@ function buildCompetitors(){
       div.className='comp-row-item self';
       div.innerHTML=`${soldBadge}
         <div style="flex:1;min-width:0;">
-          <div class="comp-row-name">🎖️ ${c.name}</div>
+          <div class="comp-row-name">${c.name}</div>
           <div class="comp-row-note">${c.note}</div>
         </div>
         <div style="text-align:right;">
-          <div class="comp-row-price">${c.price>0?c.price.toLocaleString():'—'}<span style="font-size:10px;color:var(--tx3);">元</span></div>
-          <div style="font-size:10px;color:var(--ac);margin-top:2px;">★ ${c.rating}</div>
+          <div class="comp-row-price">${c.price>0?c.price.toLocaleString():'—'}<span style="font-size:var(--fs-tiny);color:var(--tx3);">元</span></div>
+          <div style="font-size:var(--fs-tiny);color:var(--ac);margin-top:2px;">★ ${c.rating}</div>
         </div>`;
     } else {
       div.className='comp-row-item '+soldCls;
       div.style.position='relative';
       div.innerHTML=`${soldBadge}
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-          <div style="flex:1;font-size:12px;font-weight:500;color:${c.hostel?'var(--green)':'var(--tx)'};
+          <div style="flex:1;font-size:var(--fs-label);font-weight:500;color:${c.hostel?'var(--green)':'var(--tx)'};
             overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
-            ${c.hostel?'🎒 ':''} ${c.name}
+            ${c.name}
           </div>
-          <div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:700;
+          <div style="font-family:'DM Mono',monospace;font-size:var(--fs-tab);font-weight:700;
             color:${c.avail?'var(--tx)':'var(--red)'};white-space:nowrap;">
             ${c.price>0?c.price.toLocaleString()+'元':'—'}
           </div>
-          <div class="comp-type" style="flex-shrink:0;font-size:10px;">${c.note.split('・')[0]}</div>
+          <div class="comp-type" style="flex-shrink:0;font-size:var(--fs-tiny);">${c.note.split('・')[0]}</div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:10px;color:var(--tx3);">★${c.rating}</span>
-          <a class="agoda-link" href="${agodaUrl}" target="_blank" style="font-size:10px;">🔗 Agoda</a>
+          <span style="font-size:var(--fs-tiny);color:var(--tx3);">★${c.rating}</span>
+          <a class="agoda-link" href="${agodaUrl}" target="_blank" style="font-size:var(--fs-tiny);">Agoda</a>
         </div>`;
     }
     row.appendChild(div);
@@ -5521,21 +5520,21 @@ function buildLists(){
       const idx=COMPETITORS.indexOf(h);
       const agodaUrl=h.agoda+'?checkIn='+fmt(today)+'&los=1&adults=1&rooms=1&currencyCode=TWD';
       const nameCol=h.self?'#FFE234':'var(--tx)';
-      const sold=h.avail?'':'<span style="color:var(--red);font-size:9px;margin-left:4px;">售完</span>';
+      const sold=h.avail?'':'<span style="color:var(--red);font-size:var(--fs-mini);margin-left:4px;">售完</span>';
       cells+=`<div id="item-${idx}" style="background:var(--sf2);border:1px solid ${h.self?'rgba(255,226,52,.35)':'var(--bd)'};border-radius:var(--rs);padding:8px 8px 9px;display:flex;flex-direction:column;gap:5px;min-width:0;">
-        <div style="font-size:11px;font-weight:500;color:${nameCol};line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${h.self?'🎖️ ':''}${h.shortLabel||h.name}${sold}</div>
+        <div style="font-size:var(--fs-label);font-weight:500;color:${nameCol};line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${h.shortLabel||h.name}${sold}</div>
         <div style="display:flex;align-items:center;justify-content:space-between;gap:4px;">
-          <span style="font-size:10px;color:var(--tx3);white-space:nowrap;">★ ${h.rating||'—'}</span>
-          <a href="${agodaUrl}" target="_blank" style="font-size:9px;color:var(--ac2,#5BE3B3);text-decoration:none;white-space:nowrap;">🔗 Agoda</a>
+          <span style="font-size:var(--fs-tiny);color:var(--tx3);white-space:nowrap;">★ ${h.rating||'—'}</span>
+          <a href="${agodaUrl}" target="_blank" style="font-size:var(--fs-mini);color:var(--ac2,#5BE3B3);text-decoration:none;white-space:nowrap;">Agoda</a>
         </div>
       </div>`;
     });
 
     container.innerHTML+=`<div class="comp-section" style="margin-top:12px;">
-      <div class="section-hdr" style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--tx);margin-bottom:8px;">
+      <div class="section-hdr" style="display:flex;align-items:center;gap:6px;font-size:var(--fs-label);color:var(--tx);margin-bottom:8px;">
         <div class="section-dot" style="width:8px;height:8px;border-radius:50%;background:${sec.dot};"></div>
         ${sec.label}
-        <span style="font-size:10px;color:var(--tx3);margin-left:auto;">${hotels.length} 家</span>
+        <span style="font-size:var(--fs-tiny);color:var(--tx3);margin-left:auto;">${hotels.length} 家</span>
       </div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">${cells}</div>
     </div>`;
@@ -5811,7 +5810,7 @@ function renderAllHistCharts(){
   if(!HIST_DATA || !Object.keys(HIST_DATA.hotels).length){
     ['Self','High','Mid','Hostel','All'].forEach(s=>{
       const box=document.getElementById('histChart'+s);
-      if(box) box.innerHTML='<div style="font-size:11px;color:var(--tx3);text-align:center;padding:18px 8px;line-height:1.8;">尚無歷史資料<br>每日上傳 CSV 後自動累積</div>';
+      if(box) box.innerHTML='<div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;padding:18px 8px;line-height:1.8;">尚無歷史資料<br>每日上傳 CSV 後自動累積</div>';
     });
     if(sub) sub.textContent='累積每日上傳紀錄';
     return;
@@ -5883,14 +5882,14 @@ function drawInto(boxId, names, opt){
   }
 
   if(!series.length && !selfVals){
-    box.innerHTML='<div style="font-size:11px;color:var(--tx3);text-align:center;padding:18px 8px;">此分類尚無資料</div>';
+    box.innerHTML='<div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;padding:18px 8px;">此分類尚無資料</div>';
     return;
   }
   // 判斷可成線天數（任一條線有 ≥2 個有效點才畫得出走勢）
   const maxValid=Math.max(0,...series.map(s=>s.vals.filter(v=>v!==null&&v>0).length),
                             selfVals?selfVals.filter(v=>v!==null&&v>0).length:0);
   if(maxValid<2){
-    box.innerHTML='<div style="font-size:11px;color:var(--tx3);text-align:center;padding:18px 8px;line-height:1.8;">目前僅 '+maxValid+' 天資料<br>再累積幾天就會出現走勢線</div>';
+    box.innerHTML='<div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;padding:18px 8px;line-height:1.8;">目前僅 '+maxValid+' 天資料<br>再累積幾天就會出現走勢線</div>';
     return;
   }
   box.innerHTML=drawMultiLineSVG(dates, series, selfVals, opt);
@@ -5906,7 +5905,7 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   const pool=[];
   series.forEach(s=>s.vals.forEach(v=>{if(v!==null&&v>0)pool.push(v);}));
   if(selfVals) selfVals.forEach(v=>{if(v!==null&&v>0)pool.push(v);});
-  if(!pool.length) return '<div style="font-size:11px;color:var(--tx3);text-align:center;padding:18px;">無有效價格</div>';
+  if(!pool.length) return '<div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;padding:18px;">無有效價格</div>';
 
   const dataLo=Math.min(...pool), dataHi=Math.max(...pool);
   let lo,hi;
@@ -5982,10 +5981,10 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
     legend+=`<span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:0;border-top:2px dashed ${SELF_COLOR};display:inline-block;"></span>本中心</span>`;
   }
 
-  const tapHint=interactive?`<div style="font-size:9px;color:var(--tx3);text-align:center;margin-top:6px;">點下方飯店名可凸顯該條線・再點一次取消</div>`:'';
+  const tapHint=interactive?`<div style="font-size:var(--fs-mini);color:var(--tx3);text-align:center;margin-top:6px;">點下方飯店名可凸顯該條線・再點一次取消</div>`:'';
   const legendStyle=interactive
-    ? 'display:grid;grid-template-columns:repeat(4,1fr);gap:4px 6px;margin-top:8px;font-size:9px;color:var(--tx3);'
-    : 'display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:center;margin-top:8px;font-size:10px;color:var(--tx3);';
+    ? 'display:grid;grid-template-columns:repeat(4,1fr);gap:4px 6px;margin-top:8px;font-size:var(--fs-mini);color:var(--tx3);'
+    : 'display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:center;margin-top:8px;font-size:var(--fs-tiny);color:var(--tx3);';
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMidYMid meet" style="display:block;">
     ${yTicks}${lines}${selfLine}${dots}${xLabels}
   </svg>
@@ -6098,7 +6097,7 @@ function buildBarChart(){
   const el=document.getElementById('barChart');
   if(!el) return;
   if(!list.length){
-    el.innerHTML='<div style="font-size:11px;color:var(--tx3);text-align:center;padding:8px;">上傳 CSV 後自動顯示</div>';
+    el.innerHTML='<div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;padding:8px;">上傳 CSV 後自動顯示</div>';
     return;
   }
   const max=priced.length?Math.max(...priced.map(h=>h.price)):1;
