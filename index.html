@@ -4130,7 +4130,7 @@ function ordFsc(){
   return {std:1,lg:1.18,xl:1.38,xxl:1.6}[fs]||1;
 }
 // 圖表依字級+資料量決定尺寸：資料少塞得下就 100% 自適應；資料多且放大字級則放大像素觸發橫向捲軸
-function fitOrdSvg(id, W, H, dataCount){
+function fitOrdSvg(id, W, H, dataCount, minPerItem){
   var el=document.getElementById(id); if(!el) return;
   var isDesktop=window.matchMedia('(min-width:768px)').matches;
   var fs=document.documentElement.getAttribute('data-fs')||'std';
@@ -4139,9 +4139,12 @@ function fitOrdSvg(id, W, H, dataCount){
   var perItem=(W*scale)/Math.max(dataCount,1);
   var needScroll = !isDesktop && fs!=='std' && dataCount>10 && perItem<22;
   if(needScroll){
-    el.setAttribute('width', Math.round(W*scale));
+    // 每筆保證最小寬度（隨字級放大），讓日期標籤不擠在一起
+    var per=(minPerItem||18)*scale;
+    var targetW=Math.max(Math.round(W*scale), Math.round(per*dataCount));
+    el.setAttribute('width', targetW);
     el.setAttribute('height', Math.round(H*scale));
-    el.style.width=Math.round(W*scale)+'px';
+    el.style.width=targetW+'px';
     el.style.maxWidth='none';
   }else{
     el.setAttribute('width','100%');
@@ -4199,7 +4202,12 @@ function renderOrdDaily(){
   const n=labels.length;
   const isDaily=(ordRange&&ordRange[0]==='m');  // 逐日資料點多，長條較細
   const fsc=ordFsc();
-  const W=360,H=Math.round(133*fsc),padL=Math.round(24*fsc),padR=14,padB=Math.round(14*fsc),padT=16;
+  const padL=Math.round(24*fsc),padR=14,padB=Math.round(14*fsc),padT=16;
+  // 放大字級且天數多時，viewBox 加寬讓每天有足夠橫向間距（配合外層捲軸）
+  const widen=(fsc>1 && isDaily && n>10);
+  const perDay=22;  // 每天座標寬
+  const W=widen?Math.max(360, Math.round(padL+padR+perDay*n)):360;
+  const H=Math.round(133*fsc);
   const fAx=(8*fsc).toFixed(1),fNum=(7.5*fsc).toFixed(1),fDay=(6.5*fsc).toFixed(1),fMon=(8*fsc).toFixed(1);
   const maxV=Math.max(...newArr,...cancelArr,1);
   const yAt=v=>H-padB-(v/maxV)*(H-padB-padT);
@@ -4248,7 +4256,15 @@ function renderOrdDaily(){
   });
   svgEl.setAttribute('viewBox','0 0 '+W+' '+H);
   svgEl.innerHTML=svg;
-  fitOrdSvg('ordDailyChart', W, H, n);
+  if(widen){
+    // viewBox 已加寬，直接以像素寬呈現觸發橫向捲軸（每天間距足夠）
+    svgEl.setAttribute('width', W);
+    svgEl.setAttribute('height', H);
+    svgEl.style.width=W+'px';
+    svgEl.style.maxWidth='none';
+  }else{
+    fitOrdSvg('ordDailyChart', W, H, n);
+  }
 }
 function renderOrdCancel(all){
   const g=ordGroupBy(all,'sys');
