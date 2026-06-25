@@ -5914,18 +5914,23 @@ function drawInto(boxId, names, opt){
 function drawMultiLineSVG(dates, series, selfVals, opt){
   opt=opt||{};
   const dense=opt.dense, interactive=opt.interactive;
-  // 字級放大：viewBox 總尺寸固定（顯示比例不變），只放大字與留白，內容繪圖區相應縮小
-  const _fsMap={std:1, lg:1.15, xl:1.3, xxl:1.45};
-  const _fsK=_fsMap[document.documentElement.getAttribute('data-fs')||'std']||1;
   const _nDays=dates.length;
-  const fsAxis=(9*_fsK).toFixed(1);
-  // 天數多時加寬 SVG 觸發水平捲動（每天固定像素），少時維持 320 viewBox 填滿容器
-  const _SCROLL_FROM=12, _PX_PER_DAY=22;
+  // SVG 用 viewBox+width:100% 填滿容器：字顯示大小 = 9 × (容器寬/viewBox寬)。
+  // 桌機容器寬，需用較大 viewBox 寬，否則字被等比拉爆；手機維持 320。
+  const _isDesktop=window.matchMedia('(min-width:768px)').matches;
+  // 字級設定放大 → 縮小 viewBox 基準寬，讓同樣 9px 的字相對變大
+  const _fsMap={std:1, lg:1.12, xl:1.24, xxl:1.36};
+  const _fsK=_fsMap[document.documentElement.getAttribute('data-fs')||'std']||1;
+  const _baseW=(_isDesktop?760:320)/_fsK;   // 字級越大→viewBox越小→字相對越大
+  const fsAxis=9;
+  // 天數多時加寬 SVG 觸發水平捲動（每天固定像素），少時維持基準寬填滿容器
+  const _SCROLL_FROM=12, _PX_PER_DAY=Math.round((_isDesktop?40:22)/_fsK);
   const _scrollMode=_nDays>_SCROLL_FROM;
-  // 留白隨字級加大，留空間給變大的軸標籤；W/H 總尺寸固定維持顯示比例
-  const padL=42+(_fsK-1)*22, padR=12, padT=12, padB=(dense?38:26)+(_fsK-1)*16;
-  const W=_scrollMode ? (padL+padR+_PX_PER_DAY*(_nDays-1)) : 320;
-  const H=(dense?153:120)+(_fsK-1)*20;
+  const padL=42, padR=12, padT=12, padB=dense?38:26;
+  const W=_scrollMode ? (padL+padR+_PX_PER_DAY*(_nDays-1)) : _baseW;
+  // 高度依基準寬比例（桌機圖較寬，維持約 2.6:1 顯示比例不過扁）
+  const _ratio=dense?0.42:0.36;
+  const H=_scrollMode ? (dense?153:120) : Math.round(W*_ratio);
   const innerW=W-padL-padR, innerH=H-padT-padB;
 
   const pool=[];
@@ -6016,7 +6021,7 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   </svg>`;
   const _chart=_scrollMode
     ? `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">${_svg}</div>`
-    : `<div style="max-width:560px;margin:0 auto;">${_svg}</div>`;
+    : _svg;
   return `${_chart}
   <div style="${legendStyle}">${legend}</div>${tapHint}`;
 }
