@@ -1460,15 +1460,21 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <div id="calSrcBtns" style="margin-top:18px;display:none;flex-direction:column;gap:7px;">
     <div class="lbl" style="margin-bottom:2px;padding-left:0;padding-right:0;"><span>賽事／活動官方來源</span></div>
     <a href="https://www.sportsnet.org.tw/schedule.php" target="_blank" style="text-decoration:none;display:flex;
-      align-items:center;justify-content:space-between;background:var(--sf2);border:1px solid var(--bd);
+      align-items:center;justify-content:space-between;gap:10px;background:var(--sf2);border:1px solid var(--bd);
       border-radius:var(--rs);padding:10px 12px;">
-      <span style="font-size:var(--fs-sub);color:var(--tx);">中華民國路跑協會・賽事行事曆</span>
-      <span style="font-size:var(--fs-sub);color:var(--ac);">前往 →</span></a>
+      <span style="flex:1;min-width:0;line-height:1.4;">
+        <span style="font-size:var(--fs-sub);color:var(--tx);font-weight:600;display:block;">中華民國路跑協會</span>
+        <span style="font-size:var(--fs-tiny);color:var(--tx3);display:block;">賽事行事曆</span>
+      </span>
+      <span style="font-size:var(--fs-sub);color:var(--ac);flex-shrink:0;white-space:nowrap;">前往 →</span></a>
     <a href="https://www.taipeidome.com.tw/Web/Dome/Calendar/" target="_blank" style="text-decoration:none;display:flex;
-      align-items:center;justify-content:space-between;background:var(--sf2);border:1px solid var(--bd);
+      align-items:center;justify-content:space-between;gap:10px;background:var(--sf2);border:1px solid var(--bd);
       border-radius:var(--rs);padding:10px 12px;">
-      <span style="font-size:var(--fs-sub);color:var(--tx);">臺北大巨蛋・最新消息（賽程／活動）</span>
-      <span style="font-size:var(--fs-sub);color:var(--ac);">前往 →</span></a>
+      <span style="flex:1;min-width:0;line-height:1.4;">
+        <span style="font-size:var(--fs-sub);color:var(--tx);font-weight:600;display:block;">臺北大巨蛋</span>
+        <span style="font-size:var(--fs-tiny);color:var(--tx3);display:block;">最新消息（賽程／活動）</span>
+      </span>
+      <span style="font-size:var(--fs-sub);color:var(--ac);flex-shrink:0;white-space:nowrap;">前往 →</span></a>
   </div>
 
   <!-- 頁尾：手動更新提醒（含大巨蛋賽程的單位顯示，例：劍潭）-->
@@ -3088,6 +3094,17 @@ function bootUnit(){
   applyUnitBranding(getUnit());
   loadCfg();           // 載入該單位品牌與已存營運資料（內含 loadSavedOccData）
   init();              // 重繪
+  // 切換單位時，若正停在行事曆子頁，重繪日曆與相關區塊（否則需手動下拉才更新）
+  try{
+    const calSub=document.getElementById('occ-sub-cal');
+    if(calSub && calSub.style.display!=='none'){
+      buildCalendar();
+      renderAnnualEvents();
+      fetchKmdnNews();
+      try{ fetchUnitEvents(); }catch(e){}
+      try{ applyCalSrcBtns(); }catch(e){}
+    }
+  }catch(e){}
 }
 // 依單位套用品牌名稱（從 UNITS 設定取，單一來源）
 function applyUnitBranding(unit){
@@ -4470,7 +4487,7 @@ const CAL_EVENTS_JT = [
   {y:2026,m:5,d:15,name:'孫燕姿 大巨蛋演唱會',type:'major',end:17,note:'5/15、5/17 台北大巨蛋，華語天后，住房商機',icon:'🏟️',src:'大巨蛋'},
   {y:2026,m:5,d:15,name:'動力火車 小巨蛋演唱會',type:'major',end:17,note:'5/15–5/17 台北小巨蛋',icon:'🎤',src:'演唱會彙整'},
   // 7月
-  {y:2026,m:7,d:3,name:'五月天 25週年大巨蛋演唱會',type:'major',end:12,note:'7/3、4、5、8、10、11、12 共7場，暑假最大住房商機',icon:'🏟️',src:'大巨蛋'},
+  {y:2026,m:7,d:3,name:'五月天 25週年大巨蛋演唱會',type:'major',end:12,days:[3,4,5,8,10,11,12],note:'7/3、4、5、8、10、11、12 共7場，暑假最大住房商機',icon:'🏟️',src:'大巨蛋'},
   // 12月
   {y:2026,m:12,d:30,name:'蔡依林 大巨蛋跨年演唱會',type:'major',note:'12/30 跨年檔期，與101煙火連動，住房全面爆滿',icon:'🏟️',src:'大巨蛋'},
   // ── 在此貼上更多台北活動（格式同上）──
@@ -4705,6 +4722,16 @@ function buildCalendar(){
     const dotDays=new Set(), majorDays=new Set(), holDays=new Set(), sportDays=new Set();
     mevts.forEach(e=>{
       if(!e.d) return;
+      // 若提供 days 陣列（不連續的實際場次日），精確標記這幾天
+      if(Array.isArray(e.days) && e.days.length){
+        e.days.forEach(dd=>{
+          if(e.type==='major'){ majorDays.add(dd); dotDays.add(dd); }
+          else if(e.type==='holiday'){ holDays.add(dd); dotDays.add(dd); }
+          else if(e.type==='sport'){ sportDays.add(dd); dotDays.add(dd); }
+          else dotDays.add(dd);
+        });
+        return;
+      }
       const lastD=e.end||e.d;
       const isLongMajor=(e.type==='major' && lastD>e.d);
       for(let dd=e.d;dd<=lastD;dd++){
@@ -4832,7 +4859,7 @@ function buildCalendar(){
     // 已預訂率圖例（僅該月有資料時顯示）
     if(hasOcc){
       g+=`<div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:var(--fs-mini);color:var(--tx3);flex-wrap:wrap;">
-        <span style="color:var(--tx2);">日期色＝已預訂率%</span>
+        <span style="color:var(--tx2);">日期色＝住宿率</span>
         <span style="display:flex;align-items:center;gap:3px;"><b style="color:#9AA5B1;font-family:'DM Mono',monospace;">●</b>≤30</span>
         <span style="display:flex;align-items:center;gap:3px;"><b style="color:#E8C547;font-family:'DM Mono',monospace;">●</b>31–50</span>
         <span style="display:flex;align-items:center;gap:3px;"><b style="color:#E8893E;font-family:'DM Mono',monospace;">●</b>51–80</span>
@@ -4853,7 +4880,9 @@ function buildCalendar(){
     if(mevts.length){
       mevts.forEach(e=>{
         const t=CAL_TYPE[e.type]||CAL_TYPE.cultural;
-        const dateStr=e.d?(e.end?`${e.m}/${e.d}–${e.end}`:`${e.m}/${e.d}`):'日期未定';
+        const dateStr=(Array.isArray(e.days)&&e.days.length)
+          ? `${e.m}/${e.days[0]}·${e.days[e.days.length-1]}`
+          : (e.d?(e.end?`${e.m}/${e.d}–${e.end}`:`${e.m}/${e.d}`):'日期未定');
         evHTML+=`<div style="padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);">
           <div style="display:flex;align-items:center;gap:7px;">
             <div style="width:7px;height:7px;border-radius:50%;background:${t.dot};flex-shrink:0;"></div>
