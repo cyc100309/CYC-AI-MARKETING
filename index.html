@@ -5933,8 +5933,8 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   const _scrollMode=_nDays>_SCROLL_FROM;
   const padL=42, padR=12, padT=12, padB=dense?38:26;
   const W=_scrollMode ? (padL+padR+_PX_PER_DAY*(_nDays-1)) : _baseW;
-  // 高度依基準寬比例（桌機圖較寬，維持約 2.6:1 顯示比例不過扁）
-  const _ratio=dense?0.42:0.36;
+  // 高度依基準寬比例：手機螢幕窄、圖需較高才不擠；桌機圖寬維持較扁比例
+  const _ratio = _isDesktop ? (dense?0.42:0.36) : (dense?0.62:0.52);
   const H=_scrollMode ? (dense?153:120) : Math.round(W*_ratio);
   const innerW=W-padL-padR, innerH=H-padT-padB;
 
@@ -6019,8 +6019,8 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
 
   const tapHint=interactive?`<div style="font-size:var(--fs-mini);color:var(--tx3);text-align:center;margin-top:6px;">點下方飯店名可凸顯該條線・再點一次取消</div>`:'';
   const legendStyle=interactive
-    ? 'display:grid;grid-template-columns:repeat(4,1fr);gap:4px 6px;margin-top:8px;font-size:var(--fs-mini);color:var(--tx3);'
-    : 'display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:center;margin-top:8px;font-size:var(--fs-tiny);color:var(--tx3);';
+    ? 'display:grid;grid-template-columns:repeat(4,1fr);gap:2px 6px;margin-top:5px;font-size:var(--fs-mini);color:var(--tx3);line-height:1.3;'
+    : 'display:flex;flex-wrap:wrap;gap:3px 12px;justify-content:center;margin-top:5px;font-size:var(--fs-tiny);color:var(--tx3);line-height:1.3;';
   const _svg=`<svg viewBox="0 0 ${W} ${H}" width="${_scrollMode?W:'100%'}" height="${_scrollMode?H:'auto'}" preserveAspectRatio="xMidYMid meet" style="display:block;${_scrollMode?'':'width:100%;'}">
     ${yTicks}${lines}${selfLine}${dots}${xLabels}
   </svg>`;
