@@ -462,7 +462,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 /* Update time */
 .update-bar{margin:8px 18px 0;display:flex;align-items:center;justify-content:space-between;}
-.update-time{font-size:10px;color:var(--tx3);font-family:'DM Mono',monospace;}
+.update-time{font-size:var(--fs-tiny);color:var(--tx3);font-family:'DM Mono',monospace;}
 .update-btn{font-size:var(--fs-sub);color:var(--ac2);background:var(--ad);
   border:1px solid var(--bd2);border-radius:20px;padding:4px 12px;cursor:pointer;
   font-family:'Noto Sans TC',sans-serif;}
@@ -697,16 +697,21 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   /* 桌機無底部導覽，浮動字級鈕落到右下角 */
   #fsFab{bottom:28px;right:28px;}
 
-  /* 競品頁桌機版：空間大，市場概況維持四欄不降欄；圖表與清單文字放大 */
+  /* 競品頁桌機版：空間大，市場概況維持四欄不降欄。
+     市場概況+bar 放大兩級上限(×1.38)；走勢圖不動(viewBox自適應)；飯店清單放大一級(×1.18) */
   .sum-grid-comp{grid-template-columns:repeat(4,1fr) !important;}
-  #page-comp .bar-name{font-size:calc(var(--fs-tiny) * 1.25);min-width:calc(104px * var(--fs));max-width:calc(104px * var(--fs));}
-  #page-comp .bar-val{font-size:calc(var(--fs-mini) * 1.3);}
-  #page-comp .bar-track{height:calc(18px * var(--fs));}
-  #page-comp .sum-val{font-size:calc(var(--fs-body) * 1.2);}
-  #page-comp .sum-lbl,#page-comp .sum-sub{font-size:calc(var(--fs-tiny) * 1.15);}
-  #page-comp .cl-name{font-size:calc(var(--fs-label) * 1.25) !important;}
-  #page-comp .cl-rate{font-size:calc(var(--fs-tiny) * 1.2) !important;}
-  #page-comp .cl-link{font-size:calc(var(--fs-tiny) * 1.1) !important;}
+  #page-comp .bar-name{font-size:calc(var(--fs-tiny) * 1.38);min-width:calc(118px * var(--fs));max-width:calc(118px * var(--fs));}
+  #page-comp .bar-val{font-size:calc(var(--fs-mini) * 1.38);}
+  #page-comp .bar-track{height:calc(20px * var(--fs));}
+  #page-comp .sum-val{font-size:calc(var(--fs-body) * 1.38);}
+  #page-comp .sum-lbl,#page-comp .sum-sub{font-size:calc(var(--fs-tiny) * 1.38);}
+  #page-comp .cl-name{font-size:calc(var(--fs-label) * 1.18) !important;}
+  #page-comp .cl-rate{font-size:calc(var(--fs-tiny) * 1.18) !important;}
+  #page-comp .cl-link{font-size:calc(var(--fs-tiny) * 1.18) !important;}
+  /* 資料更新列：更新時間/資料來源/上傳鈕 桌機放大一級 */
+  #page-comp .update-time{font-size:calc(var(--fs-tiny) * 1.18);}
+  #page-comp .update-src{font-size:calc(var(--fs-tiny) * 1.18) !important;}
+  #page-comp .update-btn{font-size:calc(var(--fs-sub) * 1.18);}
 }
 </style>
 </head>
@@ -1695,7 +1700,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   </div>
   <div class="sum-card">
     <div class="sum-lbl">本中心定價</div>
-    <div class="sum-val" id="selfPrice" style="color:var(--ac);font-size:var(--fs-sub);">—</div>
+    <div class="sum-val" id="selfPrice" style="color:var(--ac);">—</div>
     <div class="sum-sub" id="pricePosi" style="color:var(--green);">—</div>
   </div>
 </div>
@@ -1705,7 +1710,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div class="update-bar">
   <div>
     <div class="update-time" id="updateTime">尚未更新今日房價</div>
-    <div style="font-size:var(--fs-tiny);color:var(--tx3);margin-top:2px;">資料來源：Agoda 最愛清單</div>
+    <div class="update-src" style="font-size:var(--fs-tiny);color:var(--tx3);margin-top:2px;">資料來源：Agoda 最愛清單</div>
   </div>
   <button class="update-btn" onclick="document.getElementById('csvModal').style.display='flex'">上傳房價資料</button>
 </div>
