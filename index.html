@@ -361,9 +361,9 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 [data-fs="xxl"] .sum-grid-comp{grid-template-columns:repeat(2,1fr);}
 .sum-card{background:var(--sf);border-radius:var(--rs);padding:10px 10px 8px;
   border:1px solid var(--bd);text-align:center;}
-.sum-lbl{font-size:var(--fs-tiny);color:var(--tx3);margin-bottom:5px;}
-.sum-val{font-family:'DM Mono',monospace;font-size:var(--fs-body);font-weight:500;color:var(--tx);}
-.sum-sub{font-size:var(--fs-tiny);margin-top:3px;}
+.sum-lbl{font-size:var(--fs-label);color:var(--tx3);margin-bottom:5px;}
+.sum-val{font-family:'DM Mono',monospace;font-size:var(--fs-kpi);font-weight:500;color:var(--tx);}
+.sum-sub{font-size:var(--fs-sub);margin-top:3px;}
 
 /* Category tabs */
 .cat-tabs{display:flex;gap:6px;padding:14px 18px 0;overflow-x:auto;scrollbar-width:none;}
@@ -646,6 +646,8 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 /* 手機（≤767px）：四張 KPI 卡標準/大維持兩欄，特大才改單欄 */
 @media (max-width:767px){
   .kg{grid-template-columns:1fr 1fr !important;}
+  /* 大數字統一 26px 後，含 sum-card 的三欄格線在手機收成兩欄，避免數字折行 */
+  .sum-grid, [style*="repeat(3,1fr)"]:has(> .sum-card), [style*="repeat(3, 1fr)"]:has(> .sum-card){grid-template-columns:1fr 1fr !important;}
   /* 放大字級時改單欄，避免兩欄擠壓 */
   [data-fs="lg"] .kg, [data-fs="xl"] .kg, [data-fs="xxl"] .kg{grid-template-columns:1fr !important;}
   /* 網路訂單頁 KPI 卡特大字級排版 */
@@ -705,8 +707,9 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   #page-comp .bar-name{font-size:calc(var(--fs-tiny) * 1.38);min-width:calc(118px * var(--fs));max-width:calc(118px * var(--fs));}
   #page-comp .bar-val{font-size:calc(var(--fs-mini) * 1.38);}
   #page-comp .bar-track{height:calc(20px * var(--fs));}
-  #page-comp .sum-val{font-size:calc(var(--fs-body) * 1.38);}
-  #page-comp .sum-lbl,#page-comp .sum-sub{font-size:calc(var(--fs-tiny) * 1.38);}
+  #page-comp .sum-val{font-size:var(--fs-kpi);}
+  #page-comp .sum-lbl{font-size:var(--fs-label);}
+  #page-comp .sum-sub{font-size:var(--fs-sub);}
   #page-comp .cl-name{font-size:calc(var(--fs-label) * 1.18) !important;}
   #page-comp .cl-rate{font-size:calc(var(--fs-tiny) * 1.18) !important;}
   #page-comp .cl-link{font-size:calc(var(--fs-tiny) * 1.18) !important;}
@@ -1865,17 +1868,17 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px 18px 0;">
   <div class="sum-card">
     <div class="sum-lbl">2026年 Q1 累計</div>
-    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--green);" id="tri-total">51.5萬</div>
+    <div class="sum-val" style="color:var(--green);" id="tri-total">51.5萬</div>
     <div class="sum-sub" style="color:var(--green);">2026年 Q1</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">國人旅客</div>
-    <div class="sum-val" style="font-size:var(--fs-sub);" id="tri-tw">3月 17.6萬</div>
+    <div class="sum-val" style="" id="tri-tw">3月 17.6萬</div>
     <div class="sum-sub" style="color:var(--tx3);">台灣83.3%</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">月均人次</div>
-    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--ac);">17.2萬</div>
+    <div class="sum-val" style="color:var(--ac);">17.2萬</div>
     <div class="sum-sub" style="color:var(--tx3);">28班/日</div>
   </div>
 </div>
@@ -2213,17 +2216,17 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 18px;">
   <div class="sum-card">
     <div class="sum-lbl">2025年來台</div>
-    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--green);">857.5萬</div>
+    <div class="sum-val" style="color:var(--green);">857.5萬</div>
     <div class="sum-sub" style="color:var(--green);">↑9.1% vs 2024</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">2024年</div>
-    <div class="sum-val" style="font-size:var(--fs-sub);">785.8萬</div>
+    <div class="sum-val" style="">785.8萬</div>
     <div class="sum-sub" style="color:var(--green);">↑21.1% vs 2023</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">疫前（2019）</div>
-    <div class="sum-val" style="font-size:var(--fs-sub);">1,186萬</div>
+    <div class="sum-val" style="">1,186萬</div>
     <div class="sum-sub" style="color:var(--tx3);">目前恢復 72%</div>
   </div>
 </div>
@@ -2237,17 +2240,17 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 18px;">
   <div class="sum-card">
     <div class="sum-lbl">2025年出國</div>
-    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--red);">1,894萬</div>
+    <div class="sum-val" style="color:var(--red);">1,894萬</div>
     <div class="sum-sub" style="color:var(--red);">↑12.4%・史上最高</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">觀光逆差人次</div>
-    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--red);">1,037萬</div>
+    <div class="sum-val" style="color:var(--red);">1,037萬</div>
     <div class="sum-sub" style="color:var(--red);">出境＞入境</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">觀光逆差金額</div>
-    <div class="sum-val" style="font-size:var(--fs-tiny);color:var(--red);">7,010億</div>
+    <div class="sum-val" style="color:var(--red);">7,010億</div>
     <div class="sum-sub" style="color:var(--tx3);">台幣估算</div>
   </div>
 </div>
@@ -2374,17 +2377,17 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 16px 0;">
   <div class="sum-card">
     <div class="sum-lbl">全國住用率</div>
-    <div class="sum-val" style="font-size:var(--fs-tab);">51.1%</div>
+    <div class="sum-val" style="">51.1%</div>
     <div class="sum-sub" style="color:var(--green);">2025年全年</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">一般旅館均價</div>
-    <div class="sum-val" style="font-size:var(--fs-tab);">2,661元</div>
+    <div class="sum-val" style="">2,661元</div>
     <div class="sum-sub" style="color:var(--green);">↑0.3% vs 2024</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">旅館家數</div>
-    <div class="sum-val" style="font-size:var(--fs-tab);">3,281家</div>
+    <div class="sum-val" style="">3,281家</div>
     <div class="sum-sub" style="color:var(--tx3);">2025年12月</div>
   </div>
 </div>
@@ -2542,17 +2545,17 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 18px;">
   <div class="sum-card">
     <div class="sum-lbl">101年（近年高峰）</div>
-    <div class="sum-val" style="font-size:var(--fs-sub);">22.9萬</div>
+    <div class="sum-val" style="">22.9萬</div>
     <div class="sum-sub" style="color:var(--tx3);">龍年效應</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">113年出生數</div>
-    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--red);">13.5萬</div>
+    <div class="sum-val" style="color:var(--red);">13.5萬</div>
     <div class="sum-sub" style="color:var(--red);">↓ 41%</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">粗出生率</div>
-    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--red);">5.76‰</div>
+    <div class="sum-val" style="color:var(--red);">5.76‰</div>
     <div class="sum-sub" style="color:var(--red);">歷史最低</div>
   </div>
 </div>
@@ -8646,13 +8649,13 @@ function renderAirKpis(){
   const prevFull=airSumYear(prev);
   box.innerHTML=
     `<div class="sum-card"><div class="sum-lbl">${cy}年 累計（1-${monthsWithData}月）</div>
-      <div class="sum-val" style="font-size:var(--fs-sub);color:var(--ac2);">${(curSum/10000).toFixed(1)}萬</div>
+      <div class="sum-val" style="color:var(--ac2);">${(curSum/10000).toFixed(1)}萬</div>
       <div class="sum-sub">空運旅客</div></div>`+
     `<div class="sum-card"><div class="sum-lbl">較去年同期</div>
-      <div class="sum-val" style="font-size:var(--fs-sub);color:${yoy>=0?'var(--green)':'var(--red)'};">${yoy===null?'—':(yoy>=0?'+':'')+yoy.toFixed(1)+'%'}</div>
+      <div class="sum-val" style="color:${yoy>=0?'var(--green)':'var(--red)'};">${yoy===null?'—':(yoy>=0?'+':'')+yoy.toFixed(1)+'%'}</div>
       <div class="sum-sub">YoY</div></div>`+
     `<div class="sum-card"><div class="sum-lbl">${py}年 全年</div>
-      <div class="sum-val" style="font-size:var(--fs-sub);color:var(--tx);">${(prevFull/10000).toFixed(0)}萬</div>
+      <div class="sum-val" style="color:var(--tx);">${(prevFull/10000).toFixed(0)}萬</div>
       <div class="sum-sub">參考</div></div>`;
 }
 
