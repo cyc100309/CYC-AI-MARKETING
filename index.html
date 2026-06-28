@@ -409,6 +409,15 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 .hbar-pct{font-size:var(--fs-label);font-family:'DM Mono',monospace;font-weight:600;
   color:#0F1923;white-space:nowrap;}
 .hbar-pct.out{color:var(--tx3);padding-left:6px;flex-shrink:0;}
+/* ── 堆疊長條（單條100%、分段顏色）── */
+.stack-bar{display:flex;width:100%;height:calc(20px * var(--fs));border-radius:5px;overflow:hidden;background:var(--sf2);}
+.stack-seg{height:100%;display:flex;align-items:center;justify-content:center;
+  font-size:var(--fs-note);font-family:'DM Mono',monospace;font-weight:600;color:#0F1923;
+  white-space:nowrap;overflow:hidden;min-width:0;}
+.stack-legend{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:10px;}
+.stack-leg{display:flex;align-items:center;gap:6px;font-size:var(--fs-label);color:var(--tx2);}
+.stack-leg .dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+.stack-leg strong{font-family:'DM Mono',monospace;color:var(--tx);font-weight:600;}
 .bar-fill.soldout-fill{background:repeating-linear-gradient(45deg,
   rgba(255,255,255,.06),rgba(255,255,255,.06) 5px,
   rgba(255,255,255,.02) 5px,rgba(255,255,255,.02) 10px);
@@ -1973,48 +1982,37 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 <!-- 旅客結構 -->
 <div class="lbl" style="padding:10px 18px 6px;"><span>2026年 Q1 旅客組成</span><span style="font-size:var(--fs-label);color:var(--tx3);">1–3月加權平均</span></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 18px;align-items:start;">
-  <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:10px;">
-    <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:8px;">國籍分布（2026 Q1 加權平均）</div>
-    <div style="display:flex;flex-direction:column;gap:4px;">
-      <div class="hbar-row">
-        <span class="hbar-name">台籍</span>
-        <span class="hbar-track"><span class="hbar-fill" style="width:79.9%;background:var(--blue);"></span></span>
-        <span class="hbar-val">79.9%</span>
-      </div>
-      <div class="hbar-row">
-        <span class="hbar-name">大陸</span>
-        <span class="hbar-track"><span class="hbar-fill" style="width:18.7%;background:var(--ac);"></span></span>
-        <span class="hbar-val">18.7%</span>
-      </div>
-      <div class="hbar-row">
-        <span class="hbar-name">外籍</span>
-        <span class="hbar-track"><span class="hbar-fill" style="width:1.35%;background:var(--green);"></span></span>
-        <span class="hbar-val">1.35%</span>
-      </div>
+<div style="display:grid;grid-template-columns:1fr;gap:8px;margin:0 18px;align-items:start;">
+  <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:12px;">
+    <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:10px;">國籍分布（2026 Q1 加權平均）</div>
+    <div class="stack-bar">
+      <span class="stack-seg" style="width:79.9%;background:var(--blue);">79.9%</span>
+      <span class="stack-seg" style="width:18.7%;background:var(--ac);">18.7%</span>
+      <span class="stack-seg" style="width:1.35%;background:var(--green);"></span>
+    </div>
+    <div class="stack-legend">
+      <span class="stack-leg"><span class="dot" style="background:var(--blue);"></span>台籍 <strong>79.9%</strong></span>
+      <span class="stack-leg"><span class="dot" style="background:var(--ac);"></span>大陸 <strong>18.7%</strong></span>
+      <span class="stack-leg"><span class="dot" style="background:var(--green);"></span>外籍 <strong>1.35%</strong></span>
     </div>
     <div style="font-size:var(--fs-note);color:var(--tx3);border-top:1px solid var(--bd);
-      padding-top:6px;margin-top:8px;">
-      Q1 合計：51.5萬人次<br>月均 17.2萬人次
+      padding-top:6px;margin-top:10px;">
+      Q1 合計：51.5萬人次　月均 17.2萬人次
     </div>
   </div>
-  <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:10px;">
-    <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:8px;">陸客入境類型（2025年全年）</div>
-    <div style="display:flex;flex-direction:column;gap:4px;">
-      <div class="hbar-row">
-        <span class="hbar-name">自由行</span>
-        <span class="hbar-track"><span class="hbar-fill" style="width:95.7%;background:var(--ac);"></span></span>
-        <span class="hbar-val">95.7%</span>
-      </div>
-      <div class="hbar-row">
-        <span class="hbar-name">團體</span>
-        <span class="hbar-track"><span class="hbar-fill" style="width:4.3%;background:var(--pur);"></span></span>
-        <span class="hbar-val">4.3%</span>
-      </div>
+  <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:12px;">
+    <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:10px;">陸客入境類型（2025年全年）</div>
+    <div class="stack-bar">
+      <span class="stack-seg" style="width:95.7%;background:var(--ac);">95.7%</span>
+      <span class="stack-seg" style="width:4.3%;background:var(--pur);"></span>
+    </div>
+    <div class="stack-legend">
+      <span class="stack-leg"><span class="dot" style="background:var(--ac);"></span>自由行 <strong>95.7%</strong></span>
+      <span class="stack-leg"><span class="dot" style="background:var(--pur);"></span>團體 <strong>4.3%</strong></span>
     </div>
     <div style="font-size:var(--fs-note);color:var(--tx3);border-top:1px solid var(--bd);
-      padding-top:6px;margin-top:8px;">
-      陸客累計：23萬6千人<br>（自 2024.9.27 起）
+      padding-top:6px;margin-top:10px;">
+      陸客累計：23萬6千人　（自 2024.9.27 起）
     </div>
   </div>
 </div>
