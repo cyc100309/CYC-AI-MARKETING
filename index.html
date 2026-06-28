@@ -1829,7 +1829,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   </div>
   <div style="text-align:right;">
     <div class="date-badge" id="triDataDate">2026年 Q1</div>
-    <div style="font-size:9px;color:var(--tx3);margin-top:4px;">金門縣大數據平台・115年</div>
+    <div style="font-size:var(--fs-mini);color:var(--tx3);margin-top:4px;">金門縣大數據平台・115年</div>
   </div>
 </div>
 
@@ -1837,13 +1837,13 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div style="display:flex;gap:6px;padding:10px 16px 0;">
   <button id="tri-tab-boat" onclick="triView('boat',this)"
     style="flex:1;padding:8px 4px;background:var(--ac);border:none;border-radius:20px;
-    color:#0F1923;font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
-    🚢 小三通（水運）
+    color:#0F1923;font-size:var(--fs-label);font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
+    小三通（水運）
   </button>
   <button id="tri-tab-air" onclick="triView('air',this)"
     style="flex:1;padding:8px 4px;background:var(--sf);border:1px solid var(--bd);border-radius:20px;
-    color:var(--tx3);font-size:11px;font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
-    ✈️ 航班歷史（空運）
+    color:var(--tx3);font-size:var(--fs-label);font-weight:500;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
+    航班歷史（空運）
   </button>
 </div>
 
@@ -1851,11 +1851,11 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 <!-- 月份進度 & 手動更新 -->
 <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 18px 0;">
-  <div style="font-size:10px;color:var(--tx3);" id="triUpdateNote">資料：金門縣大數據平台 2026.3</div>
+  <div style="font-size:var(--fs-tiny);color:var(--tx3);" id="triUpdateNote">資料：金門縣大數據平台 2026.3</div>
   <button onclick="document.getElementById('triUpdateModal').style.display='flex'"
-    style="font-size:10px;color:var(--ac2);background:var(--ad);border:1px solid var(--bd2);
+    style="font-size:var(--fs-tiny);color:var(--ac2);background:var(--ad);border:1px solid var(--bd2);
     border-radius:20px;padding:3px 10px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
-    📥 更新數據
+    更新數據
   </button>
 </div>
 
@@ -1863,26 +1863,25 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px 18px 0;">
   <div class="sum-card">
     <div class="sum-lbl">2026年 Q1 累計</div>
-    <div class="sum-val" style="font-size:13px;color:var(--green);" id="tri-total">51.5萬</div>
+    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--green);" id="tri-total">51.5萬</div>
     <div class="sum-sub" style="color:var(--green);">2026年 Q1</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">國人旅客</div>
-    <div class="sum-val" style="font-size:13px;" id="tri-tw">3月 17.6萬</div>
+    <div class="sum-val" style="font-size:var(--fs-sub);" id="tri-tw">3月 17.6萬</div>
     <div class="sum-sub" style="color:var(--tx3);">台灣83.3%</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">月均人次</div>
-    <div class="sum-val" style="font-size:13px;color:var(--ac);">17.2萬</div>
+    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--ac);">17.2萬</div>
     <div class="sum-sub" style="color:var(--tx3);">28班/日</div>
   </div>
 </div>
 
 <!-- 2025最新 -->
 <div style="margin:8px 18px 0;background:rgba(76,175,130,.1);border:1px solid rgba(76,175,130,.3);
-  border-radius:var(--rs);padding:8px 12px;display:flex;align-items:center;gap:10px;">
-  <span style="font-size:20px;">📈</span>
-  <div style="font-size:11px;color:var(--tx2);line-height:1.6;">
+  border-radius:var(--rs);padding:8px 12px;">
+  <div style="font-size:var(--fs-tiny);color:var(--tx2);line-height:1.6;">
     <strong style="color:var(--green);">2026年Q1累計51.5萬，月均17.2萬人次</strong><br>
     3月最高17.6萬，旺季班班近滿
   </div>
@@ -1890,12 +1889,12 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 <!-- 疫前恢復進度 -->
 <div style="margin:8px 18px 0;background:var(--ad);border:1px solid var(--bd2);border-radius:var(--rs);padding:10px 12px;">
-  <div style="font-size:11px;color:var(--ac2);font-weight:500;margin-bottom:8px;">
-    📊 各月國籍結構（2026年 1–3月）
+  <div style="font-size:var(--fs-tiny);color:var(--ac2);font-weight:500;margin-bottom:8px;">
+    各月國籍結構（2026年 1–3月）
   </div>
   <div style="display:flex;flex-direction:column;gap:6px;">
     <div>
-      <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px;">
+      <div style="display:flex;justify-content:space-between;font-size:var(--fs-tiny);margin-bottom:2px;">
         <span style="color:var(--tx3);">1月 台灣79.9% 大陸18.8%</span>
         <span style="color:var(--green);font-weight:500;">177,776人</span>
       </div>
@@ -1904,7 +1903,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       </div>
     </div>
     <div>
-      <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px;">
+      <div style="display:flex;justify-content:space-between;font-size:var(--fs-tiny);margin-bottom:2px;">
         <span style="color:var(--tx3);">2月 台灣76.3% 大陸22.8%</span>
         <span style="color:var(--blue);font-weight:500;">161,411人</span>
       </div>
@@ -1913,7 +1912,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       </div>
     </div>
     <div>
-      <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px;">
+      <div style="display:flex;justify-content:space-between;font-size:var(--fs-tiny);margin-bottom:2px;">
         <span style="color:var(--tx3);">3月 台灣83.3% 大陸14.9%</span>
         <span style="color:var(--green);font-weight:500;">176,055人</span>
       </div>
@@ -1927,7 +1926,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <!-- 2026月份圖 -->
 <div class="lbl" style="padding:10px 18px 6px;">
   <span>月份入出境比較</span>
-  <span style="font-size:10px;color:var(--tx3);">2025全年 vs 2026 Q1</span>
+  <span style="font-size:var(--fs-tiny);color:var(--tx3);">2025全年 vs 2026 Q1</span>
 </div>
 <div style="margin:0 18px;background:var(--sf);border-radius:var(--r);padding:12px;border:1px solid var(--bd);">
   <svg id="triMonthSvg" height="170" style="display:block;width:100%;"></svg>
@@ -1936,13 +1935,13 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <!-- 趨勢圖 -->
 <div class="lbl" style="padding:10px 18px 6px;">
   <span>歷年入出境趨勢</span>
-  <span style="font-size:10px;color:var(--tx3);">2016–2026 Q1</span>
+  <span style="font-size:var(--fs-tiny);color:var(--tx3);">2016–2026 Q1</span>
 </div>
 <div style="margin:0 18px;background:var(--sf);border-radius:var(--r);padding:12px;border:1px solid var(--bd);">
   <svg id="triTrendSvg" height="160" style="display:block;width:100%;"></svg>
-  <div id="triTip" style="font-size:11px;color:var(--ac2);text-align:center;min-height:16px;
+  <div id="triTip" style="font-size:var(--fs-tiny);color:var(--ac2);text-align:center;min-height:16px;
     font-family:'DM Mono',monospace;margin-top:4px;"></div>
-  <div style="display:flex;gap:14px;margin-top:4px;font-size:10px;color:var(--tx3);">
+  <div style="display:flex;gap:14px;margin-top:4px;font-size:var(--fs-tiny);color:var(--tx3);">
     <span><span style="color:#3B82F6;">▬</span> 國人</span>
     <span><span style="color:#E85D26;">▬</span> 陸港澳</span>
     <span><span style="color:var(--ac2);">- -</span> 總計</span>
@@ -1950,62 +1949,62 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 </div>
 
 <!-- 旅客結構 -->
-<div class="lbl" style="padding:10px 18px 6px;"><span>2026年 Q1 旅客組成</span><span style="font-size:10px;color:var(--tx3);">1–3月加權平均</span></div>
+<div class="lbl" style="padding:10px 18px 6px;"><span>2026年 Q1 旅客組成</span><span style="font-size:var(--fs-tiny);color:var(--tx3);">1–3月加權平均</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 18px;align-items:start;">
   <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:10px;">
-    <div style="font-size:10px;color:var(--tx3);margin-bottom:8px;">國籍分布（2026 Q1 加權平均）</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx3);margin-bottom:8px;">國籍分布（2026 Q1 加權平均）</div>
     <div style="display:flex;flex-direction:column;gap:6px;">
       <div>
-        <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px;">
-          <span style="color:var(--tx2);">🇹🇼 台籍</span><strong>79.9%</strong>
+        <div style="display:flex;justify-content:space-between;font-size:var(--fs-tiny);margin-bottom:2px;">
+          <span style="color:var(--tx2);">台籍</span><strong>79.9%</strong>
         </div>
         <div style="height:5px;background:var(--sf2);border-radius:2px;">
           <div style="height:100%;width:79.9%;background:#3B82F6;border-radius:2px;"></div>
         </div>
       </div>
       <div>
-        <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px;">
-          <span style="color:var(--tx2);">🇨🇳 大陸</span><strong>18.7%</strong>
+        <div style="display:flex;justify-content:space-between;font-size:var(--fs-tiny);margin-bottom:2px;">
+          <span style="color:var(--tx2);">大陸</span><strong>18.7%</strong>
         </div>
         <div style="height:5px;background:var(--sf2);border-radius:2px;">
           <div style="height:100%;width:18.7%;background:#E85D26;border-radius:2px;"></div>
         </div>
       </div>
       <div>
-        <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px;">
-          <span style="color:var(--tx2);">🌍 外籍</span><strong>1.35%</strong>
+        <div style="display:flex;justify-content:space-between;font-size:var(--fs-tiny);margin-bottom:2px;">
+          <span style="color:var(--tx2);">外籍</span><strong>1.35%</strong>
         </div>
         <div style="height:5px;background:var(--sf2);border-radius:2px;">
           <div style="height:100%;width:1.35%;background:#10B981;border-radius:2px;"></div>
         </div>
       </div>
     </div>
-    <div style="font-size:9px;color:var(--tx3);border-top:1px solid var(--bd);
+    <div style="font-size:var(--fs-mini);color:var(--tx3);border-top:1px solid var(--bd);
       padding-top:6px;margin-top:8px;">
       Q1 合計：51.5萬人次<br>月均 17.2萬人次
     </div>
   </div>
   <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:10px;">
-    <div style="font-size:10px;color:var(--tx3);margin-bottom:8px;">陸客入境類型（2025年全年）</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx3);margin-bottom:8px;">陸客入境類型（2025年全年）</div>
     <div style="display:flex;flex-direction:column;gap:6px;">
       <div>
-        <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px;">
-          <span style="color:var(--tx2);">🚶 自由行</span><strong style="color:var(--ac);">95.7%</strong>
+        <div style="display:flex;justify-content:space-between;font-size:var(--fs-tiny);margin-bottom:2px;">
+          <span style="color:var(--tx2);">自由行</span><strong style="color:var(--ac);">95.7%</strong>
         </div>
         <div style="height:5px;background:var(--sf2);border-radius:2px;">
           <div style="height:100%;width:95.7%;background:var(--ac);border-radius:2px;opacity:.7;"></div>
         </div>
       </div>
       <div>
-        <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px;">
-          <span style="color:var(--tx2);">🚌 團體</span><strong style="color:#A78BFA;">4.3%</strong>
+        <div style="display:flex;justify-content:space-between;font-size:var(--fs-tiny);margin-bottom:2px;">
+          <span style="color:var(--tx2);">團體</span><strong style="color:#A78BFA;">4.3%</strong>
         </div>
         <div style="height:5px;background:var(--sf2);border-radius:2px;">
           <div style="height:100%;width:4.3%;background:#A78BFA;border-radius:2px;"></div>
         </div>
       </div>
     </div>
-    <div style="font-size:9px;color:var(--tx3);border-top:1px solid var(--bd);
+    <div style="font-size:var(--fs-mini);color:var(--tx3);border-top:1px solid var(--bd);
       padding-top:6px;margin-top:8px;">
       陸客累計：23萬6千人<br>（自 2024.9.27 起）
     </div>
@@ -2013,58 +2012,58 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 </div>
 
 <!-- 航線 -->
-<div class="lbl" style="padding:10px 18px 6px;"><span>🚢 現行航線</span></div>
+<div class="lbl" style="padding:10px 18px 6px;"><span>現行航線</span></div>
 <div style="margin:0 18px;display:flex;flex-direction:column;gap:5px;">
   <div style="background:var(--sf);border:1px solid var(--ac);border-radius:var(--rs);padding:9px 12px;
     display:flex;align-items:center;gap:8px;">
     <div style="text-align:center;min-width:50px;">
-      <div style="font-size:10px;font-weight:500;color:var(--ac);">🏝️ 金門</div>
-      <div style="font-size:9px;color:var(--tx3);">水頭碼頭</div>
+      <div style="font-size:var(--fs-tiny);font-weight:500;color:var(--ac);">金門</div>
+      <div style="font-size:var(--fs-mini);color:var(--tx3);">水頭碼頭</div>
     </div>
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
-      <div style="font-size:9px;color:var(--ac2);">主要航線・多班/日</div>
+      <div style="font-size:var(--fs-mini);color:var(--ac2);">主要航線・多班/日</div>
       <div style="width:100%;height:1px;border-top:2px dashed var(--ac2);"></div>
-      <div style="font-size:9px;color:var(--tx3);">約 30 分鐘</div>
+      <div style="font-size:var(--fs-mini);color:var(--tx3);">約 30 分鐘</div>
     </div>
     <div style="text-align:center;min-width:50px;">
-      <div style="font-size:10px;font-weight:500;color:var(--blue);">🏙️ 廈門</div>
-      <div style="font-size:9px;color:var(--tx3);">五通碼頭</div>
+      <div style="font-size:var(--fs-tiny);font-weight:500;color:var(--blue);">廈門</div>
+      <div style="font-size:var(--fs-mini);color:var(--tx3);">五通碼頭</div>
     </div>
   </div>
   <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:9px 12px;
     display:flex;align-items:center;gap:8px;">
     <div style="text-align:center;min-width:50px;">
-      <div style="font-size:10px;font-weight:500;color:var(--ac);">🏝️ 金門</div>
-      <div style="font-size:9px;color:var(--tx3);">水頭碼頭</div>
+      <div style="font-size:var(--fs-tiny);font-weight:500;color:var(--ac);">金門</div>
+      <div style="font-size:var(--fs-mini);color:var(--tx3);">水頭碼頭</div>
     </div>
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">
-      <div style="font-size:9px;color:var(--tx3);">2024.4 新增・1班/日</div>
+      <div style="font-size:var(--fs-mini);color:var(--tx3);">2024.4 新增・1班/日</div>
       <div style="width:100%;height:1px;border-top:1px dashed var(--bd);"></div>
-      <div style="font-size:9px;color:var(--tx3);">泉州石井碼頭</div>
+      <div style="font-size:var(--fs-mini);color:var(--tx3);">泉州石井碼頭</div>
     </div>
     <div style="text-align:center;min-width:50px;">
-      <div style="font-size:10px;font-weight:500;color:var(--blue);">🏙️ 泉州</div>
-      <div style="font-size:9px;color:var(--tx3);">石井碼頭</div>
+      <div style="font-size:var(--fs-tiny);font-weight:500;color:var(--blue);">泉州</div>
+      <div style="font-size:var(--fs-mini);color:var(--tx3);">石井碼頭</div>
     </div>
   </div>
 </div>
 
 <!-- 最新小三通新聞 -->
 <div class="lbl" style="padding:10px 18px 6px;">
-  <span>📰 最新小三通動態</span>
-  <span style="font-size:10px;color:var(--tx3);" id="triNewsTime">載入中...</span>
+  <span>最新小三通動態</span>
+  <span style="font-size:var(--fs-tiny);color:var(--tx3);" id="triNewsTime">載入中...</span>
 </div>
 <div id="triNewsFeed" style="margin:0 18px;display:flex;flex-direction:column;gap:5px;">
   <div style="background:var(--sf);border-radius:var(--rs);padding:10px;border:1px solid var(--bd);">
-    <div style="font-size:10px;color:var(--tx3);text-align:center;">⏳ 載入最新新聞...</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx3);text-align:center;">⏳ 載入最新新聞...</div>
   </div>
 </div>
 
 <!-- 對本中心影響 -->
 <div style="margin:10px 18px 0;background:rgba(200,150,62,.08);border:1px solid var(--ac);
   border-radius:var(--rs);padding:10px 12px;">
-  <div style="font-size:11px;color:var(--ac);font-weight:500;margin-bottom:5px;">🎖️ 對本中心的影響</div>
-  <div style="font-size:11px;color:var(--tx2);line-height:1.8;">
+  <div style="font-size:var(--fs-tiny);color:var(--ac);font-weight:500;margin-bottom:5px;">對本中心的影響</div>
+  <div style="font-size:var(--fs-tiny);color:var(--tx2);line-height:1.8;">
     ・2026年Q1累計51.5萬，月均17.2萬，旺季班班幾近滿座<br>
     ・大陸客占18.7%（Q1），2月春節高達22.8%<br>
     ・每日28班次，廈門24班＋泉州4班，日均約5,700人次<br>
@@ -2077,14 +2076,14 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <a href="https://www.kinmen.gov.tw/bigdata/cp.aspx?n=0BB54206D5EC839B" target="_blank"
     style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);
     padding:8px;text-align:center;text-decoration:none;">
-    <div style="font-size:10px;color:var(--ac);">📊 金門大數據平台</div>
-    <div style="font-size:9px;color:var(--tx3);">小三通人次分析</div>
+    <div style="font-size:var(--fs-tiny);color:var(--ac);">金門大數據平台</div>
+    <div style="font-size:var(--fs-mini);color:var(--tx3);">小三通人次分析</div>
   </a>
   <a href="https://harbor.kinmen.gov.tw/Content_List.aspx?n=BEBF60B159519F17" target="_blank"
     style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);
     padding:8px;text-align:center;text-decoration:none;">
-    <div style="font-size:10px;color:var(--ac);">⚓ 港務處統計表</div>
-    <div style="font-size:9px;color:var(--tx3);">入出境人數原始資料</div>
+    <div style="font-size:var(--fs-tiny);color:var(--ac);">港務處統計表</div>
+    <div style="font-size:var(--fs-mini);color:var(--tx3);">入出境人數原始資料</div>
   </a>
 </div>
 
@@ -2092,33 +2091,33 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div id="triUpdateModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);
   z-index:200;align-items:center;justify-content:center;padding:0 18px;">
   <div style="background:var(--sf);border-radius:var(--r);padding:20px;width:100%;max-width:400px;border:1px solid var(--bd2);">
-    <div style="font-size:14px;font-weight:500;color:var(--tx);margin-bottom:4px;">📊 更新小三通數據</div>
-    <div style="font-size:11px;color:var(--tx3);margin-bottom:10px;">
+    <div style="font-size:var(--fs-tab);font-weight:500;color:var(--tx);margin-bottom:4px;">更新小三通數據</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx3);margin-bottom:10px;">
       從金門大數據平台下載最新數據後，貼入下方更新：
     </div>
     <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;">
       <div style="display:flex;align-items:center;gap:8px;">
-        <label style="font-size:11px;color:var(--tx3);min-width:70px;">期間</label>
-        <input id="tri-input-period" placeholder="例：2025年Q1" style="flex:1;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:5px 8px;font-size:11px;color:var(--tx);outline:none;">
+        <label style="font-size:var(--fs-tiny);color:var(--tx3);min-width:70px;">期間</label>
+        <input id="tri-input-period" placeholder="例：2025年Q1" style="flex:1;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:5px 8px;font-size:var(--fs-tiny);color:var(--tx);outline:none;">
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
-        <label style="font-size:11px;color:var(--tx3);min-width:70px;">總人次</label>
-        <input id="tri-input-total" type="number" placeholder="例：1301960" style="flex:1;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:5px 8px;font-size:11px;color:var(--tx);outline:none;">
+        <label style="font-size:var(--fs-tiny);color:var(--tx3);min-width:70px;">總人次</label>
+        <input id="tri-input-total" type="number" placeholder="例：1301960" style="flex:1;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:5px 8px;font-size:var(--fs-tiny);color:var(--tx);outline:none;">
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
-        <label style="font-size:11px;color:var(--tx3);min-width:70px;">國人人次</label>
-        <input id="tri-input-tw" type="number" placeholder="例：1140717" style="flex:1;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:5px 8px;font-size:11px;color:var(--tx);outline:none;">
+        <label style="font-size:var(--fs-tiny);color:var(--tx3);min-width:70px;">國人人次</label>
+        <input id="tri-input-tw" type="number" placeholder="例：1140717" style="flex:1;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:5px 8px;font-size:var(--fs-tiny);color:var(--tx);outline:none;">
       </div>
     </div>
     <div style="display:flex;gap:8px;">
       <button onclick="applyTriUpdate()"
         style="flex:2;background:var(--ac);color:#0F1923;border:none;border-radius:var(--rs);
-        padding:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
+        padding:9px;font-size:var(--fs-label);font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
         ✅ 更新
       </button>
       <button onclick="document.getElementById('triUpdateModal').style.display='none'"
         style="flex:1;background:transparent;border:1px solid var(--bd);border-radius:var(--rs);
-        padding:9px;font-size:12px;color:var(--tx3);cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
+        padding:9px;font-size:var(--fs-label);color:var(--tx3);cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
         取消
       </button>
     </div>
@@ -2129,11 +2128,11 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 <div id="tri-sub-air" style="display:none;">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 18px 0;">
-    <div style="font-size:10px;color:var(--tx3);" id="airUpdateNote">資料：金門航空站・歷年旅客統計</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx3);" id="airUpdateNote">資料：金門航空站・歷年旅客統計</div>
     <button onclick="fetchAirStats()"
-      style="font-size:10px;color:var(--ac2);background:var(--ad);border:1px solid var(--bd2);
+      style="font-size:var(--fs-tiny);color:var(--ac2);background:var(--ad);border:1px solid var(--bd2);
       border-radius:20px;padding:3px 10px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">
-      🔄 重新抓取
+      重新抓取
     </button>
   </div>
 
@@ -2141,34 +2140,34 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px 18px 0;" id="airKpis"></div>
 
   <!-- 今年 vs 去年 逐月對比圖 -->
-  <div class="lbl" style="margin:16px 18px 8px;"><span>✈️ 空運旅客・今年 vs 去年（逐月）</span></div>
+  <div class="lbl" style="margin:16px 18px 8px;"><span>空運旅客・今年 vs 去年（逐月）</span></div>
   <div style="padding:0 14px;overflow-x:auto;">
     <svg id="airMonthSvg" width="100%" height="180"></svg>
   </div>
   <div style="display:flex;gap:16px;padding:4px 18px 0;">
-    <span style="font-size:10px;color:var(--tx2);display:flex;align-items:center;gap:5px;"><i style="width:9px;height:9px;border-radius:2px;background:#C8963E;display:inline-block;"></i>今年</span>
-    <span style="font-size:10px;color:var(--tx2);display:flex;align-items:center;gap:5px;"><i style="width:9px;height:9px;border-radius:2px;background:#3B6EA5;display:inline-block;"></i>去年</span>
+    <span style="font-size:var(--fs-tiny);color:var(--tx2);display:flex;align-items:center;gap:5px;"><i style="width:9px;height:9px;border-radius:2px;background:#C8963E;display:inline-block;"></i>今年</span>
+    <span style="font-size:var(--fs-tiny);color:var(--tx2);display:flex;align-items:center;gap:5px;"><i style="width:9px;height:9px;border-radius:2px;background:#3B6EA5;display:inline-block;"></i>去年</span>
   </div>
 
   <!-- 空運 vs 水運 年度對比 -->
-  <div class="lbl" style="margin:18px 18px 8px;"><span>📊 空運 vs 水運・歷年旅客總量</span></div>
+  <div class="lbl" style="margin:18px 18px 8px;"><span>空運 vs 水運・歷年旅客總量</span></div>
   <div style="padding:0 14px;overflow-x:auto;">
     <svg id="airVsBoatSvg" width="100%" height="180"></svg>
   </div>
   <div style="display:flex;gap:16px;padding:4px 18px 0;">
-    <span style="font-size:10px;color:var(--tx2);display:flex;align-items:center;gap:5px;"><i style="width:9px;height:9px;border-radius:2px;background:#C8963E;display:inline-block;"></i>空運（飛機）</span>
-    <span style="font-size:10px;color:var(--tx2);display:flex;align-items:center;gap:5px;"><i style="width:9px;height:9px;border-radius:2px;background:#16A085;display:inline-block;"></i>水運（小三通）</span>
+    <span style="font-size:var(--fs-tiny);color:var(--tx2);display:flex;align-items:center;gap:5px;"><i style="width:9px;height:9px;border-radius:2px;background:#C8963E;display:inline-block;"></i>空運（飛機）</span>
+    <span style="font-size:var(--fs-tiny);color:var(--tx2);display:flex;align-items:center;gap:5px;"><i style="width:9px;height:9px;border-radius:2px;background:#16A085;display:inline-block;"></i>水運（小三通）</span>
   </div>
 
   <!-- 歷年空運明細表 -->
-  <div class="lbl" style="margin:18px 18px 8px;"><span>📅 歷年空運旅客數（近10年）</span></div>
+  <div class="lbl" style="margin:18px 18px 8px;"><span>歷年空運旅客數（近10年）</span></div>
   <div style="padding:0 14px;">
     <div id="airYearTable" style="display:flex;flex-direction:column;gap:5px;"></div>
   </div>
 
   <!-- 旺淡季分析 -->
-  <div class="lbl" style="margin:18px 18px 8px;"><span>🔥 空運旺淡季（近3年平均）</span></div>
-  <div id="airSeason" style="padding:0 18px;font-size:11px;color:var(--tx2);line-height:1.7;"></div>
+  <div class="lbl" style="margin:18px 18px 8px;"><span>空運旺淡季（近3年平均）</span></div>
+  <div id="airSeason" style="padding:0 18px;font-size:var(--fs-tiny);color:var(--tx2);line-height:1.7;"></div>
 
   <div style="height:80px;"></div>
 </div>
@@ -2185,15 +2184,15 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   </div>
   <div style="text-align:right;">
     <div class="date-badge">2025年5月</div>
-    <div style="font-size:9px;color:var(--tx3);margin-top:4px;">資料：觀光署・教育部</div>
+    <div style="font-size:var(--fs-mini);color:var(--tx3);margin-top:4px;">資料：觀光署・教育部</div>
   </div>
 </div>
 
 <!-- Sub-page tabs -->
 <div style="display:flex;gap:0;padding:10px 18px 0;border-bottom:1px solid var(--bd);">
-  <button class="env-tab on" id="env-tab-tour" onclick="envView('tour',this)">🗺️ 旅遊市場</button>
-  <button class="env-tab" id="env-tab-hotel" onclick="envView('hotel',this)">🏨 飯店營運</button>
-  <button class="env-tab" id="env-tab-pop" onclick="envView('pop',this)">📚 學生人口</button>
+  <button class="env-tab on" id="env-tab-tour" onclick="envView('tour',this)">旅遊市場</button>
+  <button class="env-tab" id="env-tab-hotel" onclick="envView('hotel',this)">飯店營運</button>
+  <button class="env-tab" id="env-tab-pop" onclick="envView('pop',this)">學生人口</button>
 </div>
 
 <!-- ── Sub-page 1: Tourism Market ───────────────── -->
@@ -2201,52 +2200,52 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 <!-- Header -->
 <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 18px 6px;">
-  <div style="font-size:10px;color:var(--tx3);font-family:'DM Mono',monospace;">資料：交通部觀光署・2025年全年統計</div>
+  <div style="font-size:var(--fs-tiny);color:var(--tx3);font-family:'DM Mono',monospace;">資料：交通部觀光署・2025年全年統計</div>
   <a href="https://stat.taiwan.net.tw/" target="_blank"
-    style="font-size:10px;color:var(--ac2);background:var(--ad);border:1px solid var(--bd2);
-    border-radius:20px;padding:3px 10px;text-decoration:none;">🔗 官方資料庫</a>
+    style="font-size:var(--fs-tiny);color:var(--ac2);background:var(--ad);border:1px solid var(--bd2);
+    border-radius:20px;padding:3px 10px;text-decoration:none;">官方資料庫</a>
 </div>
 
 <!-- ① 來台旅客人數統計 -->
-<div class="lbl" style="padding:4px 18px 6px;"><span>① 來台旅客人數統計</span><span style="font-size:10px;color:var(--tx3);">2025年全年</span></div>
+<div class="lbl" style="padding:4px 18px 6px;"><span>① 來台旅客人數統計</span><span style="font-size:var(--fs-tiny);color:var(--tx3);">2025年全年</span></div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 18px;">
   <div class="sum-card">
     <div class="sum-lbl">2025年來台</div>
-    <div class="sum-val" style="font-size:13px;color:var(--green);">857.5萬</div>
+    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--green);">857.5萬</div>
     <div class="sum-sub" style="color:var(--green);">↑9.1% vs 2024</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">2024年</div>
-    <div class="sum-val" style="font-size:13px;">785.8萬</div>
+    <div class="sum-val" style="font-size:var(--fs-sub);">785.8萬</div>
     <div class="sum-sub" style="color:var(--green);">↑21.1% vs 2023</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">疫前（2019）</div>
-    <div class="sum-val" style="font-size:13px;">1,186萬</div>
+    <div class="sum-val" style="font-size:var(--fs-sub);">1,186萬</div>
     <div class="sum-sub" style="color:var(--tx3);">目前恢復 72%</div>
   </div>
 </div>
 <div style="margin:8px 18px 0;background:var(--sf);border-radius:var(--r);padding:12px;border:1px solid var(--bd);">
-  <div style="font-size:10px;color:var(--tx3);margin-bottom:8px;">來台旅客趨勢（2016–2025年，萬人）</div>
+  <div style="font-size:var(--fs-tiny);color:var(--tx3);margin-bottom:8px;">來台旅客趨勢（2016–2025年，萬人）</div>
   <div style="overflow-x:auto;"><svg id="tourSvg" height="130" style="display:block;min-width:300px;"></svg></div>
 </div>
 
 <!-- ② 國人出國統計 -->
-<div class="lbl" style="padding:10px 18px 6px;"><span>② 國人出國統計</span><span style="font-size:10px;color:var(--green);">創歷史新高</span></div>
+<div class="lbl" style="padding:10px 18px 6px;"><span>② 國人出國統計</span><span style="font-size:var(--fs-tiny);color:var(--green);">創歷史新高</span></div>
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 18px;">
   <div class="sum-card">
     <div class="sum-lbl">2025年出國</div>
-    <div class="sum-val" style="font-size:13px;color:var(--red);">1,894萬</div>
+    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--red);">1,894萬</div>
     <div class="sum-sub" style="color:var(--red);">↑12.4%・史上最高</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">觀光逆差人次</div>
-    <div class="sum-val" style="font-size:13px;color:var(--red);">1,037萬</div>
+    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--red);">1,037萬</div>
     <div class="sum-sub" style="color:var(--red);">出境＞入境</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">觀光逆差金額</div>
-    <div class="sum-val" style="font-size:11px;color:var(--red);">7,010億</div>
+    <div class="sum-val" style="font-size:var(--fs-tiny);color:var(--red);">7,010億</div>
     <div class="sum-sub" style="color:var(--tx3);">台幣估算</div>
   </div>
 </div>
@@ -2267,8 +2266,8 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div class="lbl" style="padding:10px 18px 6px;"><span>⑤ 出入境輪廓</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 18px;">
   <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:10px;">
-    <div style="font-size:10px;color:var(--ac2);font-weight:500;margin-bottom:6px;">✈️ 來台旅客輪廓</div>
-    <div style="font-size:10px;color:var(--tx2);line-height:1.9;">
+    <div style="font-size:var(--fs-tiny);color:var(--ac2);font-weight:500;margin-bottom:6px;">來台旅客輪廓</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx2);line-height:1.9;">
       ・主要目的：觀光 68.4%<br>
       ・平均消費：US$1,276/趟<br>
       ・集中北部：台北吸納 65.7%<br>
@@ -2277,8 +2276,8 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     </div>
   </div>
   <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:10px;">
-    <div style="font-size:10px;color:var(--red);font-weight:500;margin-bottom:6px;">🛫 國人出國輪廓</div>
-    <div style="font-size:10px;color:var(--tx2);line-height:1.9;">
+    <div style="font-size:var(--fs-tiny);color:var(--red);font-weight:500;margin-bottom:6px;">國人出國輪廓</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx2);line-height:1.9;">
       ・亞洲占比：92.23%<br>
       ・平均花費：NT$55,541/趟<br>
       ・高峰：春節（1-2月）暑假（7-8月）<br>
@@ -2293,15 +2292,15 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <a href="https://stat.taiwan.net.tw/inbound" target="_blank"
     style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);
     padding:8px 6px;text-align:center;text-decoration:none;">
-    <div style="font-size:10px;color:var(--ac);">✈️ 來台統計</div></a>
+    <div style="font-size:var(--fs-tiny);color:var(--ac);">來台統計</div></a>
   <a href="https://stat.taiwan.net.tw/outbound" target="_blank"
     style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);
     padding:8px 6px;text-align:center;text-decoration:none;">
-    <div style="font-size:10px;color:var(--ac);">🛫 出國統計</div></a>
+    <div style="font-size:var(--fs-tiny);color:var(--ac);">出國統計</div></a>
   <a href="https://stat.taiwan.net.tw/" target="_blank"
     style="background:var(--ac);border-radius:var(--rs);
     padding:8px 6px;text-align:center;text-decoration:none;">
-    <div style="font-size:10px;color:#0F1923;font-weight:700;">📊 完整資料庫</div></a>
+    <div style="font-size:var(--fs-tiny);color:#0F1923;font-weight:700;">完整資料庫</div></a>
 </div>
 
 <!-- County attractions -->
@@ -2312,53 +2311,53 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 <!-- 其他縣市下拉選單 -->
 <div style="margin:0 18px 4px;display:flex;align-items:center;gap:8px;">
-  <span style="font-size:11px;color:var(--tx3);">其他縣市：</span>
+  <span style="font-size:var(--fs-tiny);color:var(--tx3);">其他縣市：</span>
   <select id="countySelect" onchange="buildCountyGrid()"
     style="background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);
-    color:var(--tx);font-size:11px;padding:4px 8px;font-family:'Noto Sans TC',sans-serif;flex:1;">
+    color:var(--tx);font-size:var(--fs-tiny);padding:4px 8px;font-family:'Noto Sans TC',sans-serif;flex:1;">
   </select>
 </div>
 <div style="margin:0 18px;" id="countyGrid"></div>
 
 <!-- News -->
 <div class="lbl" style="padding:10px 18px 6px;">
-  <span>📰 最新旅遊新聞</span>
-  <span style="font-size:10px;color:var(--tx3);" id="newsUpdateTime"></span>
+  <span>最新旅遊新聞</span>
+  <span style="font-size:var(--fs-tiny);color:var(--tx3);" id="newsUpdateTime"></span>
 </div>
 <div id="newsFeed" style="margin:0 18px;display:flex;flex-direction:column;gap:5px;">
   <div style="background:var(--sf);border-radius:var(--rs);padding:10px;border:1px solid var(--bd);">
-    <div style="font-size:10px;color:var(--tx3);text-align:center;">⏳ 載入中...</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx3);text-align:center;">⏳ 載入中...</div>
   </div>
 </div>
 <div id="newsFeedExtra" style="margin:0 18px;display:none;flex-direction:column;gap:5px;margin-top:5px;"></div>
 <div style="margin:4px 18px 0;display:flex;gap:6px;">
   <button id="newsFeedToggle" onclick="toggleNewsMore('news')" style="display:none;flex:1;
     background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);
-    padding:8px 12px;font-size:11px;color:var(--ac);cursor:pointer;
+    padding:8px 12px;font-size:var(--fs-tiny);color:var(--ac);cursor:pointer;
     font-family:'Noto Sans TC',sans-serif;text-align:center;">顯示更多 ▾</button>
   <a id="newsFeedMore" href="https://news.google.com/search?q=台灣旅遊+觀光+when:7d&hl=zh-TW" target="_blank"
     style="display:none;flex:1;background:var(--sf);border:1px solid var(--bd);
     border-radius:var(--rs);padding:8px 12px;text-decoration:none;text-align:center;
-    font-size:11px;color:var(--tx3);">前往 Google 新聞搜尋 →</a>
+    font-size:var(--fs-tiny);color:var(--tx3);">前往 Google 新聞搜尋 →</a>
 </div>
 
 <!-- 觀光署官方消息 -->
 <div class="lbl" style="padding:10px 18px 6px;">
-  <span>🏛️ 交通部觀光署最新消息</span>
-  <span style="font-size:10px;color:var(--tx3);" id="officialNewsTime"></span>
+  <span>交通部觀光署最新消息</span>
+  <span style="font-size:var(--fs-tiny);color:var(--tx3);" id="officialNewsTime"></span>
 </div>
 <div id="officialNewsFeed" style="margin:0 18px;display:flex;flex-direction:column;gap:5px;"></div>
 <div id="officialNewsExtra" style="margin:0 18px;display:none;flex-direction:column;gap:5px;margin-top:5px;"></div>
 <div style="margin:4px 18px 0;display:flex;gap:6px;">
   <button id="officialToggle" onclick="toggleNewsMore('official')" style="display:none;flex:1;
     background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);
-    padding:8px 12px;font-size:11px;color:var(--ac);cursor:pointer;
+    padding:8px 12px;font-size:var(--fs-tiny);color:var(--ac);cursor:pointer;
     font-family:'Noto Sans TC',sans-serif;text-align:center;">顯示更多 ▾</button>
   <a href="https://www.taiwan.net.tw/m1.aspx?sNo=0001001" target="_blank"
     style="display:flex;flex:1;background:var(--sf);border:1px solid var(--bd);
     border-radius:var(--rs);padding:8px 12px;text-decoration:none;align-items:center;justify-content:space-between;">
-    <span style="font-size:11px;color:var(--tx3);">前往觀光署官網</span>
-    <span style="font-size:11px;color:var(--tx3);">→</span>
+    <span style="font-size:var(--fs-tiny);color:var(--tx3);">前往觀光署官網</span>
+    <span style="font-size:var(--fs-tiny);color:var(--tx3);">→</span>
   </a>
 </div>
 
@@ -2373,17 +2372,17 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 16px 0;">
   <div class="sum-card">
     <div class="sum-lbl">全國住用率</div>
-    <div class="sum-val" style="font-size:14px;">51.1%</div>
+    <div class="sum-val" style="font-size:var(--fs-tab);">51.1%</div>
     <div class="sum-sub" style="color:var(--green);">2025年全年</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">一般旅館均價</div>
-    <div class="sum-val" style="font-size:14px;">2,661元</div>
+    <div class="sum-val" style="font-size:var(--fs-tab);">2,661元</div>
     <div class="sum-sub" style="color:var(--green);">↑0.3% vs 2024</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">旅館家數</div>
-    <div class="sum-val" style="font-size:14px;">3,281家</div>
+    <div class="sum-val" style="font-size:var(--fs-tab);">3,281家</div>
     <div class="sum-sub" style="color:var(--tx3);">2025年12月</div>
   </div>
 </div>
@@ -2391,8 +2390,8 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <!-- Selectors -->
 <div style="display:flex;gap:8px;padding:10px 16px 0;align-items:center;">
   <select id="lodgingCounty" onchange="updateLodging()"
-    style="flex:1;background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:6px;padding:6px 8px;font-size:12px;outline:none;">
-    <option value="全國">🌐 全國</option>
+    style="flex:1;background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:6px;padding:6px 8px;font-size:var(--fs-label);outline:none;">
+    <option value="全國">全國</option>
     <option value="新北市">新北市</option><option value="臺北市">臺北市</option>
     <option value="桃園市">桃園市</option><option value="臺中市">臺中市</option>
     <option value="臺南市">臺南市</option><option value="高雄市">高雄市</option>
@@ -2403,11 +2402,11 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <option value="臺東縣">臺東縣</option><option value="花蓮縣">花蓮縣</option>
     <option value="澎湖縣">澎湖縣</option><option value="基隆市">基隆市</option>
     <option value="新竹市">新竹市</option><option value="嘉義市">嘉義市</option>
-    <option value="金門縣" selected>⭐ 金門縣</option><option value="連江縣">連江縣</option>
+    <option value="金門縣" selected>金門縣</option><option value="連江縣">連江縣</option>
   </select>
   <select id="lodgingPeriod" onchange="updateLodging()"
-    style="flex:1;background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:6px;padding:6px 8px;font-size:12px;outline:none;">
-    <option value="annual">📈 歷年趨勢</option>
+    style="flex:1;background:var(--sf);color:var(--tx);border:1px solid var(--bd);border-radius:6px;padding:6px 8px;font-size:var(--fs-label);outline:none;">
+    <option value="annual">歷年趨勢</option>
     <option value="2025">2025年 月別</option>
     <option value="2024">2024年 月別</option>
     <option value="2023">2023年 月別</option>
@@ -2424,35 +2423,35 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <!-- Charts -->
 <div style="padding:8px 16px 0;">
   <div style="background:var(--sf);border-radius:var(--r);padding:10px;border:1px solid var(--bd);margin-bottom:8px;">
-    <div id="lodgingOccTitle" style="font-size:11px;font-weight:500;color:var(--tx);margin-bottom:4px;">住用率趨勢（%）</div>
+    <div id="lodgingOccTitle" style="font-size:var(--fs-tiny);font-weight:500;color:var(--tx);margin-bottom:4px;">住用率趨勢（%）</div>
     <div style="overflow-x:auto;"><svg id="lodgingOccSvg" height="160" style="display:block;min-width:280px;"></svg></div>
     <div style="display:flex;gap:12px;margin-top:4px;justify-content:center;">
-      <span style="font-size:9px;color:var(--blue);">● 旅館</span>
-      <span style="font-size:9px;color:var(--green);">● 民宿</span>
+      <span style="font-size:var(--fs-mini);color:var(--blue);">● 旅館</span>
+      <span style="font-size:var(--fs-mini);color:var(--green);">● 民宿</span>
     </div>
   </div>
   <div style="background:var(--sf);border-radius:var(--r);padding:10px;border:1px solid var(--bd);margin-bottom:8px;">
-    <div id="lodgingAdrTitle" style="font-size:11px;font-weight:500;color:var(--tx);margin-bottom:4px;">平均房價趨勢（元）</div>
+    <div id="lodgingAdrTitle" style="font-size:var(--fs-tiny);font-weight:500;color:var(--tx);margin-bottom:4px;">平均房價趨勢（元）</div>
     <div style="overflow-x:auto;"><svg id="lodgingAdrSvg" height="155" style="display:block;min-width:280px;"></svg></div>
     <div style="display:flex;gap:12px;margin-top:4px;justify-content:center;">
-      <span style="font-size:9px;color:var(--blue);">● 旅館</span>
-      <span style="font-size:9px;color:var(--green);">● 民宿</span>
+      <span style="font-size:var(--fs-mini);color:var(--blue);">● 旅館</span>
+      <span style="font-size:var(--fs-mini);color:var(--green);">● 民宿</span>
     </div>
   </div>
   <div style="background:var(--sf);border-radius:var(--r);padding:10px;border:1px solid var(--bd);margin-bottom:8px;" id="lodgingCountBox">
-    <div style="font-size:11px;font-weight:500;color:var(--tx);margin-bottom:4px;">家數 ／ 房間數趨勢</div>
+    <div style="font-size:var(--fs-tiny);font-weight:500;color:var(--tx);margin-bottom:4px;">家數 ／ 房間數趨勢</div>
     <div style="overflow-x:auto;"><svg id="lodgingCountSvg" height="150" style="display:block;min-width:280px;"></svg></div>
     <div style="display:flex;gap:12px;margin-top:4px;justify-content:center;">
-      <span style="font-size:9px;color:var(--blue);">● 旅館家數</span>
-      <span style="font-size:9px;color:var(--ac);">● 民宿家數</span>
+      <span style="font-size:var(--fs-mini);color:var(--blue);">● 旅館家數</span>
+      <span style="font-size:var(--fs-mini);color:var(--ac);">● 民宿家數</span>
     </div>
   </div>
 </div>
 
 <!-- Insight -->
 <div style="margin:0 16px 0;background:var(--ad);border:1px solid var(--bd2);border-radius:var(--rs);padding:10px 12px;">
-  <div style="font-size:11px;color:var(--ac2);font-weight:500;margin-bottom:4px;">🎖️ 對本中心的啟示</div>
-  <div style="font-size:11px;color:var(--tx2);line-height:1.7;">
+  <div style="font-size:var(--fs-tiny);color:var(--ac2);font-weight:500;margin-bottom:4px;">對本中心的啟示</div>
+  <div style="font-size:var(--fs-tiny);color:var(--tx2);line-height:1.7;">
     2025年全國一般旅館住用率 <strong style="color:var(--ac);">51.1%</strong>，均房價 <strong style="color:var(--ac);">2,661元</strong>。
     金門縣旅館住用率32.5%、均房價2,187元，低於全國水準。
     本中心均價1,035–1,800元仍處低價帶，<strong style="color:var(--ac);">建議定價向金門縣均值靠齊，逐步調升至2,000元以上</strong>以提升競爭力。
@@ -2467,60 +2466,60 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <!-- Level breakdown mini cards -->
 <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:5px;padding:8px 18px 0;">
   <div style="background:rgba(236,72,153,.1);border:1px solid rgba(236,72,153,.3);border-radius:var(--rs);padding:6px 4px;text-align:center;">
-    <div style="font-size:9px;color:#EC4899;margin-bottom:2px;">大專</div>
-    <div style="font-size:11px;font-weight:500;color:var(--tx);">105.7萬</div>
-    <div style="font-size:9px;color:var(--red);">↓22%</div>
+    <div style="font-size:var(--fs-mini);color:#EC4899;margin-bottom:2px;">大專</div>
+    <div style="font-size:var(--fs-tiny);font-weight:500;color:var(--tx);">105.7萬</div>
+    <div style="font-size:var(--fs-mini);color:var(--red);">↓22%</div>
   </div>
   <div style="background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:var(--rs);padding:6px 4px;text-align:center;">
-    <div style="font-size:9px;color:#8B5CF6;margin-bottom:2px;">高中職</div>
-    <div style="font-size:11px;font-weight:500;color:var(--tx);">53.2萬</div>
-    <div style="font-size:9px;color:var(--red);">↓31%</div>
+    <div style="font-size:var(--fs-mini);color:#8B5CF6;margin-bottom:2px;">高中職</div>
+    <div style="font-size:var(--fs-tiny);font-weight:500;color:var(--tx);">53.2萬</div>
+    <div style="font-size:var(--fs-mini);color:var(--red);">↓31%</div>
   </div>
   <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:var(--rs);padding:6px 4px;text-align:center;">
-    <div style="font-size:9px;color:#10B981;margin-bottom:2px;">國中</div>
-    <div style="font-size:11px;font-weight:500;color:var(--tx);">60.5萬</div>
-    <div style="font-size:9px;color:var(--red);">↓28%</div>
+    <div style="font-size:var(--fs-mini);color:#10B981;margin-bottom:2px;">國中</div>
+    <div style="font-size:var(--fs-tiny);font-weight:500;color:var(--tx);">60.5萬</div>
+    <div style="font-size:var(--fs-mini);color:var(--red);">↓28%</div>
   </div>
   <div style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);border-radius:var(--rs);padding:6px 4px;text-align:center;">
-    <div style="font-size:9px;color:#3B82F6;margin-bottom:2px;">國小</div>
-    <div style="font-size:11px;font-weight:500;color:var(--tx);">116.5萬</div>
-    <div style="font-size:9px;color:var(--red);">↓15%</div>
+    <div style="font-size:var(--fs-mini);color:#3B82F6;margin-bottom:2px;">國小</div>
+    <div style="font-size:var(--fs-tiny);font-weight:500;color:var(--tx);">116.5萬</div>
+    <div style="font-size:var(--fs-mini);color:var(--red);">↓15%</div>
   </div>
   <div style="background:rgba(232,93,38,.1);border:1px solid rgba(232,93,38,.3);border-radius:var(--rs);padding:6px 4px;text-align:center;">
-    <div style="font-size:9px;color:#E85D26;margin-bottom:2px;">幼兒園</div>
-    <div style="font-size:11px;font-weight:500;color:var(--tx);">53.1萬</div>
-    <div style="font-size:9px;color:var(--green);">↑16%</div>
+    <div style="font-size:var(--fs-mini);color:#E85D26;margin-bottom:2px;">幼兒園</div>
+    <div style="font-size:var(--fs-tiny);font-weight:500;color:var(--tx);">53.1萬</div>
+    <div style="font-size:var(--fs-mini);color:var(--green);">↑16%</div>
   </div>
 </div>
 <div style="margin:10px 18px 0;background:var(--ad);border:1px solid var(--bd2);
   border-radius:var(--rs);padding:10px 12px;">
-  <div style="font-size:11px;color:var(--ac2);font-weight:500;margin-bottom:4px;">🎖️ 對救國團的影響</div>
-  <div style="font-size:11px;color:var(--tx2);line-height:1.6;">
+  <div style="font-size:var(--fs-tiny);color:var(--ac2);font-weight:500;margin-bottom:4px;">對救國團的影響</div>
+  <div style="font-size:var(--fs-tiny);color:var(--tx2);line-height:1.6;">
     學生人口14年減少21.5% → 青年活動需求下降・政府補助縮減風險<br>
     建議轉型：<strong style="color:var(--ac);">成人進修</strong>・<strong style="color:var(--ac);">樂齡族群</strong>・<strong style="color:var(--ac);">企業研習</strong>
   </div>
 </div>
 <div style="display:flex;gap:6px;padding:12px 18px 0;overflow-x:auto;scrollbar-width:none;">
-  <button class="cat-tab on" onclick="eduView('total',this)">📊 總人數</button>
-  <button class="cat-tab" onclick="eduView('level',this)">🏫 各級分類</button>
-  <button class="cat-tab" onclick="eduView('grad',this)">🎓 畢業人數</button>
-  <button class="cat-tab" onclick="eduView('table',this)">📋 年度明細</button>
+  <button class="cat-tab on" onclick="eduView('total',this)">總人數</button>
+  <button class="cat-tab" onclick="eduView('level',this)">各級分類</button>
+  <button class="cat-tab" onclick="eduView('grad',this)">畢業人數</button>
+  <button class="cat-tab" onclick="eduView('table',this)">年度明細</button>
 </div>
 <div id="eduChartCard" style="margin:10px 18px 0;background:var(--sf);border-radius:var(--r);
   padding:14px;border:1px solid var(--bd);">
-  <div id="eduChartTitle" style="font-size:12px;font-weight:500;color:var(--tx);margin-bottom:10px;">
+  <div id="eduChartTitle" style="font-size:var(--fs-label);font-weight:500;color:var(--tx);margin-bottom:10px;">
     全國學生總人數趨勢（101–114學年）
   </div>
   <div class="edu-chart-wrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
     <svg id="eduSvg" height="220" style="display:block;min-width:320px;"></svg>
   </div>
-  <div id="eduTooltip" style="font-size:11px;color:var(--ac2);margin-top:6px;min-height:16px;
+  <div id="eduTooltip" style="font-size:var(--fs-tiny);color:var(--ac2);margin-top:6px;min-height:16px;
     font-family:'DM Mono',monospace;text-align:center;"></div>
 </div>
 <div id="eduLegend" style="display:flex;flex-wrap:wrap;gap:6px;padding:6px 18px 0;"></div>
 <div id="eduTableWrap" style="display:none;margin:10px 18px 0;background:var(--sf);
   border-radius:var(--r);border:1px solid var(--bd);overflow:hidden;">
-  <table style="width:100%;border-collapse:collapse;font-size:11px;">
+  <table style="width:100%;border-collapse:collapse;font-size:var(--fs-tiny);">
     <thead><tr style="background:var(--sf2);">
       <th style="padding:7px 10px;text-align:left;color:var(--tx3);font-weight:400;">學年</th>
       <th style="padding:7px 10px;text-align:right;color:var(--tx3);font-weight:400;">在學人數</th>
@@ -2535,38 +2534,38 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <!-- ── 出生數趨勢 ────────────────────────────────── -->
 <div class="lbl" style="padding:14px 18px 8px;">
   <span>出生數趨勢・未來學生來源預測</span>
-  <span style="font-size:10px;color:var(--tx3);">內政部戶政司</span>
+  <span style="font-size:var(--fs-tiny);color:var(--tx3);">內政部戶政司</span>
 </div>
 
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 18px;">
   <div class="sum-card">
     <div class="sum-lbl">101年（近年高峰）</div>
-    <div class="sum-val" style="font-size:13px;">22.9萬</div>
+    <div class="sum-val" style="font-size:var(--fs-sub);">22.9萬</div>
     <div class="sum-sub" style="color:var(--tx3);">龍年效應</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">113年出生數</div>
-    <div class="sum-val" style="font-size:13px;color:var(--red);">13.5萬</div>
+    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--red);">13.5萬</div>
     <div class="sum-sub" style="color:var(--red);">↓ 41%</div>
   </div>
   <div class="sum-card">
     <div class="sum-lbl">粗出生率</div>
-    <div class="sum-val" style="font-size:13px;color:var(--red);">5.76‰</div>
+    <div class="sum-val" style="font-size:var(--fs-sub);color:var(--red);">5.76‰</div>
     <div class="sum-sub" style="color:var(--red);">歷史最低</div>
   </div>
 </div>
 
 <div style="margin:10px 18px 0;background:rgba(224,92,92,.1);border:1px solid rgba(224,92,92,.3);
   border-radius:var(--rs);padding:10px 12px;">
-  <div style="font-size:11px;color:var(--red);font-weight:500;margin-bottom:5px;">⚠️ 學生來源警示</div>
-  <div style="font-size:11px;color:var(--tx2);line-height:1.8;">
+  <div style="font-size:var(--fs-tiny);color:var(--red);font-weight:500;margin-bottom:5px;">⚠️ 學生來源警示</div>
+  <div style="font-size:var(--fs-tiny);color:var(--tx2);line-height:1.8;">
     今天的出生數 = <strong>6年後幼兒園</strong> = <strong>12年後國中</strong> = <strong>18年後大學生</strong><br>
     113年僅出生 13.5萬 → 119年幼兒園生將減少至現在 25%<br>
     <span style="color:var(--ac);font-weight:500;">→ 救國團必須加速開發非學生客群</span>
   </div>
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:8px 18px 0;font-size:10px;">
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:8px 18px 0;font-size:var(--fs-tiny);">
   <div style="background:var(--sf2);border-radius:var(--rs);padding:7px 4px;text-align:center;border:1px solid var(--bd);">
     <div style="color:var(--tx3);margin-bottom:3px;">現在生</div>
     <div style="font-weight:500;color:var(--red);">107萬→</div>
@@ -2591,17 +2590,17 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 <div id="birthChartCard" style="margin:10px 18px 0;background:var(--sf);border-radius:var(--r);
   padding:14px;border:1px solid var(--bd);">
-  <div style="font-size:12px;font-weight:500;color:var(--tx);margin-bottom:2px;">
+  <div style="font-size:var(--fs-label);font-weight:500;color:var(--tx);margin-bottom:2px;">
     全國出生人數趨勢（民國88–114年）
   </div>
-  <div style="display:flex;gap:12px;font-size:10px;color:var(--tx3);margin-bottom:10px;">
+  <div style="display:flex;gap:12px;font-size:var(--fs-tiny);color:var(--tx3);margin-bottom:10px;">
     <span>▬ <span style="color:#3B82F6;">出生人數（萬）</span></span>
     <span>-- <span style="color:#F59E0B;">粗出生率（‰）</span></span>
   </div>
   <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
     <svg id="birthSvg" height="180" style="display:block;min-width:340px;"></svg>
   </div>
-  <div id="birthTooltip" style="font-size:11px;color:var(--ac2);margin-top:6px;min-height:16px;
+  <div id="birthTooltip" style="font-size:var(--fs-tiny);color:var(--ac2);margin-top:6px;min-height:16px;
     font-family:'DM Mono',monospace;text-align:center;"></div>
 </div>
 
@@ -2621,7 +2620,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   </div>
   <div style="text-align:right;">
     <div class="date-badge" id="intelDate">自動更新</div>
-    <div style="font-size:9px;color:var(--tx3);margin-top:4px;">三大情報來源</div>
+    <div style="font-size:var(--fs-mini);color:var(--tx3);margin-top:4px;">三大情報來源</div>
   </div>
 </div>
 
@@ -2629,21 +2628,21 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div class="lbl" style="padding:8px 18px 6px;">
   <span>① 未來流通研究所・旅遊分析</span>
   <a href="https://www.mirai.com.tw/category/info/info-travel/" target="_blank"
-    style="font-size:10px;color:var(--ac);text-decoration:none;">mirai.com.tw →</a>
+    style="font-size:var(--fs-tiny);color:var(--ac);text-decoration:none;">mirai.com.tw →</a>
 </div>
 <!-- AI 摘要 mirai -->
 <div style="margin:0 18px 6px;background:var(--ad);border:1px solid var(--bd2);border-radius:var(--rs);">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;">
-    <span style="font-size:10px;color:var(--ac2);font-weight:500;">🤖 AI 摘要與建議</span>
-    <span style="font-size:9px;color:var(--tx3);" id="miraiAiTs"></span>
+    <span style="font-size:var(--fs-tiny);color:var(--ac2);font-weight:500;">🤖 AI 摘要與建議</span>
+    <span style="font-size:var(--fs-mini);color:var(--tx3);" id="miraiAiTs"></span>
   </div>
-  <div id="miraiAiText" style="font-size:11px;color:var(--tx2);line-height:1.7;padding:0 10px 8px;">
+  <div id="miraiAiText" style="font-size:var(--fs-tiny);color:var(--tx2);line-height:1.7;padding:0 10px 8px;">
     
   </div>
 </div>
 <div id="miraiList" style="margin:0 18px;display:flex;flex-direction:column;gap:6px;">
   <div style="background:var(--sf);border-radius:var(--rs);padding:10px;border:1px solid var(--bd);">
-    <div style="font-size:10px;color:var(--tx3);text-align:center;">⏳ 載入中...</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx3);text-align:center;">⏳ 載入中...</div>
   </div>
 </div>
 
@@ -2651,21 +2650,21 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div class="lbl" style="padding:10px 18px 6px;">
   <span>② 台灣趨勢研究・產業報告</span>
   <a href="https://www.twtrend.com/trend/" target="_blank"
-    style="font-size:10px;color:var(--ac);text-decoration:none;">twtrend.com →</a>
+    style="font-size:var(--fs-tiny);color:var(--ac);text-decoration:none;">twtrend.com →</a>
 </div>
 <!-- AI 摘要 twtrend -->
 <div style="margin:0 18px 6px;background:var(--ad);border:1px solid var(--bd2);border-radius:var(--rs);">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;">
-    <span style="font-size:10px;color:var(--ac2);font-weight:500;">🤖 AI 摘要與建議</span>
-    <span style="font-size:9px;color:var(--tx3);" id="twtrendAiTs"></span>
+    <span style="font-size:var(--fs-tiny);color:var(--ac2);font-weight:500;">🤖 AI 摘要與建議</span>
+    <span style="font-size:var(--fs-mini);color:var(--tx3);" id="twtrendAiTs"></span>
   </div>
-  <div id="twtrendAiText" style="font-size:11px;color:var(--tx2);line-height:1.7;padding:0 10px 8px;">
+  <div id="twtrendAiText" style="font-size:var(--fs-tiny);color:var(--tx2);line-height:1.7;padding:0 10px 8px;">
     
   </div>
 </div>
 <div id="twtrendList" style="margin:0 18px;display:flex;flex-direction:column;gap:6px;">
   <div style="background:var(--sf);border-radius:var(--rs);padding:10px;border:1px solid var(--bd);">
-    <div style="font-size:10px;color:var(--tx3);text-align:center;">⏳ 載入中...</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx3);text-align:center;">⏳ 載入中...</div>
   </div>
 </div>
 
@@ -2673,21 +2672,21 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div class="lbl" style="padding:10px 18px 6px;">
   <span>③ Social Lab・旅遊聲量分析</span>
   <a href="https://www.social-lab.cc/news_insight/travel-entertainment/" target="_blank"
-    style="font-size:10px;color:var(--ac);text-decoration:none;">social-lab.cc →</a>
+    style="font-size:var(--fs-tiny);color:var(--ac);text-decoration:none;">social-lab.cc →</a>
 </div>
 <!-- AI 摘要 sociallab -->
 <div style="margin:0 18px 6px;background:var(--ad);border:1px solid var(--bd2);border-radius:var(--rs);">
   <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;">
-    <span style="font-size:10px;color:var(--ac2);font-weight:500;">🤖 AI 摘要與建議</span>
-    <span style="font-size:9px;color:var(--tx3);" id="socialAiTs"></span>
+    <span style="font-size:var(--fs-tiny);color:var(--ac2);font-weight:500;">🤖 AI 摘要與建議</span>
+    <span style="font-size:var(--fs-mini);color:var(--tx3);" id="socialAiTs"></span>
   </div>
-  <div id="socialAiText" style="font-size:11px;color:var(--tx2);line-height:1.7;padding:0 10px 8px;">
+  <div id="socialAiText" style="font-size:var(--fs-tiny);color:var(--tx2);line-height:1.7;padding:0 10px 8px;">
     
   </div>
 </div>
 <div id="socialLabList" style="margin:0 18px;display:flex;flex-direction:column;gap:6px;">
   <div style="background:var(--sf);border-radius:var(--rs);padding:10px;border:1px solid var(--bd);">
-    <div style="font-size:10px;color:var(--tx3);text-align:center;">⏳ 載入中...</div>
+    <div style="font-size:var(--fs-tiny);color:var(--tx3);text-align:center;">⏳ 載入中...</div>
   </div>
 </div>
 
@@ -5933,8 +5932,8 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   const _scrollMode=_nDays>_SCROLL_FROM;
   const padL=42, padR=12, padT=12, padB=dense?38:26;
   const W=_scrollMode ? (padL+padR+_PX_PER_DAY*(_nDays-1)) : _baseW;
-  // 高度依基準寬比例：手機螢幕窄、圖需較高才不擠；桌機圖寬維持較扁比例
-  const _ratio = _isDesktop ? (dense?0.42:0.36) : (dense?0.62:0.52);
+  // 高度依基準寬比例（桌機圖較寬，維持約 2.6:1 顯示比例不過扁）
+  const _ratio=dense?0.42:0.36;
   const H=_scrollMode ? (dense?153:120) : Math.round(W*_ratio);
   const innerW=W-padL-padR, innerH=H-padT-padB;
 
@@ -6019,8 +6018,8 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
 
   const tapHint=interactive?`<div style="font-size:var(--fs-mini);color:var(--tx3);text-align:center;margin-top:6px;">點下方飯店名可凸顯該條線・再點一次取消</div>`:'';
   const legendStyle=interactive
-    ? 'display:grid;grid-template-columns:repeat(4,1fr);gap:2px 6px;margin-top:5px;font-size:var(--fs-mini);color:var(--tx3);line-height:1.3;'
-    : 'display:flex;flex-wrap:wrap;gap:3px 12px;justify-content:center;margin-top:5px;font-size:var(--fs-tiny);color:var(--tx3);line-height:1.3;';
+    ? 'display:grid;grid-template-columns:repeat(4,1fr);gap:4px 6px;margin-top:8px;font-size:var(--fs-mini);color:var(--tx3);'
+    : 'display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:center;margin-top:8px;font-size:var(--fs-tiny);color:var(--tx3);';
   const _svg=`<svg viewBox="0 0 ${W} ${H}" width="${_scrollMode?W:'100%'}" height="${_scrollMode?H:'auto'}" preserveAspectRatio="xMidYMid meet" style="display:block;${_scrollMode?'':'width:100%;'}">
     ${yTicks}${lines}${selfLine}${dots}${xLabels}
   </svg>`;
@@ -8182,12 +8181,24 @@ const BIRTH_DATA = [
 function buildBirthChart(){
   const svg=document.getElementById('birthSvg');
   if(!svg)return;
-  const card=document.getElementById('birthChartCard');
-  const W=Math.max((card?card.clientWidth:360)-28,320);
-  svg.setAttribute('width',W);
-  svg.innerHTML='';
+  var _fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
+  var _fsc=_fs/1.12;
+  var _isDesktop=window.matchMedia('(min-width:768px)').matches;
+  var _curFs=document.documentElement.getAttribute('data-fs')||'std';
+  const W=Math.round((_isDesktop?760:320)/(_isDesktop?1:_fsc));
   const n=BIRTH_DATA.length;
-  const pL=46,pT=12,pB=28,pR=46,H=180,iH=H-pT-pB,iW=W-pL-pR;
+  const pL=46,pT=Math.round(12*_fsc),pB=Math.round(28*_fsc),pR=46,H=Math.round(180*_fsc),iH=H-pT-pB,iW=W-pL-pR;
+  const _fNum=(9*_fsc).toFixed(1);
+  const _fSm=(8*_fsc).toFixed(1);
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  if(_isDesktop || _curFs==='std'){
+    svg.setAttribute('width','100%'); svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+    svg.removeAttribute('height'); svg.style.maxWidth='100%';
+  }else{
+    svg.setAttribute('width',W); svg.setAttribute('height',H);
+    svg.removeAttribute('preserveAspectRatio'); svg.style.maxWidth='none';
+  }
+  svg.innerHTML='';
   const xp=i=>pL+i/(n-1)*iW;
   const maxB=320000,minB=100000,maxR=15,minR=4;
   const yB=v=>pT+(1-(v-minB)/(maxB-minB))*iH;
@@ -8195,15 +8206,15 @@ function buildBirthChart(){
   [150000,200000,250000,300000].forEach(v=>{
     const y=yB(v);if(y<pT||y>pT+iH)return;
     svg.innerHTML+=`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="rgba(255,255,255,.05)" stroke-width="1"/>`;
-    svg.innerHTML+=`<text x="${pL-4}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="9" font-family="DM Mono">${v/10000|0}萬</text>`;
+    svg.innerHTML+=`<text x="${pL-4}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="${_fNum}" font-family="DM Mono">${v/10000|0}萬</text>`;
   });
   [6,8,10,12,14].forEach(v=>{
     const y=yR(v);if(y<pT||y>pT+iH)return;
-    svg.innerHTML+=`<text x="${W-pR+4}" y="${y+3}" fill="#F59E0B" font-size="9" font-family="DM Mono" opacity=".7">${v}‰</text>`;
+    svg.innerHTML+=`<text x="${W-pR+4}" y="${y+3}" fill="#F59E0B" font-size="${_fNum}" font-family="DM Mono" opacity=".7">${v}‰</text>`;
   });
   const x101=xp(13);
   svg.innerHTML+=`<line x1="${x101}" y1="${pT}" x2="${x101}" y2="${pT+iH}" stroke="rgba(200,150,62,.25)" stroke-width="1" stroke-dasharray="3,2"/>`;
-  svg.innerHTML+=`<text x="${x101}" y="${pT-2}" text-anchor="middle" fill="var(--ac)" font-size="8">龍年</text>`;
+  svg.innerHTML+=`<text x="${x101}" y="${pT-2}" text-anchor="middle" fill="var(--ac)" font-size="${_fSm}">龍年</text>`;
   const bW=Math.max(iW/n-1,4);
   BIRTH_DATA.forEach((d,i)=>{
     const x=pL+i/(n-1)*iW-bW/2;
@@ -8215,9 +8226,9 @@ function buildBirthChart(){
   svg.innerHTML+=`<polyline points="${ratePts}" fill="none" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4,2" stroke-linejoin="round" opacity=".8"/>`;
   BIRTH_DATA.forEach((d,i)=>{
     if(i===0||i===n-1||(d.roc%5===0)||d.roc===101)
-      svg.innerHTML+=`<text x="${xp(i)}" y="${H-6}" text-anchor="middle" fill="#4A6070" font-size="9" font-family="DM Mono">${d.roc}</text>`;
+      svg.innerHTML+=`<text x="${xp(i)}" y="${H-6}" text-anchor="middle" fill="#4A6070" font-size="${_fNum}" font-family="DM Mono">${d.roc}</text>`;
   });
-  svg.innerHTML+=`<text x="${xp(n-1)}" y="${yB(BIRTH_DATA[n-1].births)-6}" text-anchor="end" fill="#E05C5C" font-size="9">↓創新低</text>`;
+  svg.innerHTML+=`<text x="${xp(n-1)}" y="${yB(BIRTH_DATA[n-1].births)-6}" text-anchor="end" fill="#E05C5C" font-size="${_fNum}">↓創新低</text>`;
 }
 
 const INBOUND_2025 = [
@@ -8239,26 +8250,44 @@ const OUTBOUND_2025 = [
 
 function buildHBarChart(svgId, data, unit){
   const svg=document.getElementById(svgId); if(!svg) return;
-  const W=svg.parentElement.clientWidth||300;
-  svg.setAttribute('width',W);
-  const pL=42,labelW=68,pT=6,rowH=24,n=data.length,H=n*rowH+pT*2;
-  svg.setAttribute('height',H); svg.innerHTML='';
+  var _fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
+  var _fsc=_fs/1.12;
+  var _isDesktop=window.matchMedia('(min-width:768px)').matches;
+  var _curFs=document.documentElement.getAttribute('data-fs')||'std';
+  // viewBox 寬對齊全站標準（桌機760/手機320），字級顯示即等同標準圖
+  const W=Math.round((_isDesktop?760:320)/(_isDesktop?1:_fsc));
+  const pL=72, labelW=64, pT=10, rowH=Math.round(34*_fsc), n=data.length, H=n*rowH+pT*2;
+  const _f9=(9*_fsc).toFixed(1);
+  const _f8=(8*_fsc).toFixed(1);
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  if(_isDesktop || _curFs==='std'){
+    svg.setAttribute('width','100%'); svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+    svg.removeAttribute('height'); svg.style.maxWidth='100%';
+  }else{
+    svg.setAttribute('width',W); svg.setAttribute('height',H);
+    svg.removeAttribute('preserveAspectRatio'); svg.style.maxWidth='none';
+  }
+  svg.innerHTML='';
   const maxV=data[0].v;
   const barMax=W-pL-labelW-6;
+  const barH=16;
   data.forEach((d,i)=>{
     const y=pT+i*rowH;
     const bW=Math.max((d.v/maxV)*barMax,2);
-    // Country name
-    svg.innerHTML+=`<text x="${pL-4}" y="${y+15}" text-anchor="end"
-      fill="var(--tx2)" font-size="10">${d.name}</text>`;
-    // Bar
-    svg.innerHTML+=`<rect x="${pL}" y="${y+3}" width="${bW}" height="15"
+    const barY=y+(rowH-barH)/2-pT/2;
+    const midY=barY+barH/2;
+    // 國名（左側，垂直置中於 bar）
+    svg.innerHTML+=`<text x="${pL-8}" y="${midY+3.5}" text-anchor="end"
+      fill="var(--tx2)" font-size="${_f9}">${d.name}</text>`;
+    // 長條
+    svg.innerHTML+=`<rect x="${pL}" y="${barY}" width="${bW}" height="${barH}"
       fill="${d.col}" opacity=".85" rx="2"/>`;
-    // Value + pct in fixed right column
-    svg.innerHTML+=`<text x="${W-labelW+4}" y="${y+12}"
-      fill="${d.col}" font-size="10" font-weight="500">${d.v}${unit}</text>`;
-    svg.innerHTML+=`<text x="${W-labelW+4}" y="${y+22}"
-      fill="var(--tx3)" font-size="9">${d.pct}%</text>`;
+    // 百分比：放在長條右端上方
+    svg.innerHTML+=`<text x="${pL+bW-2}" y="${barY-3}" text-anchor="end"
+      fill="var(--tx3)" font-size="${_f8}">${d.pct}%</text>`;
+    // 數值：右側固定欄，垂直置中
+    svg.innerHTML+=`<text x="${W-2}" y="${midY+3.5}" text-anchor="end"
+      fill="${d.col}" font-size="${_f9}" font-weight="500">${d.v}${unit}</text>`;
   });
 }
 
@@ -8270,24 +8299,37 @@ function buildTourCharts(){
 
 function buildTourChart(){
   const svg=document.getElementById('tourSvg'); if(!svg) return;
-  const W=Math.max((svg.parentElement.clientWidth||360)-4,300);
-  svg.setAttribute('width',W); svg.innerHTML='';
-  const n=TOUR_DATA.length,pL=36,pT=10,pB=26,pR=10,H=160,iH=H-pT-pB,iW=W-pL-pR;
+  var _fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
+  var _fsc=_fs/1.12;
+  var _isDesktop=window.matchMedia('(min-width:768px)').matches;
+  var _curFs=document.documentElement.getAttribute('data-fs')||'std';
+  const W=Math.round((_isDesktop?760:320)/(_isDesktop?1:_fsc));
+  const n=TOUR_DATA.length,pL=36,pT=Math.round(10*_fsc),pB=Math.round(26*_fsc),pR=10,H=Math.round(160*_fsc),iH=H-pT-pB,iW=W-pL-pR;
+  const _fNum=(9*_fsc).toFixed(1);
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  if(_isDesktop || _curFs==='std'){
+    svg.setAttribute('width','100%'); svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+    svg.removeAttribute('height'); svg.style.maxWidth='100%';
+  }else{
+    svg.setAttribute('width',W); svg.setAttribute('height',H);
+    svg.removeAttribute('preserveAspectRatio'); svg.style.maxWidth='none';
+  }
+  svg.innerHTML='';
   const xp=i=>pL+i/(n-1)*iW;
   const mx=1300; const yp=v=>pT+(1-v/mx)*iH;
   [400,800,1200].forEach(v=>{
     const y=yp(v);
     svg.innerHTML+=`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="rgba(255,255,255,.05)" stroke-width="1"/>`;
-    svg.innerHTML+=`<text x="${pL-4}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="9">${v/10}萬</text>`;
+    svg.innerHTML+=`<text x="${pL-4}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="${_fNum}">${v/10}萬</text>`;
   });
   const bW=Math.max(iW/n*0.65,8);
   TOUR_DATA.forEach((d,i)=>{
     const x=xp(i)-bW/2; const barH=Math.max(yp(0)-yp(d.v),2);
     const col=d.y==='2019'?'var(--ac)':d.v<200?'var(--red)':d.v>=700?'var(--green)':'#3B82F6';
     svg.innerHTML+=`<rect x="${x}" y="${yp(d.v)}" width="${bW}" height="${barH}" fill="${col}" opacity=".85" rx="2"/>`;
-    svg.innerHTML+=`<text x="${xp(i)}" y="${H-6}" text-anchor="middle" fill="#4A6070" font-size="9">${d.y.slice(2)}</text>`;
+    svg.innerHTML+=`<text x="${xp(i)}" y="${H-6}" text-anchor="middle" fill="#4A6070" font-size="${_fNum}">${d.y.slice(2)}</text>`;
     if(d.y==='2019'||d.y==='2024')
-      svg.innerHTML+=`<text x="${xp(i)}" y="${yp(d.v)-4}" text-anchor="middle" fill="${col}" font-size="9">${d.v}萬</text>`;
+      svg.innerHTML+=`<text x="${xp(i)}" y="${yp(d.v)-4}" text-anchor="middle" fill="${col}" font-size="${_fNum}">${d.v}萬</text>`;
   });
 }
 
@@ -8361,16 +8403,31 @@ function getTriWidth(){
 
 function buildTriMonthChart(){
   const svg=document.getElementById('triMonthSvg'); if(!svg) return;
-  const W=Math.max(getTriWidth()-62,260);
-  const n=12, pB=28, pT=20, pL=26, pR=4, H=170;
+  // ── 響應式字級標準（比照 dcSvg）──
+  var _fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
+  var _fsc=_fs/1.12;
+  var _isDesktop=window.matchMedia('(min-width:768px)').matches;
+  var _curFs=document.documentElement.getAttribute('data-fs')||'std';
+  // viewBox 基準寬：桌機/標準字級用適中基準寬讓字相對放大；手機放大字級時縮 viewBox
+  const W=Math.round((_isDesktop?760:320)/(_isDesktop?1:_fsc));
+  const n=12, pB=Math.round(28*_fsc), pT=Math.round(20*_fsc), pL=26, pR=4;
+  const H=Math.round(170*_fsc);
   const iH=H-pT-pB, iW=W-pL-pR;
   const slotW=iW/n;
   const bW=Math.max(Math.floor(slotW*0.34),3);
   const maxV=200000;
   const yp=v=>pT+(1-(v/maxV))*iH;
+  const _fNum=(8*_fsc).toFixed(1);
+  const _fLbl=(8.5*_fsc).toFixed(1);
 
-  svg.setAttribute('width',W);
-  svg.setAttribute('height',H);
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  if(_isDesktop || _curFs==='std'){
+    svg.setAttribute('width','100%'); svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+    svg.removeAttribute('height'); svg.style.maxWidth='100%';
+  }else{
+    svg.setAttribute('width',W); svg.setAttribute('height',H);
+    svg.removeAttribute('preserveAspectRatio'); svg.style.maxWidth='none';
+  }
   svg.innerHTML='';
 
   // Grid lines + left labels (outside bar area)
@@ -8379,7 +8436,7 @@ function buildTriMonthChart(){
     svg.innerHTML+=`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}"
       stroke="rgba(255,255,255,.06)" stroke-width="1"/>`;
     svg.innerHTML+=`<text x="${pL-3}" y="${y+3}" text-anchor="end"
-      fill="#4A6070" font-size="8" font-family="DM Mono">${v/10000}</text>`;
+      fill="#4A6070" font-size="${_fNum}" font-family="DM Mono">${v/10000}</text>`;
   });
 
   // 2025全年12個月
@@ -8390,7 +8447,7 @@ function buildTriMonthChart(){
     svg.innerHTML+=`<rect x="${x25}" y="${yp(d.total)}" width="${bW}" height="${barH}"
       fill="#4A7FA5" opacity=".7" rx="2"/>`;
     svg.innerHTML+=`<text x="${cx}" y="${H-8}" text-anchor="middle"
-      fill="#4A6070" font-size="8.5" font-family="DM Mono">${i+1}</text>`;
+      fill="#4A6070" font-size="${_fLbl}" font-family="DM Mono">${i+1}</text>`;
   });
 
   // 2026 Q1 三個月（金色）
@@ -8402,34 +8459,50 @@ function buildTriMonthChart(){
       fill="#C8963E" opacity=".9" rx="2"/>`;
     const topY=yp(Math.max(d.total,TRI_2025_MONTHLY[i].total))-3;
     svg.innerHTML+=`<text x="${cx}" y="${topY}" text-anchor="middle"
-      fill="#C8963E" font-size="8" font-weight="600"
+      fill="#C8963E" font-size="${_fNum}" font-weight="600"
       font-family="DM Mono">${Math.round(d.total/10000)}萬</text>`;
   });
 
   // Legend + unit
   svg.innerHTML+=`<rect x="${pL+2}" y="5" width="8" height="7" fill="#4A7FA5" opacity=".7" rx="1"/>
-    <text x="${pL+13}" y="11" fill="#6B8FA8" font-size="8.5">2025</text>
+    <text x="${pL+13}" y="11" fill="#6B8FA8" font-size="${_fLbl}">2025</text>
     <rect x="${pL+38}" y="5" width="8" height="7" fill="#C8963E" opacity=".9" rx="1"/>
-    <text x="${pL+49}" y="11" fill="#C8963E" font-size="8.5">2026</text>
-    <text x="${W-2}" y="11" text-anchor="end" fill="#4A6070" font-size="8.5">單位：萬人</text>`;
+    <text x="${pL+49}" y="11" fill="#C8963E" font-size="${_fLbl}">2026</text>
+    <text x="${W-2}" y="11" text-anchor="end" fill="#4A6070" font-size="${_fLbl}">單位：萬人</text>`;
 }
 function buildTriChart(){
   const svg=document.getElementById('triTrendSvg'); if(!svg) return;
-  const W=Math.max(getTriWidth()-62,260);
-  svg.setAttribute('width',W); svg.innerHTML='';
-  const n=TRI_DATA.length,pL=36,pT=12,pB=26,pR=10,H=160,iH=H-pT-pB,iW=W-pL-pR;
+  var _fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
+  var _fsc=_fs/1.12;
+  var _isDesktop=window.matchMedia('(min-width:768px)').matches;
+  var _curFs=document.documentElement.getAttribute('data-fs')||'std';
+  const W=Math.round((_isDesktop?760:320)/(_isDesktop?1:_fsc));
+  const n=TRI_DATA.length,pL=36,pT=Math.round(12*_fsc),pB=Math.round(26*_fsc),pR=10;
+  const H=Math.round(160*_fsc),iH=H-pT-pB,iW=W-pL-pR;
+  const _fNum=(9*_fsc).toFixed(1);
+  const _fLbl=(8.5*_fsc).toFixed(1);
+  const _fSm=(8*_fsc).toFixed(1);
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  if(_isDesktop || _curFs==='std'){
+    svg.setAttribute('width','100%'); svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+    svg.removeAttribute('height'); svg.style.maxWidth='100%';
+  }else{
+    svg.setAttribute('width',W); svg.setAttribute('height',H);
+    svg.removeAttribute('preserveAspectRatio'); svg.style.maxWidth='none';
+  }
+  svg.innerHTML='';
   const xp=i=>pL+i/(n-1)*iW;
   const mx=2100000; const yp=v=>pT+(1-v/mx)*iH;
   [500000,1000000,1500000,2000000].forEach(v=>{
     const y=yp(v);
     svg.innerHTML+=`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="rgba(255,255,255,.05)" stroke-width="1"/>`;
-    svg.innerHTML+=`<text x="${pL-4}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="9" font-family="DM Mono">${v/10000}</text>`;
+    svg.innerHTML+=`<text x="${pL-4}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="${_fNum}" font-family="DM Mono">${v/10000}</text>`;
   });
   // Unit label
-  svg.innerHTML+=`<text x="${W-pR}" y="${pT-2}" text-anchor="end" fill="#4A6070" font-size="8.5">單位：萬人</text>`;
+  svg.innerHTML+=`<text x="${W-pR}" y="${pT-2}" text-anchor="end" fill="#4A6070" font-size="${_fLbl}">單位：萬人</text>`;
   const xCovid=xp(4);
   svg.innerHTML+=`<rect x="${xCovid-1}" y="${pT}" width="${xp(6)-xCovid+2}" height="${iH}" fill="rgba(224,92,92,.07)"/>`;
-  svg.innerHTML+=`<text x="${(xCovid+xp(6))/2}" y="${pT+10}" text-anchor="middle" fill="#E05C5C" font-size="8">COVID</text>`;
+  svg.innerHTML+=`<text x="${(xCovid+xp(6))/2}" y="${pT+10}" text-anchor="middle" fill="#E05C5C" font-size="${_fSm}">COVID</text>`;
   const totPts=TRI_DATA.map((d,i)=>`${xp(i)},${yp(d.tot)}`).join(' ');
   svg.innerHTML+=`<polyline points="${totPts}" fill="none" stroke="rgba(200,150,62,.7)" stroke-width="1.5" stroke-dasharray="4,3" stroke-linejoin="round"/>`;
   [{key:'tw',col:'#3B82F6'},{key:'cn',col:'#E85D26'}].forEach(({key,col})=>{
@@ -8445,7 +8518,7 @@ function buildTriChart(){
   // Show ALL year labels
   TRI_DATA.forEach((d,i)=>{
     const lbl=d.y.length>4?d.y.slice(2):d.y.slice(2);
-    svg.innerHTML+=`<text x="${xp(i)}" y="${H-8}" text-anchor="middle" fill="#4A6070" font-size="8.5" font-family="DM Mono">${lbl}</text>`;
+    svg.innerHTML+=`<text x="${xp(i)}" y="${H-8}" text-anchor="middle" fill="#4A6070" font-size="${_fLbl}" font-family="DM Mono">${lbl}</text>`;
   });
 }
 // ── 小三通數據更新 ───────────────────────────────────────────
@@ -8558,13 +8631,13 @@ function renderAirKpis(){
   const prevFull=airSumYear(prev);
   box.innerHTML=
     `<div class="sum-card"><div class="sum-lbl">${cy}年 累計（1-${monthsWithData}月）</div>
-      <div class="sum-val" style="font-size:13px;color:var(--ac2);">${(curSum/10000).toFixed(1)}萬</div>
+      <div class="sum-val" style="font-size:var(--fs-sub);color:var(--ac2);">${(curSum/10000).toFixed(1)}萬</div>
       <div class="sum-sub">空運旅客</div></div>`+
     `<div class="sum-card"><div class="sum-lbl">較去年同期</div>
-      <div class="sum-val" style="font-size:13px;color:${yoy>=0?'var(--green)':'var(--red)'};">${yoy===null?'—':(yoy>=0?'+':'')+yoy.toFixed(1)+'%'}</div>
+      <div class="sum-val" style="font-size:var(--fs-sub);color:${yoy>=0?'var(--green)':'var(--red)'};">${yoy===null?'—':(yoy>=0?'+':'')+yoy.toFixed(1)+'%'}</div>
       <div class="sum-sub">YoY</div></div>`+
     `<div class="sum-card"><div class="sum-lbl">${py}年 全年</div>
-      <div class="sum-val" style="font-size:13px;color:var(--tx);">${(prevFull/10000).toFixed(0)}萬</div>
+      <div class="sum-val" style="font-size:var(--fs-sub);color:var(--tx);">${(prevFull/10000).toFixed(0)}萬</div>
       <div class="sum-sub">參考</div></div>`;
 }
 
@@ -8572,22 +8645,36 @@ function renderAirMonthChart(){
   const svg=document.getElementById('airMonthSvg'); if(!svg) return;
   const cy=airLatestYear(), py=cy-1;
   const cur=AIR_YEARLY[cy]||[], prev=AIR_YEARLY[py]||[];
-  const W=svg.clientWidth||360, H=180, pL=34,pT=10,pB=24,pR=8;
+  var _fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
+  var _fsc=_fs/1.12;
+  var _isDesktop=window.matchMedia('(min-width:768px)').matches;
+  var _curFs=document.documentElement.getAttribute('data-fs')||'std';
+  const W=Math.round((_isDesktop?760:320)/(_isDesktop?1:_fsc));
+  const H=Math.round(180*_fsc), pL=34,pT=Math.round(10*_fsc),pB=Math.round(24*_fsc),pR=8;
   const iW=W-pL-pR, iH=H-pT-pB;
+  const _fNum=(7*_fsc).toFixed(1);
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  if(_isDesktop || _curFs==='std'){
+    svg.setAttribute('width','100%'); svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+    svg.removeAttribute('height'); svg.style.maxWidth='100%';
+  }else{
+    svg.setAttribute('width',W); svg.setAttribute('height',H);
+    svg.removeAttribute('preserveAspectRatio'); svg.style.maxWidth='none';
+  }
   const maxV=Math.max(...cur,...prev,1);
   const bw=iW/12, bin=bw*0.34;
   let s='';
   [0.25,0.5,0.75,1].forEach(f=>{
     const y=pT+(1-f)*iH;
     s+=`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="rgba(255,255,255,.05)"/>`;
-    s+=`<text x="${pL-3}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="7" font-family="DM Mono">${Math.round(maxV*f/10000)}萬</text>`;
+    s+=`<text x="${pL-3}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="${_fNum}" font-family="DM Mono">${Math.round(maxV*f/10000)}萬</text>`;
   });
   for(let i=0;i<12;i++){
     const x0=pL+i*bw;
     const ph=prev[i]?prev[i]/maxV*iH:0, ch=cur[i]?cur[i]/maxV*iH:0;
     s+=`<rect x="${x0+bw/2-bin-1}" y="${pT+iH-ph}" width="${bin}" height="${ph}" fill="#3B6EA5" rx="1"/>`;
     s+=`<rect x="${x0+bw/2+1}" y="${pT+iH-ch}" width="${bin}" height="${ch}" fill="#C8963E" rx="1"/>`;
-    s+=`<text x="${x0+bw/2}" y="${H-9}" text-anchor="middle" fill="#6A8090" font-size="7">${i+1}</text>`;
+    s+=`<text x="${x0+bw/2}" y="${H-9}" text-anchor="middle" fill="#6A8090" font-size="${_fNum}">${i+1}</text>`;
   }
   svg.innerHTML=s;
 }
@@ -8602,22 +8689,36 @@ function renderAirVsBoat(){
     const west=roc+1911;
     return {label:String(roc), air:ad, boat:boatMap[west]||0};
   }).filter(d=>d.air>0).slice(-8);
-  const W=svg.clientWidth||360, H=180, pL=34,pT=10,pB=24,pR=8;
+  var _fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
+  var _fsc=_fs/1.12;
+  var _isDesktop=window.matchMedia('(min-width:768px)').matches;
+  var _curFs=document.documentElement.getAttribute('data-fs')||'std';
+  const W=Math.round((_isDesktop?760:320)/(_isDesktop?1:_fsc));
+  const H=Math.round(180*_fsc), pL=34,pT=Math.round(10*_fsc),pB=Math.round(24*_fsc),pR=8;
   const iW=W-pL-pR, iH=H-pT-pB;
+  const _fNum=(7*_fsc).toFixed(1);
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  if(_isDesktop || _curFs==='std'){
+    svg.setAttribute('width','100%'); svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+    svg.removeAttribute('height'); svg.style.maxWidth='100%';
+  }else{
+    svg.setAttribute('width',W); svg.setAttribute('height',H);
+    svg.removeAttribute('preserveAspectRatio'); svg.style.maxWidth='none';
+  }
   const maxV=Math.max(...series.map(d=>Math.max(d.air,d.boat)),1);
   const bw=iW/series.length, bin=bw*0.32;
   let s='';
   [0.5,1].forEach(f=>{
     const y=pT+(1-f)*iH;
     s+=`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="rgba(255,255,255,.05)"/>`;
-    s+=`<text x="${pL-3}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="7" font-family="DM Mono">${Math.round(maxV*f/10000)}萬</text>`;
+    s+=`<text x="${pL-3}" y="${y+3}" text-anchor="end" fill="#4A6070" font-size="${_fNum}" font-family="DM Mono">${Math.round(maxV*f/10000)}萬</text>`;
   });
   series.forEach((d,i)=>{
     const x0=pL+i*bw;
     const ah=d.air/maxV*iH, bh=d.boat/maxV*iH;
     s+=`<rect x="${x0+bw/2-bin-1}" y="${pT+iH-ah}" width="${bin}" height="${ah}" fill="#C8963E" rx="1"/>`;
     s+=`<rect x="${x0+bw/2+1}" y="${pT+iH-bh}" width="${bin}" height="${bh}" fill="#16A085" rx="1"/>`;
-    s+=`<text x="${x0+bw/2}" y="${H-9}" text-anchor="middle" fill="#6A8090" font-size="7">${d.label}</text>`;
+    s+=`<text x="${x0+bw/2}" y="${H-9}" text-anchor="middle" fill="#6A8090" font-size="${_fNum}">${d.label}</text>`;
   });
   svg.innerHTML=s;
 }
