@@ -8843,11 +8843,11 @@ function buildCountyGrid(){
 
   grid.innerHTML = '<div style="background:var(--sf2);border-radius:var(--rs);padding:10px 12px;border:1px solid var(--bd);">'
     +'<div style="font-size:var(--fs-body);font-weight:600;color:var(--tx);margin-bottom:6px;">📍 '+chosen.city+' 熱門景點</div>'
-    +'<div style="display:flex;flex-direction:column;gap:4px;">'
+    +'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;">'
     + chosen.spots.map(function(s,i){
-        return '<div style="display:flex;align-items:center;gap:6px;padding:5px 8px;background:var(--ad);border-radius:var(--rs);">'
-          +'<span style="font-size:var(--fs-sub);color:var(--ac2);font-weight:700;min-width:18px;">'+('①②③'[i])+'</span>'
-          +'<span style="font-size:var(--fs-sub);color:var(--tx);">'+s+'</span>'
+        return '<div style="background:var(--ad);border-radius:var(--rs);padding:6px 8px;text-align:center;">'
+          +'<div style="font-size:var(--fs-note);color:var(--ac2);">TOP '+(i+1)+'</div>'
+          +'<div style="font-size:var(--fs-sub);color:var(--tx);font-weight:500;margin-top:2px;">'+s+'</div>'
           +'</div>';
       }).join('')
     +'</div></div>';
