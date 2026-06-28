@@ -5948,9 +5948,9 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   const _scrollMode=_nDays>_SCROLL_FROM;
   const padL=42, padR=12, padT=12, padB=dense?38:26;
   const W=_scrollMode ? (padL+padR+_PX_PER_DAY*(_nDays-1)) : _baseW;
-  // 高度依基準寬比例（桌機圖較寬，維持約 2.6:1 顯示比例不過扁）
-  const _ratio=dense?0.42:0.36;
-  const H=_scrollMode ? (dense?153:120) : Math.round(W*_ratio);
+  // 高度依基準寬比例：桌機降到約 2/3（避免過高），手機調高（避免過扁）
+  const _ratio=_isDesktop ? (dense?0.28:0.24) : (dense?0.56:0.50);
+  const H=_scrollMode ? (_isDesktop?(dense?153:120):(dense?180:150)) : Math.round(W*_ratio);
   const innerW=W-padL-padR, innerH=H-padT-padB;
 
   const pool=[];
