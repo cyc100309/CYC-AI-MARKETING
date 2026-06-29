@@ -2189,7 +2189,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <div class="sub">旅遊市場・飯店營運・人口趨勢</div>
   </div>
   <div style="text-align:right;">
-    <div class="date-badge">2025年5月</div>
+    <div class="date-badge">2026年5月</div>
     <div style="font-size:var(--fs-note);color:var(--tx3);margin-top:4px;">資料：觀光署・教育部</div>
   </div>
 </div>
@@ -2206,10 +2206,33 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 <!-- Header -->
 <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 18px 6px;">
-  <div style="font-size:var(--fs-label);color:var(--tx3);font-family:'DM Mono',monospace;">資料：交通部觀光署・2025年全年統計</div>
+  <div style="font-size:var(--fs-label);color:var(--tx3);font-family:'DM Mono',monospace;">資料：交通部觀光署・全年統計2025／占比2026年1–5月</div>
   <a href="https://stat.taiwan.net.tw/" target="_blank"
     style="font-size:var(--fs-label);color:var(--ac2);background:var(--ad);border:1px solid var(--bd2);
     border-radius:20px;padding:3px 10px;text-decoration:none;">官方資料庫</a>
+</div>
+
+<!-- 2026 即時概況 ── 1-5月累計（與下方全年數字區分） -->
+<div style="margin:2px 18px 6px;background:linear-gradient(135deg,rgba(91,155,213,.10),rgba(16,185,129,.06));
+  border:1px solid var(--bd2);border-radius:var(--r);padding:10px 12px;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+    <span style="font-size:var(--fs-label);color:var(--ac2);font-weight:600;">⚡ 2026 即時概況</span>
+    <span style="font-size:var(--fs-label);color:var(--tx3);font-family:'DM Mono',monospace;">1–5月累計</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:8px 10px;">
+      <div style="font-size:var(--fs-label);color:var(--green);font-weight:500;margin-bottom:3px;">來臺旅客</div>
+      <div style="font-size:var(--fs-kpi);color:var(--tx);font-weight:700;line-height:1.2;">368.3<span style="font-size:var(--fs-label);font-weight:400;">萬</span>
+        <span style="font-size:var(--fs-label);color:var(--green);font-weight:500;">↑2.6%</span></div>
+      <div style="font-size:var(--fs-note);color:var(--tx3);margin-top:2px;">5月單月 69.3萬・月增 -8.7%</div>
+    </div>
+    <div style="background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:8px 10px;">
+      <div style="font-size:var(--fs-label);color:var(--red);font-weight:500;margin-bottom:3px;">國人出國</div>
+      <div style="font-size:var(--fs-kpi);color:var(--tx);font-weight:700;line-height:1.2;">882.4<span style="font-size:var(--fs-label);font-weight:400;">萬</span>
+        <span style="font-size:var(--fs-label);color:var(--red);font-weight:500;">↑17.8%</span></div>
+      <div style="font-size:var(--fs-note);color:var(--tx3);margin-top:2px;">5月單月 170.3萬・月增 -3.0%</div>
+    </div>
+  </div>
 </div>
 
 <!-- ① 來台旅客人數統計 -->
@@ -2257,13 +2280,13 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 </div>
 
 <!-- ③ 來台國籍分析 -->
-<div class="lbl" style="padding:10px 18px 6px;"><span>③ 來台旅客國籍分析（2025年 TOP 6）</span></div>
+<div class="lbl" style="padding:10px 18px 6px;"><span>③ 來台旅客國籍分析（2026年1–5月 TOP 6）</span></div>
 <div style="margin:0 18px;background:var(--sf);border-radius:var(--r);padding:12px;border:1px solid var(--bd);">
   <div id="inboundBars"></div>
 </div>
 
 <!-- ④ 出國目的地分析 -->
-<div class="lbl" style="padding:10px 18px 6px;"><span>④ 國人出國目的地（2025年 TOP 6）</span></div>
+<div class="lbl" style="padding:10px 18px 6px;"><span>④ 國人出國目的地（2026年1–5月 TOP 6）</span></div>
 <div style="margin:0 18px;background:var(--sf);border-radius:var(--r);padding:12px;border:1px solid var(--bd);">
   <div id="outboundBars"></div>
 </div>
@@ -7633,6 +7656,14 @@ function loadAITourResult(){ /* static content */ }
 
 // 觀光署硬編碼備援文章（真實URL）
 const OFFICIAL_NEWS=[
+  {date:'2026/06/17',title:'日本護照規費最高調降7,000日圓 觀光署赴日深化JATA及阪急合作促日客來臺',
+   url:'https://www.tad.gov.tw/m1.aspx?sNo=0001001'},
+  {date:'2026/06/15',title:'觀光署3處國家風景區榮獲第10屆國家環境教育獎 展現永續觀光成果',
+   url:'https://www.tad.gov.tw/m1.aspx?sNo=0001001'},
+  {date:'2026/06/12',title:'2026香港國際旅遊展臺灣館開幕 港澳為第2大客源市場逾131萬人次',
+   url:'https://www.tad.gov.tw/m1.aspx?sNo=0001001'},
+  {date:'2026/06/12',title:'馬尼拉台灣旅展登場 菲律賓Q1來臺破21萬人次年增43% 穩居東南亞之冠',
+   url:'https://www.tad.gov.tw/m1.aspx?sNo=0001001'},
   {date:'2026/04',title:'台灣觀光推廣東京！日本黃金週來台旅客搜尋量增154%',
    url:'https://www.taiwan.net.tw/m1.aspx?sNo=0001001'},
   {date:'2026/03/16',title:'2026台灣燈會圓滿閉幕 逾千萬人次見證嘉義新魅力',
@@ -7707,7 +7738,7 @@ function parseNewsDate(str){
 }
 
 // ── 觀光署最新消息（顯示3則，其餘收合，超過1年自動移除）─
-function renderOfficialNews(){
+async function renderOfficialNews(){
   const el   = document.getElementById('officialNewsFeed');
   const extra= document.getElementById('officialNewsExtra');
   const ts   = document.getElementById('officialNewsTime');
@@ -7715,26 +7746,64 @@ function renderOfficialNews(){
   if(!el) return;
 
   const cutoff = new Date(); cutoff.setFullYear(cutoff.getFullYear()-1);
-  const tagColors={
-    '2026/04':'var(--ac)','2026/03':'var(--blue)','2026/03/16':'var(--blue)',
-    '2026/03/02':'var(--blue)','2025/12/29':'#A78BFA','2025/11/25':'var(--green)'
-  };
+  const palette=['var(--ac)','var(--blue)','var(--green)','#A78BFA','#E05C5C','var(--ac2)'];
 
-  // 過濾超過1年的，依日期新→舊排序
-  const valid = OFFICIAL_NEWS
-    .filter(n=>parseNewsDate(n.date)>=cutoff)
-    .sort((a,b)=>parseNewsDate(b.date)-parseNewsDate(a.date));
-
-  const first3 = valid.slice(0,3);
-  const rest   = valid.slice(3);
-
-  el.innerHTML = first3.map(n=>renderNewsItem(n, tagColors[n.date]||'var(--ac2)')).join('');
-  if(extra){
-    extra.innerHTML = rest.map(n=>renderNewsItem(n, tagColors[n.date]||'var(--ac2)')).join('');
-    extra.style.display = 'none';
+  // 統一渲染：顯示3則、其餘收合
+  function paint(list, stampText){
+    const valid = list
+      .filter(n=>parseNewsDate(n.date)>=cutoff)
+      .sort((a,b)=>parseNewsDate(b.date)-parseNewsDate(a.date));
+    const first3=valid.slice(0,3), rest=valid.slice(3);
+    el.innerHTML = first3.map((n,i)=>renderNewsItem(n, palette[i%palette.length])).join('');
+    if(extra){
+      extra.innerHTML = rest.map((n,i)=>renderNewsItem(n, palette[(i+3)%palette.length])).join('');
+      extra.style.display='none';
+    }
+    if(btn) btn.style.display = rest.length>0 ? 'block' : 'none';
+    if(ts)  ts.textContent = stampText || (valid.length ? valid[0].date+' 最新' : '');
   }
-  if(btn) btn.style.display = rest.length>0 ? 'block' : 'none';
-  if(ts) ts.textContent = valid.length>0 ? valid[0].date+' 最新' : '';
+
+  // 1) 先用寫死備援立即顯示（不開天窗）
+  paint(OFFICIAL_NEWS, '');
+
+  // 2) 嘗試抓觀光署官方 RSS（admin.taiwan.net.tw/fapi/rss/1）
+  try{
+    const rssUrl='https://admin.taiwan.net.tw/fapi/rss/1';
+    const proxyUrl=`https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`;
+    const resp=await fetch(proxyUrl,{signal:AbortSignal.timeout(8000)});
+    if(!resp.ok) throw new Error('fetch failed');
+    const data=await resp.json();
+    const xml=new DOMParser().parseFromString(data.contents,'text/xml');
+    const raw=[...xml.querySelectorAll('item')];
+    if(!raw.length) throw new Error('no items');
+
+    const items=raw.map(item=>{
+      const title=(item.querySelector('title')?.textContent||'').trim();
+      const link=item.querySelector('link')?.textContent||'#';
+      const pub=item.querySelector('pubDate')?.textContent||'';
+      const d=pub?new Date(pub):new Date(0);
+      const date=pub?`${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`:'';
+      return {date,title,url:link};
+    }).filter(n=>n.title && n.date);
+
+    if(items.length){
+      paint(items, `${new Date().getMonth()+1}/${new Date().getDate()} 自動更新`);
+      try{
+        localStorage.setItem('officialNewsCache',JSON.stringify(items));
+        localStorage.setItem('officialNewsCachedAt',String(Date.now()));
+      }catch(e){}
+    }
+  }catch(e){
+    // 3) RSS 失敗 → 讀1小時內快取，否則維持寫死備援
+    try{
+      const cached=localStorage.getItem('officialNewsCache');
+      const cachedAt=parseInt(localStorage.getItem('officialNewsCachedAt')||'0');
+      if(cached && Date.now()-cachedAt<3600000){
+        const cItems=JSON.parse(cached);
+        if(cItems.length) paint(cItems, '快取資料');
+      }
+    }catch(e2){}
+  }
 }
 
 // ── 旅遊新聞（7天內，顯示3則，超過3個月移除，新→舊排序）─
@@ -8253,42 +8322,41 @@ function buildBirthChart(){
 }
 
 const INBOUND_2025 = [
-  {name:'日本',    v:148.3, pct:17.3, col:'#E05C5C'},
-  {name:'港澳',    v:131.0, pct:15.3, col:'#F59E0B'},
-  {name:'韓國',    v:101.7, pct:11.9, col:'#3B82F6'},
-  {name:'美國',    v:71.5,  pct:8.3,  col:'#8B5CF6'},
-  {name:'大陸',    v:63.7,  pct:7.4,  col:'#E85D26'},
-  {name:'菲律賓',  v:62.7,  pct:7.3,  col:'#10B981'},
+  {name:'日本',    pct:15.9, col:'#E05C5C'},
+  {name:'韓國',    pct:13.1, col:'#3B82F6'},
+  {name:'香港',    pct:12.1, col:'#F59E0B'},
+  {name:'菲律賓',  pct:9.4,  col:'#10B981'},
+  {name:'美國',    pct:8.7,  col:'#8B5CF6'},
+  {name:'中國大陸',pct:7.1,  col:'#E85D26'},
 ];
 const OUTBOUND_2025 = [
-  {name:'日本',  v:614,  pct:35.4, col:'#E05C5C'},
-  {name:'中國',  v:280,  pct:16.1, col:'#F59E0B'},
-  {name:'港澳',  v:260,  pct:15.0, col:'#3B82F6'},
-  {name:'越南',  v:120,  pct:6.9,  col:'#10B981'},
-  {name:'泰國',  v:95,   pct:5.5,  col:'#8B5CF6'},
-  {name:'美國',  v:55,   pct:3.2,  col:'#6366F1'},
+  {name:'日本',    pct:37.0, col:'#E05C5C'},
+  {name:'中國大陸',pct:17.2, col:'#E85D26'},
+  {name:'韓國',    pct:10.3, col:'#3B82F6'},
+  {name:'香港',    pct:8.3,  col:'#F59E0B'},
+  {name:'越南',    pct:5.7,  col:'#10B981'},
+  {name:'泰國',    pct:5.2,  col:'#8B5CF6'},
 ];
 
 function buildHBarChart(containerId, data, unit){
   const box=document.getElementById(containerId); if(!box) return;
-  const maxV=data[0].v;
+  const maxV=data[0].pct;
   box.innerHTML=data.map(d=>{
-    const w=Math.max((d.v/maxV)*100,2);
-    const wide=w>22;  // 條夠寬才把%放進條內
+    const w=Math.max((d.pct/maxV)*100,2);
+    const wide=w>30;  // 條夠寬才把%放進條內
     const pctInner=wide?`<span class="hbar-pct">${d.pct}%</span>`:'';
     const pctOuter=wide?'':`<span class="hbar-pct out">${d.pct}%</span>`;
     return `<div class="hbar-row tall">
       <span class="hbar-name">${d.name}</span>
       <span class="hbar-track"><span class="hbar-fill" style="width:${w}%;background:${d.col};">${pctInner}</span></span>${pctOuter}
-      <span class="hbar-val" style="color:${d.col};">${d.v}${unit}</span>
     </div>`;
   }).join('');
 }
 
 function buildTourCharts(){
   buildTourChart();
-  buildHBarChart('inboundBars', INBOUND_2025, '萬');
-  buildHBarChart('outboundBars', OUTBOUND_2025, '萬');
+  buildHBarChart('inboundBars', INBOUND_2025);
+  buildHBarChart('outboundBars', OUTBOUND_2025);
 }
 
 function buildTourChart(){
