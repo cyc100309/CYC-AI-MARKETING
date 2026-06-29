@@ -700,6 +700,44 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   .yt th:first-child,.yt td:first-child{width:auto !important;}
   .yt th:nth-child(2),.yt th:nth-child(3),.yt th:nth-child(4){width:auto !important;}
 }
+
+/* ── 單位選擇封面 ───────────────────────────────────────────── */
+.cover-wrap{width:100%;max-width:440px;margin:0 auto;font-family:'Noto Sans TC',sans-serif;}
+.cover-title{font-size:21px;}
+.cover-units{display:grid;grid-template-columns:1fr;gap:12px;margin-top:24px;}
+.ucard{position:relative;display:flex;flex-direction:column;gap:7px;
+  background:linear-gradient(150deg,rgba(26,45,69,.9),rgba(16,30,46,.9));
+  border:1px solid var(--brand);border-radius:16px;padding:17px 18px;cursor:pointer;text-align:left;
+  font-family:'Noto Sans TC',sans-serif;overflow:hidden;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;}
+.ucard::after{content:'';position:absolute;inset:0;border-radius:16px;pointer-events:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);}
+.ucard:hover{transform:translateY(-3px);box-shadow:0 10px 28px -12px var(--brand);}
+.ucard:focus-visible{outline:2px solid var(--brand);outline-offset:2px;}
+.ucard-dim{border-style:dashed;opacity:.72;}
+.ucard-dim:hover{opacity:.92;}
+.ucard-top{display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:3px;}
+.ucard-mono{width:42px;height:42px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:700;font-family:'Noto Sans TC',sans-serif;
+  border:1.5px solid;border-radius:11px;background:rgba(255,255,255,.02);}
+.ucard-badge{font-size:9px;font-weight:700;border-radius:8px;padding:3px 8px;letter-spacing:.5px;
+  font-family:'DM Mono',monospace;}
+.ucard-name{font-size:16px;font-weight:700;color:#F5F0E6;letter-spacing:.5px;}
+.ucard-sub{font-size:11px;color:#A8B4C0;line-height:1.55;}
+.ucard-go{margin-top:4px;font-size:11px;font-weight:600;color:var(--brand);letter-spacing:1px;
+  font-family:'DM Mono',monospace;opacity:0;transform:translateX(-4px);transition:opacity .18s,transform .18s;}
+.ucard:hover .ucard-go{opacity:1;transform:translateX(0);}
+.cover-tools{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px;}
+.utool{display:flex;align-items:center;gap:14px;background:#13202E;border:1px solid #2A3A4A;
+  border-radius:14px;padding:14px 18px;cursor:pointer;text-align:left;font-family:'Noto Sans TC',sans-serif;
+  transition:border-color .18s,background .18s;}
+.utool:hover{border-color:#C8963E;background:#16263A;}
+.utool:focus-visible{outline:2px solid #C8963E;outline-offset:2px;}
+.utool-body{flex:1;}
+.utool-name{font-size:14px;font-weight:700;color:#F5F0E6;}
+.utool-sub{font-size:10px;color:#9AA8B6;line-height:1.5;margin-top:2px;}
+.utool-arrow{font-size:16px;color:#C8963E;flex-shrink:0;}
+
 @media (min-width:768px){
   body{max-width:none !important;padding-left:240px !important;padding-right:0 !important;}
   .app{max-width:1180px;margin:0 auto;padding-bottom:48px !important;}
@@ -723,8 +761,20 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   .ni-l{font-size:calc(15px * var(--fs)) !important;}
   .ni-l br{display:none;}
 
-  /* 全螢幕覆蓋頁（封面/說明書/檢查）桌機置中收斂 */
-  #unitCover,#unitCheckPage,#guidePage{padding-left:240px;}
+  /* 全螢幕覆蓋頁（說明書/檢查）桌機置中收斂；封面本身無側欄、不偏移 */
+  #unitCheckPage,#guidePage{padding-left:240px;}
+  #unitCover{padding-left:22px;padding-right:22px;}
+  .cover-wrap{max-width:980px;}
+  .cover-title{font-size:30px;}
+  .cover-units{grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px;}
+  .ucard{padding:22px 22px;border-radius:18px;gap:9px;}
+  .ucard-mono{width:48px;height:48px;font-size:25px;border-radius:13px;}
+  .ucard-name{font-size:18px;}
+  .ucard-sub{font-size:12px;}
+  .cover-tools{grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;max-width:660px;margin-left:auto;margin-right:auto;}
+  .utool{padding:16px 20px;}
+  .utool-name{font-size:15px;}
+  .utool-sub{font-size:11px;}
   /* 桌機無底部導覽，浮動字級鈕落到右下角 */
   #fsFab{bottom:28px;right:28px;}
 
@@ -750,76 +800,89 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <body>
 
 <!-- 單位選擇封面 -->
-<div id="unitCover" style="position:fixed;inset:0;z-index:100000;background:#0F1923;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 22px;overflow-y:auto;">
-  <div style="text-align:center;margin-bottom:8px;">
-    <div style="font-size:11px;color:#C8963E;letter-spacing:3px;font-family:'DM Mono',monospace;">CYC AI MARKETING</div>
-    <div style="font-size:22px;font-weight:700;color:#F5F0E6;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;">
-      救國團・智慧行銷儀表板
-      <span style="font-size:10px;font-weight:700;color:#0F1923;background:#C8963E;border-radius:6px;padding:2px 7px;letter-spacing:1px;font-family:'DM Mono',monospace;vertical-align:middle;">BETA</span>
+<div id="unitCover" style="position:fixed;inset:0;z-index:100000;background:radial-gradient(120% 90% at 50% -10%,#16273B 0%,#0F1923 55%,#0B141D 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 22px;overflow-y:auto;">
+  <div class="cover-wrap">
+    <div style="text-align:center;">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;font-size:11px;color:#C8963E;letter-spacing:4px;font-family:'DM Mono',monospace;">
+        <span style="width:24px;height:1px;background:linear-gradient(90deg,transparent,#C8963E);display:inline-block;"></span>
+        CYC AI MARKETING
+        <span style="width:24px;height:1px;background:linear-gradient(90deg,#C8963E,transparent);display:inline-block;"></span>
+      </div>
+      <div class="cover-title" style="font-weight:700;color:#F5F0E6;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
+        救國團・智慧行銷儀表板
+        <span style="font-size:10px;font-weight:700;color:#0F1923;background:#C8963E;border-radius:6px;padding:3px 8px;letter-spacing:1px;font-family:'DM Mono',monospace;">BETA</span>
+      </div>
+      <div style="font-size:13px;color:#7A8896;margin-top:8px;letter-spacing:1px;">請選擇要進入的單位</div>
     </div>
-    <div style="font-size:12px;color:#7A8896;margin-top:6px;">請選擇單位</div>
+    <div id="currentUnitStatus" style="display:none;margin:18px auto 0;font-size:12px;color:#A8B4C0;
+      background:rgba(200,150,62,.08);border:1px solid rgba(200,150,62,.25);border-radius:10px;
+      padding:9px 18px;max-width:460px;text-align:center;line-height:1.6;font-family:'Noto Sans TC',sans-serif;"></div>
+
+    <!-- 單位卡（每個單位一張，桌機三欄） -->
+    <div class="cover-units">
+      <button class="ucard" onclick="enterUnit('kinmen')" style="--brand:#C8963E;">
+        <div class="ucard-top">
+          <div class="ucard-mono" style="border-color:#C8963E;color:#C8963E;">金</div>
+          <div id="statusBadge-kinmen" class="ucard-badge" style="color:#0F1923;background:#C8963E;">公測中</div>
+        </div>
+        <div class="ucard-name">金門戰地文旅</div>
+        <div class="ucard-sub">救國團金門青年活動中心・完整儀表板</div>
+        <div class="ucard-go">進入單位 →</div>
+      </button>
+      <button class="ucard" onclick="enterUnit('jiantan')" style="--brand:#5B9BD5;">
+        <div class="ucard-top">
+          <div class="ucard-mono" style="border-color:#5B9BD5;color:#5B9BD5;">劍</div>
+          <div id="statusBadge-jiantan" class="ucard-badge" style="color:#0F1923;background:#5B9BD5;">公測中</div>
+        </div>
+        <div class="ucard-name">劍潭花園會館</div>
+        <div class="ucard-sub">救國團劍潭青年活動中心・臺北</div>
+        <div class="ucard-go">進入單位 →</div>
+      </button>
+      <button class="ucard" onclick="enterUnit('zengwen')" style="--brand:#4CAF82;">
+        <div class="ucard-top">
+          <div class="ucard-mono" style="border-color:#4CAF82;color:#4CAF82;">曾</div>
+          <div id="statusBadge-zengwen" class="ucard-badge" style="color:#0F1923;background:#4CAF82;">開發中</div>
+        </div>
+        <div class="ucard-name">曾文露樹行旅</div>
+        <div class="ucard-sub">救國團曾文青年活動中心・臺南曾文水庫</div>
+        <div class="ucard-go">進入單位 →</div>
+      </button>
+      <button class="ucard ucard-dim" onclick="enterUnit('other')" style="--brand:#3A4A5A;">
+        <div class="ucard-top">
+          <div class="ucard-mono" style="border-color:#3A4A5A;color:#7A8896;border-style:dashed;">＋</div>
+          <div class="ucard-badge" style="color:#6A7886;background:#0F1923;">待開發</div>
+        </div>
+        <div class="ucard-name" style="color:#C0CAD4;">其他活動中心</div>
+        <div class="ucard-sub">日月潭、墾丁、澄清湖…（陸續開發）</div>
+        <div class="ucard-go" style="color:#6A7886;">敬請期待</div>
+      </button>
+    </div>
+
+    <!-- 工具列（說明書／單位檢查） -->
+    <div class="cover-tools">
+      <button class="utool" onclick="openGuide()">
+        <div class="utool-body">
+          <div class="utool-name">系統說明書</div>
+          <div class="utool-sub">技術與網路資源・資料如何流動</div>
+        </div>
+        <div class="utool-arrow">→</div>
+      </button>
+      <button class="utool" onclick="openUnitCheck()">
+        <div class="utool-body">
+          <div class="utool-name">單位檢查</div>
+          <div class="utool-sub">掃描各單位設定缺漏與資料問題（維護用）</div>
+        </div>
+        <div class="utool-arrow">→</div>
+      </button>
+    </div>
+
+    <div id="otherHint" style="display:none;margin:20px auto 0;font-size:12px;color:#C8963E;
+      background:rgba(200,150,62,.1);border:1px solid rgba(200,150,62,.3);border-radius:10px;padding:11px 18px;max-width:420px;text-align:center;line-height:1.6;">
+      其他單位儀表板開發中，敬請期待。目前已上線：金門戰地文旅、劍潭花園會館、曾文露樹行旅。
+    </div>
+    <div style="margin-top:36px;text-align:center;font-size:10px;color:#4A5866;letter-spacing:1px;">救國團 CYC・AI 智慧行銷 © 2026</div>
   </div>
-  <div id="currentUnitStatus" style="display:none;margin-top:14px;font-size:11px;color:#A8B4C0;
-    background:rgba(200,150,62,.08);border:1px solid rgba(200,150,62,.25);border-radius:10px;
-    padding:8px 16px;max-width:420px;text-align:center;line-height:1.6;font-family:'Noto Sans TC',sans-serif;"></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:420px;margin-top:20px;">
-    <button onclick="enterUnit('kinmen')" style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;
-      background:linear-gradient(135deg,#1A2D45,#13294B);border:1px solid #C8963E;border-radius:16px;
-      padding:16px 16px;cursor:pointer;text-align:left;font-family:'Noto Sans TC',sans-serif;">
-      <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
-        <div style="font-size:28px;">🏝️</div>
-        <div id="statusBadge-kinmen" style="font-size:9px;font-weight:700;color:#0F1923;background:#C8963E;border-radius:8px;padding:2px 7px;letter-spacing:.5px;font-family:'DM Mono',monospace;">公測中</div>
-      </div>
-      <div style="font-size:15px;font-weight:700;color:#F5F0E6;">金門戰地文旅</div>
-      <div style="font-size:10px;color:#A8B4C0;line-height:1.5;">救國團金門青年活動中心・完整儀表板</div>
-    </button>
-    <button onclick="enterUnit('jiantan')" style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;
-      background:linear-gradient(135deg,#1A2D45,#13294B);border:1px solid #5B9BD5;border-radius:16px;
-      padding:16px 16px;cursor:pointer;text-align:left;font-family:'Noto Sans TC',sans-serif;">
-      <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
-        <div style="font-size:28px;">🌳</div>
-        <div id="statusBadge-jiantan" style="font-size:9px;font-weight:700;color:#0F1923;background:#5B9BD5;border-radius:8px;padding:2px 7px;letter-spacing:.5px;font-family:'DM Mono',monospace;">公測中</div>
-      </div>
-      <div style="font-size:15px;font-weight:700;color:#F5F0E6;">劍潭花園會館</div>
-      <div style="font-size:10px;color:#A8B4C0;line-height:1.5;">救國團劍潭青年活動中心・臺北</div>
-    </button>
-    <button onclick="enterUnit('other')" style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;
-      background:#13202E;border:1px dashed #3A4A5A;border-radius:16px;
-      padding:16px 16px;cursor:pointer;text-align:left;font-family:'Noto Sans TC',sans-serif;opacity:.75;">
-      <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
-        <div style="font-size:28px;">🏢</div>
-        <div style="font-size:9px;color:#6A7886;background:#0F1923;border-radius:8px;padding:2px 7px;">開發中</div>
-      </div>
-      <div style="font-size:15px;font-weight:700;color:#C0CAD4;">其他活動中心</div>
-      <div style="font-size:10px;color:#6A7886;line-height:1.5;">日月潭、墾丁…（開發中）</div>
-    </button>
-    <button onclick="openGuide()" style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;
-      background:#13202E;border:1px solid #3A4A5A;border-radius:16px;
-      padding:16px 16px;cursor:pointer;text-align:left;font-family:'Noto Sans TC',sans-serif;">
-      <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
-        <div style="font-size:28px;">📖</div>
-        <div style="font-size:16px;color:#C8963E;">→</div>
-      </div>
-      <div style="font-size:15px;font-weight:700;color:#F5F0E6;">系統說明書</div>
-      <div style="font-size:10px;color:#A8B4C0;line-height:1.5;">技術與網路資源・資料如何流動</div>
-    </button>
-    <button onclick="openUnitCheck()" style="display:flex;align-items:center;gap:14px;
-      background:#13202E;border:1px solid #3A4A5A;border-radius:16px;
-      padding:16px 18px;cursor:pointer;text-align:left;font-family:'Noto Sans TC',sans-serif;grid-column:1 / -1;">
-      <div style="font-size:28px;flex-shrink:0;">🔍</div>
-      <div style="flex:1;">
-        <div style="font-size:15px;font-weight:700;color:#F5F0E6;">單位檢查</div>
-        <div style="font-size:10px;color:#A8B4C0;line-height:1.5;margin-top:2px;">掃描所有單位設定缺漏與資料問題（維護用）</div>
-      </div>
-      <div style="font-size:16px;color:#C8963E;flex-shrink:0;">→</div>
-    </button>
-  </div>
-  <div id="otherHint" style="display:none;margin-top:18px;font-size:12px;color:#C8963E;
-    background:rgba(200,150,62,.1);border:1px solid rgba(200,150,62,.3);border-radius:10px;padding:10px 16px;max-width:340px;text-align:center;line-height:1.6;">
-    🚧 其他單位儀表板開發中，敬請期待！<br>目前先提供金門戰地文旅完整版。
-  </div>
-  <div style="margin-top:32px;font-size:9px;color:#4A5866;">救國團 CYC・AI 智慧行銷 © 2026</div>
 </div>
 
 <!-- 單位檢查頁（維護用，動態填入） -->
@@ -2808,11 +2871,44 @@ const JT_PREV = [
   {m:'十二月',stays:3804,guests:12097,room:47.38,rev:8771569,adr:2306,adr_p:725,rest_am:988220,rest_noon:1367112,rest_pm:1740411,rest_night:232460,rest_total:4328203,venue:{am:200,am_u:0.2016,noon:207,noon_u:0.2087,pm:162,pm_u:0.1633,total:569,total_u:0.1912,total_r:1889976}},
 ];
 
-// ── 依單位選營運資料集（金門用 DEMO，劍潭用 JT）──────────────────
+// ── 曾文露樹行旅 營運數據（開發階段示意資料；待單位提供實際數據後覆蓋）──
+// 註：以下為佔位示意值，反映風景區型活動中心（約72房、團體/露營為主、暑期旺季）的概略樣態，
+//     非真實營收。接上雲端或上傳實際營運表後即會被取代。
+const ZW_CUR = [
+  {m:'一月',stays:980, guests:2940,room:43.91,rev:1568000,adr:1600,adr_p:533,rest_am:120000,rest_noon:380000,rest_pm:210000,rest_night:40000,rest_total:750000, venue:{am:40,am_u:0.0403,noon:55,noon_u:0.0554,pm:30,pm_u:0.0302,total:125,total_u:0.0420,total_r:420000}},
+  {m:'二月',stays:1120,guests:3360,room:55.56,rev:1904000,adr:1700,adr_p:566,rest_am:150000,rest_noon:460000,rest_pm:250000,rest_night:55000,rest_total:915000, venue:{am:48,am_u:0.0530,noon:62,noon_u:0.0685,pm:35,pm_u:0.0387,total:145,total_u:0.0534,total_r:510000}},
+  {m:'三月',stays:1340,guests:4020,room:60.04,rev:2144000,adr:1600,adr_p:533,rest_am:180000,rest_noon:520000,rest_pm:300000,rest_night:60000,rest_total:1060000,venue:{am:60,am_u:0.0605,noon:78,noon_u:0.0786,pm:45,pm_u:0.0454,total:183,total_u:0.0615,total_r:680000}},
+  {m:'四月',stays:1500,guests:4500,room:69.44,rev:2475000,adr:1650,adr_p:550,rest_am:200000,rest_noon:560000,rest_pm:330000,rest_night:70000,rest_total:1160000,venue:{am:70,am_u:0.0729,noon:85,noon_u:0.0885,pm:50,pm_u:0.0521,total:205,total_u:0.0712,total_r:760000}},
+  {m:'五月',stays:1620,guests:4860,room:72.58,rev:2754000,adr:1700,adr_p:566,rest_am:240000,rest_noon:620000,rest_pm:360000,rest_night:80000,rest_total:1300000,venue:{am:85,am_u:0.0857,noon:95,noon_u:0.0958,pm:55,pm_u:0.0554,total:235,total_u:0.0790,total_r:880000}},
+  {m:'六月',stays:1380,guests:4140,room:63.89,rev:2208000,adr:1600,adr_p:533,rest_am:180000,rest_noon:500000,rest_pm:290000,rest_night:55000,rest_total:1025000,venue:{am:62,am_u:0.0646,noon:72,noon_u:0.0750,pm:42,pm_u:0.0437,total:176,total_u:0.0611,total_r:650000}},
+  {m:'七月',stays:1900,guests:5700,room:85.12,rev:3420000,adr:1800,adr_p:600,rest_am:300000,rest_noon:780000,rest_pm:460000,rest_night:110000,rest_total:1650000,venue:{am:110,am_u:0.1109,noon:120,noon_u:0.1210,pm:70,pm_u:0.0706,total:300,total_u:0.1008,total_r:1120000}},
+  {m:'八月',stays:1980,guests:5940,room:88.71,rev:3564000,adr:1800,adr_p:600,rest_am:320000,rest_noon:820000,rest_pm:480000,rest_night:120000,rest_total:1740000,venue:{am:115,am_u:0.1159,noon:125,noon_u:0.1260,pm:72,pm_u:0.0726,total:312,total_u:0.1048,total_r:1180000}},
+  {m:'九月',stays:1260,guests:3780,room:58.33,rev:2016000,adr:1600,adr_p:533,rest_am:170000,rest_noon:480000,rest_pm:280000,rest_night:50000,rest_total:980000, venue:{am:55,am_u:0.0573,noon:68,noon_u:0.0708,pm:40,pm_u:0.0416,total:163,total_u:0.0566,total_r:600000}},
+  {m:'十月',stays:1440,guests:4320,room:64.52,rev:2304000,adr:1600,adr_p:533,rest_am:190000,rest_noon:540000,rest_pm:310000,rest_night:65000,rest_total:1105000,venue:{am:65,am_u:0.0655,noon:80,noon_u:0.0806,pm:48,pm_u:0.0484,total:193,total_u:0.0648,total_r:720000}},
+  {m:'十一月',stays:1300,guests:3900,room:58.30,rev:2080000,adr:1600,adr_p:533,rest_am:170000,rest_noon:500000,rest_pm:290000,rest_night:55000,rest_total:1015000,venue:{am:58,am_u:0.0604,noon:70,noon_u:0.0729,pm:42,pm_u:0.0437,total:170,total_u:0.0590,total_r:640000}},
+  {m:'十二月',stays:1180,guests:3540,room:52.87,rev:1888000,adr:1600,adr_p:533,rest_am:150000,rest_noon:450000,rest_pm:260000,rest_night:48000,rest_total:908000, venue:{am:50,am_u:0.0504,noon:62,noon_u:0.0625,pm:36,pm_u:0.0363,total:148,total_u:0.0497,total_r:560000}},
+];
+const ZW_PREV = [
+  {m:'一月',stays:900, guests:2700,room:40.32,rev:1440000,adr:1600,adr_p:533,rest_am:110000,rest_noon:360000,rest_pm:200000,rest_night:38000,rest_total:708000, venue:{am:38,am_u:0.0383,noon:52,noon_u:0.0524,pm:28,pm_u:0.0282,total:118,total_u:0.0396,total_r:400000}},
+  {m:'二月',stays:1050,guests:3150,room:52.08,rev:1785000,adr:1700,adr_p:566,rest_am:140000,rest_noon:430000,rest_pm:240000,rest_night:50000,rest_total:860000, venue:{am:45,am_u:0.0497,noon:58,noon_u:0.0641,pm:32,pm_u:0.0354,total:135,total_u:0.0497,total_r:480000}},
+  {m:'三月',stays:1250,guests:3750,room:56.01,rev:2000000,adr:1600,adr_p:533,rest_am:170000,rest_noon:490000,rest_pm:280000,rest_night:55000,rest_total:995000, venue:{am:55,am_u:0.0554,noon:72,noon_u:0.0726,pm:40,pm_u:0.0403,total:167,total_u:0.0561,total_r:620000}},
+  {m:'四月',stays:1400,guests:4200,room:64.81,rev:2310000,adr:1650,adr_p:550,rest_am:185000,rest_noon:520000,rest_pm:300000,rest_night:62000,rest_total:1067000,venue:{am:64,am_u:0.0667,noon:78,noon_u:0.0813,pm:46,pm_u:0.0479,total:188,total_u:0.0653,total_r:700000}},
+  {m:'五月',stays:1500,guests:4500,room:67.20,rev:2550000,adr:1700,adr_p:566,rest_am:220000,rest_noon:580000,rest_pm:330000,rest_night:72000,rest_total:1202000,venue:{am:78,am_u:0.0786,noon:88,noon_u:0.0887,pm:50,pm_u:0.0504,total:216,total_u:0.0726,total_r:810000}},
+  {m:'六月',stays:1280,guests:3840,room:59.26,rev:2048000,adr:1600,adr_p:533,rest_am:165000,rest_noon:460000,rest_pm:270000,rest_night:50000,rest_total:945000, venue:{am:58,am_u:0.0604,noon:68,noon_u:0.0708,pm:38,pm_u:0.0395,total:164,total_u:0.0569,total_r:600000}},
+  {m:'七月',stays:1780,guests:5340,room:79.75,rev:3204000,adr:1800,adr_p:600,rest_am:280000,rest_noon:730000,rest_pm:430000,rest_night:100000,rest_total:1540000,venue:{am:102,am_u:0.1028,noon:112,noon_u:0.1129,pm:65,pm_u:0.0655,total:279,total_u:0.0937,total_r:1040000}},
+  {m:'八月',stays:1850,guests:5550,room:82.89,rev:3330000,adr:1800,adr_p:600,rest_am:300000,rest_noon:760000,rest_pm:450000,rest_night:110000,rest_total:1620000,venue:{am:108,am_u:0.1089,noon:118,noon_u:0.1190,pm:68,pm_u:0.0686,total:294,total_u:0.0988,total_r:1100000}},
+  {m:'九月',stays:1180,guests:3540,room:54.63,rev:1888000,adr:1600,adr_p:533,rest_am:160000,rest_noon:450000,rest_pm:260000,rest_night:46000,rest_total:916000, venue:{am:52,am_u:0.0541,noon:64,noon_u:0.0666,pm:36,pm_u:0.0375,total:152,total_u:0.0528,total_r:560000}},
+  {m:'十月',stays:1340,guests:4020,room:60.04,rev:2144000,adr:1600,adr_p:533,rest_am:178000,rest_noon:510000,rest_pm:290000,rest_night:60000,rest_total:1038000,venue:{am:60,am_u:0.0605,noon:75,noon_u:0.0756,pm:44,pm_u:0.0444,total:179,total_u:0.0601,total_r:670000}},
+  {m:'十一月',stays:1220,guests:3660,room:54.71,rev:1952000,adr:1600,adr_p:533,rest_am:160000,rest_noon:470000,rest_pm:270000,rest_night:50000,rest_total:950000, venue:{am:54,am_u:0.0562,noon:66,noon_u:0.0687,pm:40,pm_u:0.0416,total:160,total_u:0.0555,total_r:600000}},
+  {m:'十二月',stays:1100,guests:3300,room:49.28,rev:1760000,adr:1600,adr_p:533,rest_am:140000,rest_noon:420000,rest_pm:245000,rest_night:44000,rest_total:849000, venue:{am:46,am_u:0.0464,noon:58,noon_u:0.0585,pm:34,pm_u:0.0343,total:138,total_u:0.0464,total_r:520000}},
+];
+
+// ── 依單位選營運資料集（金門用 DEMO，劍潭用 JT，曾文用 ZW）──────────
 function occDataset(){
-  return (typeof getUnit==='function' && getUnit()==='jiantan')
-    ? {cur:JT_CUR, prev:JT_PREV}
-    : {cur:DEMO_CUR, prev:DEMO_PREV};
+  const u=(typeof getUnit==='function')?getUnit():'kinmen';
+  if(u==='jiantan') return {cur:JT_CUR, prev:JT_PREV};
+  if(u==='zengwen') return {cur:ZW_CUR, prev:ZW_PREV};
+  return {cur:DEMO_CUR, prev:DEMO_PREV};
 }
 
 // ── State ─────────────────────────────────────────────────────
@@ -3020,9 +3116,9 @@ function renderMonth(i){
   // 場地說明（依單位）
   const vnote=document.getElementById('venueNote');
   if(vnote){
-    const isJT=(typeof getUnit==='function'&&getUnit()==='jiantan');
+    const isJT=(typeof getUnit==='function'&&getUnit()!=='kinmen');
     vnote.textContent=isJT
-      ? '場地收入計入研習服務（早場／午場／晚場）。資料來源：805_6_1 使用率統計表。'
+      ? '場地收入計入研習服務（早場／午場／晚場）。資料來源：使用率統計表。'
       : '場地收入計入研習服務。金門若有研習／會議場次將自動顯示。';
   }
 
@@ -3106,7 +3202,8 @@ function updateCurrentUnitStatus(){
   if(!box) return;
   let chosen=null;
   try{ chosen=localStorage.getItem('chosenUnit'); }catch(e){}
-  const NAMES={kinmen:'金門戰地文旅', jiantan:'劍潭花園會館'};
+  const NAMES={};
+  if(typeof UNITS!=='undefined'){ Object.keys(UNITS).forEach(k=>{ NAMES[k]=UNITS[k].logo; }); }
   if(chosen && NAMES[chosen]){
     box.innerHTML='目前記住的單位：<b style="color:#E8B86D;">'+NAMES[chosen]+'</b>（下次開啟將自動進入）';
     box.style.display='block';
@@ -3115,17 +3212,26 @@ function updateCurrentUnitStatus(){
   }
 }
 
+// 封面：部分單位的進入驗證碼（暫時性，之後要開放就把該行刪掉即可）
+const UNIT_GATE = { zengwen:'0000' };
+
 // 封面：選擇單位（裝置記憶版）
 function enterUnit(unit){
-  if(unit==='kinmen'){
+  if(typeof UNITS!=='undefined' && UNITS[unit]){
+    // 需要驗證碼的單位：先驗證，通過才進入
+    const need = UNIT_GATE[unit];
+    if(need){
+      const ok = (typeof sessionStorage!=='undefined') && sessionStorage.getItem('gate_'+unit)==='1';
+      if(!ok){
+        const ans = prompt('「'+UNITS[unit].logo+'」尚在開發中，請輸入驗證碼：');
+        if(ans===null) return;               // 取消：留在封面
+        if(ans.trim()!==need){ alert('驗證碼錯誤，無法進入。'); return; }
+        try{ sessionStorage.setItem('gate_'+unit,'1'); }catch(e){}  // 本次開啟內記住，免重複輸入
+      }
+    }
     const cover=document.getElementById('unitCover');
     if(cover) cover.style.display='none';
-    try{ localStorage.setItem('chosenUnit','kinmen'); }catch(e){}
-    bootUnit();
-  } else if(unit==='jiantan'){
-    const cover=document.getElementById('unitCover');
-    if(cover) cover.style.display='none';
-    try{ localStorage.setItem('chosenUnit','jiantan'); }catch(e){}
+    try{ localStorage.setItem('chosenUnit',unit); }catch(e){}
     bootUnit();
   } else {
     const hint=document.getElementById('otherHint');
@@ -3221,7 +3327,8 @@ function closeUnitCheck(){
 // 各單位的內建資料集對應（檢查用，不依賴目前單位）
 function unitDatasets(key){
   const occ={ kinmen:{cur:typeof DEMO_CUR!=='undefined'?DEMO_CUR:null, prev:typeof DEMO_PREV!=='undefined'?DEMO_PREV:null},
-              jiantan:{cur:typeof JT_CUR!=='undefined'?JT_CUR:null, prev:typeof JT_PREV!=='undefined'?JT_PREV:null} };
+              jiantan:{cur:typeof JT_CUR!=='undefined'?JT_CUR:null, prev:typeof JT_PREV!=='undefined'?JT_PREV:null},
+              zengwen:{cur:typeof ZW_CUR!=='undefined'?ZW_CUR:null, prev:typeof ZW_PREV!=='undefined'?ZW_PREV:null} };
   return occ[key]||{cur:null,prev:null};
 }
 // 驗證單一營運資料列格式，回傳問題陣列
@@ -3433,12 +3540,16 @@ function applyUnitMemory(){
   try{ applyUnitStatusBadges(); }catch(e){}
   let chosen=null;
   try{ chosen=localStorage.getItem('chosenUnit'); }catch(e){}
-  if(chosen==='kinmen'){
-    applyUnitBranding('kinmen');
-    const cover=document.getElementById('unitCover');
-    if(cover) cover.style.display='none';
-  } else if(chosen==='jiantan'){
-    applyUnitBranding('jiantan');
+  if(chosen && typeof UNITS!=='undefined' && UNITS[chosen]){
+    // 有驗證碼的單位：即使被裝置記住，本次開啟仍需先通過驗證碼才自動進入
+    const need=(typeof UNIT_GATE!=='undefined')?UNIT_GATE[chosen]:null;
+    const passed=(typeof sessionStorage!=='undefined')&&sessionStorage.getItem('gate_'+chosen)==='1';
+    if(need && !passed){
+      // 未通過驗證：停在封面，走正常 enterUnit 驗證流程
+      try{ updateCurrentUnitStatus(); }catch(e){}
+      return;
+    }
+    applyUnitBranding(chosen);
     const cover=document.getElementById('unitCover');
     if(cover) cover.style.display='none';
   } else {
@@ -3522,6 +3633,35 @@ const UNITS={
     // 行事曆活動自動抓取：臺北旅遊網 Open API（背景補充，抓不到不影響手填清單）
     // base 後會自動帶 ?begin=當年1/1&end=當年12/31&page=N，透過 allorigins 代理呼叫
     eventsApi:{ base:'https://www.travel.taipei/open-api/zh-tw/Events/Calendar', pages:12, src:'臺北旅遊網' }
+  },
+  zengwen:{
+    logo:'曾文露樹行旅', name:'救國團曾文青年活動中心', city:'臺南市',
+    status:'dev',  // 狀態：live已上線／beta公測中／dev開發中／planned待開發
+    compMarket:'曾文水庫・大臺南旅宿市場',  // 競爭房價頁副標：市場名稱
+    ordersApi:'',      // 曾文 訂單 API（doGet）尚未建立，待後端部署後填入
+    sheetsUrl:'',      // 開發階段：尚未建立曾文自己的營運試算表
+    seedKey:null,      // 曾文暫無種子資料
+    aiIntro:'你現在服務的客戶是「救國團曾文青年活動中心（曾文露樹行旅）」，提供住宿、中式餐廳、研習／會議與露營場地三項服務，位於臺南市楠西區密枝里、曾文水庫風景區內（距水壩約6公里）。主要客源含學校與社團研習營隊、機關團體訓練、家庭旅遊、生態觀察團與露營客。\n\n你深知曾文的特殊性：地處山林水庫風景區、依山傍水、生態資源豐富（珍稀鳥類、蝶類、螢火蟲），是救國團最貼近自然與農村的活動中心之一；交通需自行開車或轉乘客運、離主要市區較遠；旺季集中暑假營隊與螢火蟲季、賞景旅遊，淡季需靠團體研習與露營訂單填補。',
+    aiProfile:`- 定位：隸屬救國團（非營利組織）之青年活動中心，依教育部「青年活動中心住宿設施管理及安全維護辦法」設立，設施經營非以營利為目的，主要服務學生、未滿四十歲社會青年、公益／教育／研習活動人員等特定對象。
+- 區位特色：位於曾文水庫風景區內、台南市楠西區，群山環抱、依山傍水，為白色現代化建築，是工商、學校團體辦理教育研習、訓練、休閒旅遊、生態觀察的場地。
+- 住宿結構：約72間客房，含獨棟別墅（梅、愛廬）、清淨／舒適套房、溫馨家庭套房、六人團體房等，可同時容納約300～400人膳宿；另設露營地，可容納約800人露營。
+- 三大部門：住宿、餐飲、研習／會議與露營場地，三者皆為核心。團體膳宿與研習承接能力為主要營收來源。
+- 設施：大禮堂（可容300人集會）、會議室、多功能教室、交誼廳、咖啡座、球場、游泳池、3處露營地與山訓體能場、自行車租借、便利商店（販售楊桃／芒果／梅子等在地農特產蜜餞）。
+- 市場現況：屬風景區型活動中心，散客受天氣與旅遊淡旺季影響大；穩定營收靠學校營隊、機關研習與露營團體。鄰近競品多為水庫周邊民宿、台南山區旅宿與其他研習場地。
+- 觀光連結：緊鄰曾文水庫（全台最大水庫）、曾文之眼地標、健行步道、東口野營地、鳥宮花園等景點，賞景、生態觀察與戶外活動為主要賣點。
+- （以下為待補充的單位細節，可由曾文單位補上：實際各房型數量與定價、通路結構、團隊規模、餐飲與場地實際營收、經營者方針與行銷偏好）`,
+    aiMarket:'【市場背景】\n曾文水庫風景區旅遊以賞景、生態觀察、露營與學校／機關團體研習為主，旺季集中暑假營隊與螢火蟲季，散客受天氣與連假影響大；周邊競品含水庫周邊民宿與台南山區旅宿。',
+    useKinmenData:false, // 曾文不帶金門限定的小三通/競品/新聞
+    preferBuiltin:true,  // 開發階段：尚未接雲端同步，先用內建示意資料集
+    // 交通概況分頁：曾文非金門，預設關閉。未來要做台南交通／水庫接駁／自駕路線等主題時，
+    // 把 enabled 改 true、navLabel 改成想要的分頁名稱，再於 page-tri 換上自訂內容。
+    transport:{ enabled:false, navLabel:'交通概況', kinmenBuiltin:false },
+    // 行事曆下方在地新聞來源：曾文用 Google 新聞，抓台南／曾文水庫旅遊與活動分類
+    calNews:{ type:'google', title:'臺南・曾文水庫即時新聞', desc:'自動抓取 Google 新聞中台南旅遊、曾文水庫、楠西／玉井等觀光類消息，預設顯示近三天，較早新聞可點下方展開。標「疑似活動」者可手動填入行事曆。',
+      queries:[ {name:'曾文水庫', q:'曾文水庫 旅遊 OR 景點 OR 活動'},
+                {name:'台南旅遊', q:'台南 旅遊 觀光'},
+                {name:'楠西玉井', q:'楠西 OR 玉井 OR 大埔 活動 OR 景點 OR 農產'},
+                {name:'生態露營', q:'台南 露營 OR 生態 OR 螢火蟲'} ] }
   }
 };
 // 目前單位（依封面選擇 / 裝置記憶；預設金門）
@@ -5351,8 +5491,40 @@ const COMP_JIANTAN = [
     note:'參考房價・台北車站', agoda:'https://www.agoda.com/zh-tw/caesar-park-hotel-taipei_6/hotel/taipei-tw.html' },
 ];
 
+// 曾文露樹行旅：本中心 + 曾文水庫周邊／台南山區對手與參考房價
+// 開發階段示意清單，sheetName 待接上 CSV／雲端時再校正
+// 分兩群：rival=主要對手（水庫風景區同型住宿）、ref=參考房價（台南山區度假指標）
+const COMP_ZENGWEN = [
+  { name:'曾文露樹行旅', shortLabel:'曾文露樹行旅', sheetName:'曾文青年活動中心',
+    cat:'self',  hostel:false, self:true,  price:0, avail:true, rating:8.0,
+    note:'本中心・楠西區曾文水庫', agoda:'https://www.agoda.com/zh-tw/tsengwen-youth-activity-center/hotel/chiayi-tw.html' },
+  // ── 主要對手（rival）──
+  { name:'歐都納山野渡假村', shortLabel:'歐都納渡假村', sheetName:'歐都納山野渡假村',
+    cat:'rival', hostel:false, self:false, price:0, avail:true, rating:8.4,
+    note:'主要對手・大埔曾文水庫', agoda:'' },
+  { name:'桂田休閒旅館', sheetName:'桂田休閒旅館',
+    cat:'rival', hostel:false, self:false, price:0, avail:true, rating:8.1,
+    note:'主要對手・玉井／楠西', agoda:'' },
+  { name:'梅嶺風景區民宿', shortLabel:'梅嶺民宿', sheetName:'梅嶺民宿',
+    cat:'rival', hostel:false, self:false, price:0, avail:true, rating:8.0,
+    note:'主要對手・楠西梅嶺', agoda:'' },
+  { name:'走馬瀨農場', sheetName:'走馬瀨農場',
+    cat:'rival', hostel:false, self:false, price:0, avail:true, rating:8.2,
+    note:'主要對手・大內休閒農場', agoda:'' },
+  // ── 參考房價（ref）──
+  { name:'南元花園休閒農場', shortLabel:'南元農場', sheetName:'南元花園休閒農場',
+    cat:'ref', hostel:false, self:false, price:0, avail:true, rating:8.5,
+    note:'參考房價・柳營度假', agoda:'' },
+  { name:'台南大員皇冠假日酒店', shortLabel:'大員皇冠', sheetName:'台南大員皇冠假日酒店',
+    cat:'ref', hostel:false, self:false, price:0, avail:true, rating:8.8,
+    note:'參考房價・台南市區', agoda:'https://www.agoda.com/zh-tw/crowne-plaza-tainan/hotel/tainan-tw.html' },
+  { name:'關子嶺溫泉旅館', shortLabel:'關子嶺溫泉', sheetName:'關子嶺溫泉旅館',
+    cat:'ref', hostel:false, self:false, price:0, avail:true, rating:8.3,
+    note:'參考房價・白河溫泉區', agoda:'' },
+];
+
 // 各單位競爭對手資料集
-const COMP_DATASETS = { kinmen: COMP_KINMEN, jiantan: COMP_JIANTAN };
+const COMP_DATASETS = { kinmen: COMP_KINMEN, jiantan: COMP_JIANTAN, zengwen: COMP_ZENGWEN };
 
 // 現用清單（會依單位切換）。預設金門，applyUnitCompetitors() 會在進入單位時重設。
 let COMPETITORS = COMP_KINMEN;
@@ -5363,6 +5535,29 @@ function applyUnitCompetitors(){
   COMPETITORS = COMP_DATASETS[u] || COMP_KINMEN;
   // 切到新單位先歸零，等 loadCompData()／雲端拉回再填入
   COMPETITORS.forEach(c=>{ c.price=0; c.avail=true; });
+  // 市場概況「共 N 家」先以本單位對手總數顯示（之後有報價會改用實際報價家數）
+  try{
+    const totalEl=document.getElementById('totalCount');
+    if(totalEl) totalEl.textContent=COMPETITORS.length;
+  }catch(e){}
+  // 走勢圖分組標題：依本單位的分類區塊即時更新（金門三價位／其他單位主要對手＋參考房價）
+  try{
+    const secs=compSections();
+    const tHigh=document.getElementById('histTitleHigh');
+    const tMid=document.getElementById('histTitleMid');
+    const hostelCard=document.getElementById('histCardHostel');
+    if(u==='kinmen'){
+      if(tHigh) tHigh.textContent='高價位（精品/商務/星級）';
+      if(tMid)  tMid.textContent='中價位（一般/套房/民宿）';
+      if(hostelCard) hostelCard.style.display='';
+    }else{
+      const rivalLbl=(secs.find(s=>s.cat==='rival')||{}).label||'主要對手';
+      const refLbl=(secs.find(s=>s.cat==='ref')||{}).label||'參考房價';
+      if(tHigh) tHigh.textContent=rivalLbl;
+      if(tMid)  tMid.textContent=refLbl;
+      if(hostelCard) hostelCard.style.display='none';
+    }
+  }catch(e){}
 }
 
 // 各單位的分類區塊（清單分組、歷史圖分類、長條圖配色都用這個）
@@ -5377,9 +5572,16 @@ const COMP_SECTIONS_JIANTAN=[
   {cat:'rival', label:'主要對手（同級競價）', dot:'#5BE3B3', color:'#5BE3B3'},
   {cat:'ref',   label:'參考房價（高階指標）', dot:'#5B9BD5', color:'#5B9BD5'},
 ];
+const COMP_SECTIONS_ZENGWEN=[
+  {cat:'self',  label:'本中心',    dot:'var(--ac)', color:'#FFE234'},
+  {cat:'rival', label:'主要對手（水庫風景區同型）', dot:'#5BE3B3', color:'#5BE3B3'},
+  {cat:'ref',   label:'參考房價（台南度假指標）', dot:'#5B9BD5', color:'#5B9BD5'},
+];
 function compSections(){
-  return (typeof getUnit==='function' && getUnit()==='jiantan')
-    ? COMP_SECTIONS_JIANTAN : COMP_SECTIONS_KINMEN;
+  const u=(typeof getUnit==='function')?getUnit():'kinmen';
+  if(u==='jiantan') return COMP_SECTIONS_JIANTAN;
+  if(u==='zengwen') return COMP_SECTIONS_ZENGWEN;
+  return COMP_SECTIONS_KINMEN;
 }
 // 分類篩選頁籤（all + 各區塊）依單位
 function compCatTabs(){
@@ -5394,9 +5596,9 @@ function compColorMap(){
 // ── Daily chart with month selector ──────────────────────────
 let dailyMonths=[{year:2026,month:'五月',rows:DEMO_DAILY},null,null];
 let dailyViewIdx=0;
-// 依單位重設日別資料：金門保留五月示範，劍潭暫無逐日資料
+// 依單位重設日別資料：金門保留五月示範，其他單位暫無逐日資料
 function resetDailyForUnit(){
-  if(typeof getUnit==='function' && getUnit()==='jiantan'){
+  if(typeof getUnit==='function' && getUnit()!=='kinmen'){
     dailyMonths=[null,null,null];
   } else {
     dailyMonths=[{year:2026,month:'五月',rows:DEMO_DAILY},null,null];
@@ -5431,11 +5633,11 @@ function updateDailyMonthSelector(){
 
 function buildDailyChart(){
   const slot=dailyMonths[dailyViewIdx];
-  const isJT=(typeof getUnit==='function' && getUnit()==='jiantan');
+  const isJT=(typeof getUnit==='function' && getUnit()!=='kinmen');
   const rows=slot?.rows||(isJT?[]:DEMO_DAILY);
   const title=slot
     ?`${slot.year}年 ${slot.month}・日別房使用率`
-    :(isJT?'本單位尚無逐日資料（上傳 810_3 後顯示）':`示範（請上傳第${dailyViewIdx+1}個月 810_3）`);
+    :(isJT?'本單位尚無逐日資料（上傳逐日表後顯示）':`示範（請上傳第${dailyViewIdx+1}個月 810_3）`);
   const n=rows.length;
   var _fs=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs'))||1.12;
   var _fsc=_fs/1.12;
@@ -5821,7 +6023,10 @@ function saveCompData(){
 let HIST_DATA=null;           // 後端回來的歷史 {unit,dates,hotels}
 // 本中心在歷史表中的名字（依單位）
 function selfHistName(){
-  return (typeof getUnit==='function' && getUnit()==='jiantan') ? '劍潭花園會館' : '金門青年活動中心';
+  const u=(typeof getUnit==='function')?getUnit():'kinmen';
+  if(u==='jiantan') return '劍潭花園會館';
+  if(u==='zengwen') return '曾文露樹行旅';
+  return '金門青年活動中心';
 }
 
 // 多線配色盤（分類圖內各家用不同色，易區分）
@@ -5841,8 +6046,16 @@ const HIST_ABBR_JIANTAN={
   '天閣酒店台北士林':'天閣士林','圓山大飯店':'圓山','天成大飯店':'天成',
   '台北凱撒':'凱撒'
 };
+const HIST_ABBR_ZENGWEN={
+  '曾文露樹行旅':'曾文中心','歐都納渡假村':'歐都納','桂田休閒旅館':'桂田',
+  '梅嶺民宿':'梅嶺民宿','走馬瀨農場':'走馬瀨','南元農場':'南元',
+  '大員皇冠':'大員皇冠','關子嶺溫泉':'關子嶺'
+};
 function histAbbrMap(){
-  return (typeof getUnit==='function' && getUnit()==='jiantan') ? HIST_ABBR_JIANTAN : HIST_ABBR_KINMEN;
+  const u=(typeof getUnit==='function')?getUnit():'kinmen';
+  if(u==='jiantan') return HIST_ABBR_JIANTAN;
+  if(u==='zengwen') return HIST_ABBR_ZENGWEN;
+  return HIST_ABBR_KINMEN;
 }
 
 async function loadHistData(){
@@ -5876,7 +6089,7 @@ function renderAllHistCharts(){
   const days=(HIST_DATA.dates||[]).length;
   if(sub) sub.textContent='共 '+days+' 天紀錄';
 
-  const isJT=(typeof getUnit==='function' && getUnit()==='jiantan');
+  const isJT=(typeof getUnit==='function' && getUnit()!=='kinmen');
   const tHigh=document.getElementById('histTitleHigh');
   const tMid=document.getElementById('histTitleMid');
   const hostelCard=document.getElementById('histCardHostel');
@@ -5886,11 +6099,16 @@ function renderAllHistCharts(){
     if(tHigh) tHigh.textContent='主要對手（同級競價）';
     if(tMid)  tMid.textContent='參考房價（高階指標）';
     if(hostelCard) hostelCard.style.display='none';
-    // 本中心：劍潭約 1500–2500
+    const _secs=compSections();
+    const _rivalLbl=(_secs.find(s=>s.cat==='rival')||{}).label||'主要對手';
+    const _refLbl=(_secs.find(s=>s.cat==='ref')||{}).label||'參考房價';
+    if(tHigh) tHigh.textContent=_rivalLbl;
+    if(tMid)  tMid.textContent=_refLbl;
+    // 本中心走勢
     drawInto('histChartSelf', [selfHistName()], {showSelf:false, lo:1500, hi:2500, tick:200});
-    // 主要對手：固定 1200–2800，每 400，疊本中心對比
+    // 主要對手：疊本中心對比
     drawInto('histChartHigh', histNamesByCat('rival'), {showSelf:true, lo:1200, hi:2800, tick:400});
-    // 參考房價：範圍自動，刻度 500，不疊本中心
+    // 參考房價：範圍自動，不疊本中心
     drawInto('histChartMid',  histNamesByCat('ref'),   {showSelf:false, tick:500});
   } else {
     // 金門：回復原本三價位標題與背包客棧卡片
