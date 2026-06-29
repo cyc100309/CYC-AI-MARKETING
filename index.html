@@ -2642,7 +2642,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <span style="font-size:var(--fs-label);color:var(--ac2);font-weight:500;">🤖 AI 摘要與建議</span>
     <span style="font-size:var(--fs-note);color:var(--tx3);" id="miraiAiTs"></span>
   </div>
-  <div id="miraiAiText" style="font-size:var(--fs-label);color:var(--tx2);line-height:1.7;padding:0 10px 8px;">
+  <div id="miraiAiText" style="font-size:var(--fs-label);color:var(--tx);line-height:1.7;padding:0 10px 8px;">
     
   </div>
 </div>
@@ -2664,7 +2664,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <span style="font-size:var(--fs-label);color:var(--ac2);font-weight:500;">🤖 AI 摘要與建議</span>
     <span style="font-size:var(--fs-note);color:var(--tx3);" id="twtrendAiTs"></span>
   </div>
-  <div id="twtrendAiText" style="font-size:var(--fs-label);color:var(--tx2);line-height:1.7;padding:0 10px 8px;">
+  <div id="twtrendAiText" style="font-size:var(--fs-label);color:var(--tx);line-height:1.7;padding:0 10px 8px;">
     
   </div>
 </div>
@@ -2686,7 +2686,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <span style="font-size:var(--fs-label);color:var(--ac2);font-weight:500;">🤖 AI 摘要與建議</span>
     <span style="font-size:var(--fs-note);color:var(--tx3);" id="socialAiTs"></span>
   </div>
-  <div id="socialAiText" style="font-size:var(--fs-label);color:var(--tx2);line-height:1.7;padding:0 10px 8px;">
+  <div id="socialAiText" style="font-size:var(--fs-label);color:var(--tx);line-height:1.7;padding:0 10px 8px;">
     
   </div>
 </div>
@@ -6036,7 +6036,9 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   const legendStyle=interactive
     ? 'display:grid;grid-template-columns:repeat(4,1fr);gap:4px 6px;margin-top:8px;font-size:var(--fs-mini);color:var(--tx3);'
     : 'display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:center;margin-top:8px;font-size:var(--fs-tiny);color:var(--tx3);';
-  const _svg=`<svg viewBox="0 0 ${W} ${H}" width="${_scrollMode?W:'100%'}" height="${_scrollMode?H:'auto'}" preserveAspectRatio="xMidYMid meet" style="display:block;${_scrollMode?'':'width:100%;'}">
+  const _isDesk=window.matchMedia('(min-width:768px)').matches;
+  const _dispH = dense ? (_isDesk?230:210) : (_isDesk?185:175);
+  const _svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${_scrollMode?H:_dispH}" preserveAspectRatio="xMidYMid meet" style="display:block;width:100%;${_scrollMode?'':'height:'+_dispH+'px;'}">
     ${yTicks}${lines}${selfLine}${dots}${xLabels}
   </svg>`;
   const _chart=_scrollMode
