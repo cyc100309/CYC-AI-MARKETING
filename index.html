@@ -1073,9 +1073,6 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     </div>
     <div style="display:flex;align-items:center;gap:6px;margin-top:3px;">
       <span style="font-size:var(--fs-sub);" id="syncStatusMsg"></span>
-      <button onclick="document.getElementById('cloudSetupPanel').style.display='flex'"
-        style="font-size:var(--fs-sub);color:var(--tx3);background:transparent;border:1px solid var(--bd);
-        border-radius:20px;padding:2px 8px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;">雲端同步</button>
     </div>
   </div>
   <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;margin-top:2px;">
@@ -7407,7 +7404,6 @@ function injectUnitHeaders(){
       (dateStr?'<div class="uhdr-meta"><span class="uhdr-date">'+dateStr+'</span></div>':'')+
       '<div class="uhdr-sync">'+
         '<span class="uhdr-sync-st">'+syncStr+'</span>'+
-        '<button class="uhdr-sync-btn" onclick="document.getElementById(\'cloudSetupPanel\').style.display=\'flex\'">雲端同步</button>'+
         '<button class="uhdr-refresh" onclick="refreshDisplay()">重新整理</button>'+
       '</div>';
   });
@@ -7506,7 +7502,8 @@ function showDataDate(ts){
 function refreshDisplay(){
   const btn=document.querySelector('#dataDateBar button');
   if(btn){ btn.textContent='🔄 更新中...'; btn.disabled=true; }
-  const done=()=>{ if(btn){ btn.textContent='🔄 重新整理'; btn.disabled=false; } };
+  const refreshHist=()=>{ try{ if(typeof loadHistData==='function'){ loadHistData(); } else if(typeof renderAllHistCharts==='function'){ renderAllHistCharts(); } }catch(e){} };
+  const done=()=>{ refreshHist(); if(btn){ btn.textContent='🔄 重新整理'; btn.disabled=false; } };
   // 有雲端網址的單位（金門／劍潭）：真的去雲端抓最新資料覆蓋本機再重繪；
   // 無雲端的單位：退回原本的本機重繪
   if(getCloudUrl() && typeof forceSyncFromCloud==='function'){
