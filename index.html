@@ -6534,9 +6534,14 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   }
 
   // y 軸刻度：有 tick 用固定間隔，否則 3 等分
+  // 防爆保護：若固定間隔會產生過多刻度線（例如出現異常高價把範圍撐大），
+  // 自動放大間隔，讓刻度線維持在 ~7 條以內、不擠成一團。
   let yTicks='';
   if(opt.tick){
-    for(let val=lo; val<=hi+0.5; val+=opt.tick){
+    let tickStep=opt.tick;
+    const MAX_TICKS=7;
+    while((hi-lo)/tickStep > MAX_TICKS){ tickStep*=2; }   // 過多就倍增間隔
+    for(let val=lo; val<=hi+0.5; val+=tickStep){
       const y=yAt(val);
       yTicks+=`<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="var(--bd)" stroke-width="0.5" opacity="0.5"/><text x="${padL-6}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="${fsAxis}" fill="var(--tx3)" font-family="DM Mono,monospace">${Math.round(val).toLocaleString()}</text>`;
     }
