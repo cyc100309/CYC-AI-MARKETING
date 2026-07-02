@@ -795,6 +795,9 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   .sum-grid-comp{grid-template-columns:repeat(4,1fr) !important;}
   #page-comp .bar-name{font-size:calc(var(--fs-tiny) * 1.38);min-width:calc(118px * var(--fs));max-width:calc(118px * var(--fs));}
   #page-comp .bar-val{font-size:calc(var(--fs-mini) * 1.38);}
+  /* 走勢圖互動圖例（全部總覽）桌機放大，字太小不好讀/點 */
+  #page-comp .hist-legend-int{font-size:var(--fs-label) !important;gap:8px 12px !important;}
+  #page-comp .hist-legend{font-size:var(--fs-label) !important;}
   #page-comp .bar-track{height:calc(20px * var(--fs));}
   #page-comp .sum-val{font-size:var(--fs-kpi);}
   #page-comp .sum-lbl{font-size:var(--fs-label);}
@@ -6581,9 +6584,9 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
     legend+=`<span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:12px;height:0;border-top:2px dashed ${SELF_COLOR};display:inline-block;"></span>本中心</span>`;
   }
 
-  const tapHint=interactive?`<div style="font-size:var(--fs-mini);color:var(--tx3);text-align:center;margin-top:6px;">點下方飯店名可凸顯該條線・再點一次取消</div>`:'';
+  const tapHint=interactive?`<div style="font-size:var(--fs-tiny);color:var(--tx3);text-align:center;margin-top:8px;">點下方飯店名可凸顯該條線・再點一次取消</div>`:'';
   const legendStyle=interactive
-    ? 'display:grid;grid-template-columns:repeat(4,1fr);gap:4px 6px;margin-top:8px;font-size:var(--fs-mini);color:var(--tx3);'
+    ? 'display:grid;grid-template-columns:repeat(4,1fr);gap:6px 8px;margin-top:8px;font-size:var(--fs-tiny);color:var(--tx3);'
     : 'display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:center;margin-top:8px;font-size:var(--fs-tiny);color:var(--tx3);';
   const _isDesk=window.matchMedia('(min-width:768px)').matches;
   const _dispH = dense ? (_isDesk?230:210) : (_isDesk?185:175);
@@ -6598,7 +6601,7 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
     ? `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">${_svg}</div>`
     : _svg;
   return `${_chart}
-  <div style="${legendStyle}">${legend}</div>${tapHint}`;
+  <div class="${interactive?'hist-legend-int':'hist-legend'}" style="${legendStyle}">${legend}</div>${tapHint}`;
 }
 
 // 互動凸顯：點圖例 → 該線變粗、其餘淡化；再點同一個或點別的切換
