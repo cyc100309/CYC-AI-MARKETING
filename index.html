@@ -6484,16 +6484,16 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   // 字級設定放大 → 縮小 viewBox 基準寬，讓同樣 9px 的字相對變大
   const _fsMap={std:1, lg:1.24, xl:1.24, xxl:1.24};
   const _fsK=_fsMap[document.documentElement.getAttribute('data-fs')||'std']||1;
-  const _baseW=(_isDesktop?760:320)/_fsK;   // 字級越大→viewBox越小→字相對越大
-  const fsAxis=9;
+  const _baseW=(_isDesktop?940:320)/_fsK;   // 字級越大→viewBox越小→字相對越大；桌機加寬填滿內容區
+  const fsAxis=_isDesktop?13:9;             // 桌機軸字放大，避免在寬圖裡顯得過小
   // 天數多時加寬 SVG 觸發水平捲動（每天固定像素），少時維持基準寬填滿容器
   const _SCROLL_FROM=12, _PX_PER_DAY=Math.round((_isDesktop?40:22)/_fsK);
   // fit:true → 強制填滿容器、不進捲動模式（競品每日走勢資料點少，應自適應鋪滿而非橫捲）
   const _scrollMode=(!opt.fit) && _nDays>_SCROLL_FROM;
-  const padL=42, padR=12, padT=12, padB=dense?38:26;
+  const padL=_isDesktop?54:42, padR=_isDesktop?20:12, padT=12, padB=dense?38:26;
   const W=_scrollMode ? (padL+padR+_PX_PER_DAY*(_nDays-1)) : _baseW;
-  // 高度依基準寬比例：桌機降到約 2/3（避免過高），手機調高（避免過扁）
-  const _ratio=_isDesktop ? (dense?0.28:0.24) : (dense?0.56:0.50);
+  // 高度依基準寬比例：桌機拉高讓線舒展（避免過扁），手機維持
+  const _ratio=_isDesktop ? (dense?0.34:0.30) : (dense?0.56:0.50);
   const H=_scrollMode ? (_isDesktop?(dense?153:120):(dense?180:150)) : Math.round(W*_ratio);
   const innerW=W-padL-padR, innerH=H-padT-padB;
 
