@@ -1994,7 +1994,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     border:1px solid var(--bd2);width:100%;max-width:420px;max-height:88vh;display:flex;flex-direction:column;">
     <div style="font-size:var(--fs-tab);font-weight:500;color:var(--tx);margin-bottom:4px;">手動輸入今日房價</div>
     <div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:14px;line-height:1.7;">
-      直接填入各飯店今日最低房價（元）。留空或填 0 = 售完／無資料。填完按「儲存」即更新並同步。
+      直接填入各飯店今日最低房價（元）。<b style="color:var(--ac2,#5BE3B3);">填 0 或留空 = 當日售完</b>。填完按「儲存並更新」即生效並同步。
     </div>
     <div id="priceFormList" style="overflow-y:auto;flex:1;margin:-4px -4px 0;padding:4px;"></div>
     <div id="priceFormStatus" style="font-size:var(--fs-label);text-align:center;min-height:16px;margin-top:8px;"></div>
@@ -2053,6 +2053,10 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div class="chart-card" id="histCardAll">
   <div class="chart-title"><span id="histAllTitle">全部總覽</span><span style="font-size:var(--fs-tiny);color:var(--tx3);">含本中心</span></div>
   <div id="histChartAll"></div>
+</div>
+
+<div style="font-size:var(--fs-label);color:var(--tx3);line-height:1.9;padding:12px 16px 4px;">
+  走勢圖說明：每次手動輸入或上傳房價，系統會以當天日期自動存為一筆紀錄（同一天多次輸入以最後一次為準）。本機最多保留 120 天，走勢圖顯示最近 60 天。紀錄存於本機瀏覽器，清除瀏覽器資料或更換裝置將無法沿用。
 </div>
 
 <!-- 即時各家清單（保留，供查 Agoda 與當日明細） -->
@@ -3438,6 +3442,22 @@ function bootUnit(){
       fetchKmdnNews();
       try{ fetchUnitEvents(); }catch(e){}
       try{ applyCalSrcBtns(); }catch(e){}
+    }
+  }catch(e){}
+  // 切換單位時，若正停在「競爭房價」頁，補一次完整重繪＋載入新單位房價
+  // （否則競品清單/長條圖會殘留上一個單位的資料，需再點一次分頁才更新）
+  try{
+    const compPage=document.getElementById('page-comp');
+    if(compPage && compPage.classList.contains('active')){
+      buildCatTabs();
+      loadCompData();
+      try{ buildLists(); buildBarChart(); calcStats(); loadUpdateTime(); }catch(e){}
+      try{ loadHistData(); }catch(e){}
+      if(getCloudUrl()){
+        pullFromCloud().then(synced=>{
+          if(synced){ loadCompData(); try{ buildLists(); buildBarChart(); calcStats(); loadUpdateTime(); }catch(e){} }
+        });
+      }
     }
   }catch(e){}
 }
@@ -6080,6 +6100,8 @@ function parseAndApplyCSV(text){
     return;
   }
   buildLists(); buildBarChart(); calcStats(); stampUpdateTime(); saveCompData();
+  recordCompHistoryLocal();     // 上傳 CSV 也累積進本機歷史（走勢圖用）
+  renderAllHistCharts();        // 立即刷新走勢圖
   const skipMsg = skipped.length > 0 ? `（${skipped.length} 家未找到）` : '';
   // 自動推送至雲端，依實際結果顯示，讓手機等其他裝置開頁時能拉到同一份房價
   if(typeof pushToCloud==='function' && getCloudUrl()){
@@ -6203,7 +6225,7 @@ function openPriceForm(){
       html+=`<div style="display:flex;align-items:center;gap:8px;padding:6px 2px;">
         <div style="flex:1;font-size:var(--fs-label);color:${c.self?'#FFE234':'var(--tx)'};min-width:0;
           overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${nm}</div>
-        <input type="number" inputmode="numeric" id="pf-${i}" value="${c.price>0?c.price:''}" placeholder="售完"
+        <input type="number" inputmode="numeric" id="pf-${i}" value="${c.price>0?c.price:''}" placeholder="0=售完"
           style="width:96px;flex-shrink:0;background:var(--sf3);border:1px solid var(--bd);border-radius:var(--rs);
           padding:7px 9px;font-size:var(--fs-label);color:var(--tx);font-family:'DM Mono',monospace;
           text-align:right;outline:none;">
@@ -6228,6 +6250,8 @@ function savePriceForm(){
   stampUpdateTime();
   buildLists(); buildBarChart(); calcStats();
   saveCompData();
+  recordCompHistoryLocal();     // 累積進本機歷史（走勢圖用）
+  renderAllHistCharts();        // 立即刷新走勢圖
   const st=document.getElementById('priceFormStatus');
   if(st){ st.style.color='var(--ac2,#5BE3B3)'; st.textContent=`✓ 已更新 ${n} 家房價`; }
   // 同步到雲端（若此單位有設定雲端）
@@ -6278,17 +6302,59 @@ function histAbbrMap(){
   return HIST_ABBR_KINMEN;
 }
 
+// ── 本機競品房價歷史累積（純前端，不需後端）─────────────────────
+// 每次手動輸入/上傳 CSV 存檔時呼叫，把「今天各競品價格」寫進本機 comp_hist。
+// 結構：{ 'yyyy-MM-dd': { 旅館名: 價格, ... }, ... }；同一天重複存＝覆蓋當天。
+function _todayStr(){
+  const d=new Date();
+  const p=n=>String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+}
+function recordCompHistoryLocal(){
+  try{
+    let hist={};
+    try{ hist=JSON.parse(uGet('comp_hist')||'{}'); }catch(_){ hist={}; }
+    const today=_todayStr();
+    const row={};
+    COMPETITORS.forEach(c=>{
+      const nm=c.shortLabel||c.name;
+      // 有價才記；售完/0 記 0（走勢圖會略過 0，等於當天無價點）
+      row[nm]=(c.avail && c.price>0)?Math.round(c.price):0;
+    });
+    hist[today]=row;               // 同一天覆蓋
+    // 只保留最近 120 天，避免 localStorage 膨脹
+    const days=Object.keys(hist).sort();
+    if(days.length>120){ days.slice(0,days.length-120).forEach(d=>delete hist[d]); }
+    uSet('comp_hist', JSON.stringify(hist));
+  }catch(e){}
+}
+// 把本機 comp_hist 組成 {unit,dates,hotels} —— 與後端 mode=history 相同格式
+function buildLocalHistData(){
+  let hist={};
+  try{ hist=JSON.parse(uGet('comp_hist')||'{}'); }catch(_){ return null; }
+  const dates=Object.keys(hist).sort();          // 由舊到新
+  if(!dates.length) return null;
+  const hotels={};
+  dates.forEach(d=>{
+    const row=hist[d]||{};
+    Object.keys(row).forEach(nm=>{
+      const price=Number(row[nm])||0;
+      if(price>0){ (hotels[nm]=hotels[nm]||{})[d]=price; }  // 只放有價點
+    });
+  });
+  return { unit:getUnit(), dates, hotels };
+}
+
 async function loadHistData(){
   const url=getCloudUrl();
-  if(!url) return;
+  if(!url){ renderAllHistCharts(); return; }   // 無雲端：直接用本機累積
   try{
     const r=await fetch(url+'?mode=history&unit='+encodeURIComponent(getUnit())+'&t='+Date.now());
-    if(!r.ok) return;
+    if(!r.ok){ renderAllHistCharts(); return; }
     const d=await r.json();
-    if(!d || !d.hotels) return;
-    HIST_DATA=d;
-    renderAllHistCharts();
-  }catch(e){}
+    if(d && d.hotels && Object.keys(d.hotels).length){ HIST_DATA=d; }
+    renderAllHistCharts();       // 後端有資料就用後端，否則 render 內會 fallback 本機
+  }catch(e){ renderAllHistCharts(); }
 }
 
 // 依 cat 取該類飯店在歷史表中的顯示名（用 shortLabel||name，與 comp_names 一致）
@@ -6298,16 +6364,32 @@ function histNamesByCat(cat){
 
 function renderAllHistCharts(){
   const sub=document.getElementById('histSubInfo');
-  if(!HIST_DATA || !Object.keys(HIST_DATA.hotels).length){
+  // 資料來源：後端優先，沒有就用本機累積（手動輸入/上傳 CSV 產生）
+  let H=(HIST_DATA && Object.keys(HIST_DATA.hotels||{}).length)?HIST_DATA:buildLocalHistData();
+  if(!H || !Object.keys(H.hotels||{}).length){
     ['Self','High','Mid','Hostel','All'].forEach(s=>{
       const box=document.getElementById('histChart'+s);
-      if(box) box.innerHTML='<div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;padding:18px 8px;line-height:1.8;">尚無歷史資料<br>每日上傳 CSV 後自動累積</div>';
+      if(box) box.innerHTML='<div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;padding:18px 8px;line-height:1.8;">尚無歷史資料<br>手動輸入或上傳房價後，會自動逐日累積</div>';
     });
-    if(sub) sub.textContent='累積每日上傳紀錄';
+    if(sub) sub.textContent='累積每日房價紀錄';
     return;
   }
+  HIST_DATA=H;   // 統一後續繪圖都讀 HIST_DATA
+  // 走勢圖只顯示最近 HIST_SHOW_DAYS 天（本機仍保留較長，見 recordCompHistoryLocal）
+  const HIST_SHOW_DAYS=60;
+  if((HIST_DATA.dates||[]).length>HIST_SHOW_DAYS){
+    const keep=HIST_DATA.dates.slice(-HIST_SHOW_DAYS);
+    const keepSet=new Set(keep);
+    const hotels2={};
+    Object.keys(HIST_DATA.hotels).forEach(nm=>{
+      const ser=HIST_DATA.hotels[nm], o={};
+      Object.keys(ser).forEach(d=>{ if(keepSet.has(d)) o[d]=ser[d]; });
+      hotels2[nm]=o;
+    });
+    HIST_DATA={unit:HIST_DATA.unit, dates:keep, hotels:hotels2};
+  }
   const days=(HIST_DATA.dates||[]).length;
-  if(sub) sub.textContent='共 '+days+' 天紀錄';
+  if(sub) sub.textContent='顯示最近 '+days+' 天';
 
   const isJT=(typeof getUnit==='function' && getUnit()!=='kinmen');
   const tHigh=document.getElementById('histTitleHigh');
@@ -6325,24 +6407,24 @@ function renderAllHistCharts(){
     if(tHigh) tHigh.textContent=_rivalLbl;
     if(tMid)  tMid.textContent=_refLbl;
     // 本中心走勢
-    drawInto('histChartSelf', [selfHistName()], {showSelf:false, lo:1500, hi:2500, tick:200});
+    drawInto('histChartSelf', [selfHistName()], {showSelf:false, lo:1500, hi:2500, tick:200, fit:true});
     // 主要對手：疊本中心對比
-    drawInto('histChartHigh', histNamesByCat('rival'), {showSelf:true, lo:1200, hi:2800, tick:400});
+    drawInto('histChartHigh', histNamesByCat('rival'), {showSelf:true, lo:1200, hi:2800, tick:400, fit:true});
     // 參考房價：範圍自動，不疊本中心
-    drawInto('histChartMid',  histNamesByCat('ref'),   {showSelf:false, tick:500});
+    drawInto('histChartMid',  histNamesByCat('ref'),   {showSelf:false, tick:500, fit:true});
   } else {
     // 金門：回復原本三價位標題與背包客棧卡片
     if(tHigh) tHigh.textContent='高價位（精品/商務/星級）';
     if(tMid)  tMid.textContent='中價位（一般/套房/民宿）';
     if(hostelCard) hostelCard.style.display='';
     // 本中心：單線，固定 1000–1500，每 100
-    drawInto('histChartSelf', [selfHistName()], {showSelf:false, lo:1000, hi:1500, tick:100});
+    drawInto('histChartSelf', [selfHistName()], {showSelf:false, lo:1000, hi:1500, tick:100, fit:true});
     // 高價位：範圍自動，刻度間隔 500，不疊本中心
-    drawInto('histChartHigh',   histNamesByCat('high'),   {showSelf:false, tick:500});
+    drawInto('histChartHigh',   histNamesByCat('high'),   {showSelf:false, tick:500, fit:true});
     // 中價位：固定 1000–2000，每 200，疊本中心對比
-    drawInto('histChartMid',    histNamesByCat('mid'),    {showSelf:true, lo:1000, hi:2000, tick:200});
+    drawInto('histChartMid',    histNamesByCat('mid'),    {showSelf:true, lo:1000, hi:2000, tick:200, fit:true});
     // 背包客棧：固定 400–1000，每 200，不疊本中心
-    drawInto('histChartHostel', histNamesByCat('hostel'), {showSelf:false, lo:400, hi:1000, tick:200});
+    drawInto('histChartHostel', histNamesByCat('hostel'), {showSelf:false, lo:400, hi:1000, tick:200, fit:true});
   }
   // 全部家數（含本中心）：互動式，點圖例凸顯
   const allNames=COMPETITORS.map(c=>c.shortLabel||c.name);
@@ -6406,7 +6488,8 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   const fsAxis=9;
   // 天數多時加寬 SVG 觸發水平捲動（每天固定像素），少時維持基準寬填滿容器
   const _SCROLL_FROM=12, _PX_PER_DAY=Math.round((_isDesktop?40:22)/_fsK);
-  const _scrollMode=_nDays>_SCROLL_FROM;
+  // fit:true → 強制填滿容器、不進捲動模式（競品每日走勢資料點少，應自適應鋪滿而非橫捲）
+  const _scrollMode=(!opt.fit) && _nDays>_SCROLL_FROM;
   const padL=42, padR=12, padT=12, padB=dense?38:26;
   const W=_scrollMode ? (padL+padR+_PX_PER_DAY*(_nDays-1)) : _baseW;
   // 高度依基準寬比例：桌機降到約 2/3（避免過高），手機調高（避免過扁）
