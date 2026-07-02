@@ -6587,7 +6587,11 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
     : 'display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:center;margin-top:8px;font-size:var(--fs-tiny);color:var(--tx3);';
   const _isDesk=window.matchMedia('(min-width:768px)').matches;
   const _dispH = dense ? (_isDesk?230:210) : (_isDesk?185:175);
-  const _svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${_scrollMode?H:_dispH}" preserveAspectRatio="xMidYMid meet" style="display:block;width:100%;${_scrollMode?'':'height:'+_dispH+'px;'}">
+  const _svg=_scrollMode
+    ? `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="xMidYMid meet" style="display:block;width:100%;">
+    ${yTicks}${lines}${selfLine}${dots}${xLabels}
+  </svg>`
+    : `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;width:100%;height:auto;">
     ${yTicks}${lines}${selfLine}${dots}${xLabels}
   </svg>`;
   const _chart=_scrollMode
