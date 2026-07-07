@@ -6489,7 +6489,7 @@ function renderAllHistCharts(){
   const allNames=COMPETITORS.map(c=>c.shortLabel||c.name);
   const allTitle=document.getElementById('histAllTitle');
   if(allTitle) allTitle.textContent=`全部 ${COMPETITORS.length} 家總覽`;
-  drawInto('histChartAll', allNames, {showSelf:false, dense:true, interactive:true});
+  drawInto('histChartAll', allNames, {showSelf:false, dense:true, interactive:true, fit:true});
 }
 
 // 把指定的一組飯店畫進某個容器
@@ -6591,16 +6591,19 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
   function dotsOf(vals,color){
     let out='';
     let lastY=null;   // 前一個有效點的 y，供售完標記定位
+    let markedGap=false;  // 同一段連續缺值只畫一次售罄圈，避免多天重疊變成怪異圖形
     vals.forEach((v,i)=>{
       if(v===null||v<=0){
         // 售完：在前一個有效價位高度畫空心紅圈標記，一眼看出當天客滿
-        if(lastY!==null){
+        if(lastY!==null && !markedGap){
           out+=`<circle cx="${xAt(i).toFixed(1)}" cy="${lastY.toFixed(1)}" r="3.4" fill="var(--bg,#0F1923)" stroke="#E05C5C" stroke-width="1.6"/>`;
+          markedGap=true;
         }
       }else{
         const y=yAt(v);
         out+=`<circle cx="${xAt(i).toFixed(1)}" cy="${y.toFixed(1)}" r="2.3" fill="${color}"/>`;
         lastY=y;
+        markedGap=false;
       }
     });
     return out;
