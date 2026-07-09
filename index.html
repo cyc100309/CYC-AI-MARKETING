@@ -2055,6 +2055,11 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <div id="histChartAll"></div>
 </div>
 
+<div class="chart-card" id="histCardStats">
+  <div class="chart-title"><span>各飯店房價統計</span><span style="font-size:var(--fs-tiny);color:var(--tx3);">記錄期間</span></div>
+  <div id="histStatsTbl"></div>
+</div>
+
 <div style="font-size:var(--fs-label);color:var(--tx3);line-height:1.9;padding:12px 16px 4px;">
   走勢圖說明：每次手動輸入或上傳房價，系統會以當天日期自動存為一筆紀錄（同一天多次輸入以最後一次為準）。走勢圖顯示最近 60 天。<span style="color:#E05C5C;">空心紅圈</span>表示該飯店當天客滿（售完、無房價），折線會在該處斷開。
 </div>
@@ -6490,6 +6495,46 @@ function renderAllHistCharts(){
   const allTitle=document.getElementById('histAllTitle');
   if(allTitle) allTitle.textContent=`全部 ${COMPETITORS.length} 家總覽`;
   drawInto('histChartAll', allNames, {showSelf:false, dense:true, interactive:true, fit:true});
+  buildHistStatsTable();
+}
+
+// 各飯店房價統計：記錄期間內的歷史最高價/日期、歷史最低價/日期、平均房價
+function buildHistStatsTable(){
+  const box=document.getElementById('histStatsTbl');
+  if(!box) return;
+  if(!HIST_DATA || !Object.keys(HIST_DATA.hotels||{}).length){ box.innerHTML=''; return; }
+  const dates=HIST_DATA.dates||[];
+  const self=selfHistName();
+  const names=COMPETITORS.map(c=>c.shortLabel||c.name);
+  let rows='';
+  names.forEach(nm=>{
+    const h=HIST_DATA.hotels[nm];
+    if(!h) return;
+    let hi=-Infinity, hiDate='', lo=Infinity, loDate='', sum=0, cnt=0;
+    dates.forEach(d=>{
+      const v=h[d];
+      if(v===undefined||v===null||v<=0) return;
+      if(v>hi){ hi=v; hiDate=d; }
+      if(v<lo){ lo=v; loDate=d; }
+      sum+=v; cnt++;
+    });
+    if(!cnt) return;
+    const avg=Math.round(sum/cnt);
+    const isSelf=(nm===self);
+    rows+=`<tr${isSelf?' style="color:var(--ac);font-weight:600;"':''}>
+      <td style="padding:6px 8px;">${nm}${isSelf?'（本中心）':''}</td>
+      <td style="padding:6px 8px;white-space:nowrap;">${hi.toLocaleString()}<span style="color:var(--tx3);font-size:var(--fs-tiny);"> ・${hiDate.slice(5)}</span></td>
+      <td style="padding:6px 8px;white-space:nowrap;">${lo.toLocaleString()}<span style="color:var(--tx3);font-size:var(--fs-tiny);"> ・${loDate.slice(5)}</span></td>
+      <td style="padding:6px 8px;">${avg.toLocaleString()}</td>
+    </tr>`;
+  });
+  if(!rows){ box.innerHTML='<div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;padding:14px;">尚無足夠資料</div>'; return; }
+  box.innerHTML=`<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:var(--fs-label);white-space:nowrap;">
+    <thead><tr style="color:var(--tx3);text-align:left;border-bottom:1px solid var(--bd);">
+      <th style="padding:6px 8px;">飯店</th><th style="padding:6px 8px;">歷史最高價</th><th style="padding:6px 8px;">歷史最低價</th><th style="padding:6px 8px;">期間平均房價</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>`;
 }
 
 // 把指定的一組飯店畫進某個容器
@@ -6627,11 +6672,21 @@ function drawMultiLineSVG(dates, series, selfVals, opt){
       yTicks+=`<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="var(--bd)" stroke-width="0.5" opacity="0.5"/><text x="${padL-6}" y="${(y+3).toFixed(1)}" text-anchor="end" font-size="${fsAxis}" fill="var(--tx3)" font-family="DM Mono,monospace">${Math.round(val).toLocaleString()}</text>`;
     }
   }
-  // x 軸標籤
+  // x 軸標籤：只標示「真的有上傳紀錄」的日期，這樣空白（缺資料）的天數不用自己數，
+  // 直接看左右兩邊標出來的日期就知道是哪一天斷掉
   let xLabels='';
-  const step=_scrollMode?Math.max(1,Math.round(_nDays/Math.max(5,Math.floor(innerW/(_PX_PER_DAY*3))))):Math.max(1,Math.ceil(n/5));
-  for(let i=0;i<n;i+=step){
-    xLabels+=`<text x="${xAt(i).toFixed(1)}" y="${H-(dense?20:8)}" text-anchor="middle" font-size="${fsAxis}" fill="var(--tx3)" font-family="DM Mono,monospace">${dates[i].slice(5)}</text>`;
+  const hasVal=(i)=>{
+    if(selfVals && selfVals[i]!==null && selfVals[i]>0) return true;
+    return series.some(s=>s.vals[i]!==null && s.vals[i]>0);
+  };
+  const minGap=fsAxis*3.4; // 日期字之間至少留這麼多像素，避免擠在一起看不清楚
+  let lastLabelX=-Infinity;
+  for(let i=0;i<n;i++){
+    if(!hasVal(i)) continue;
+    const x=xAt(i);
+    if(x-lastLabelX<minGap && i!==n-1) continue;
+    xLabels+=`<text x="${x.toFixed(1)}" y="${H-(dense?20:8)}" text-anchor="middle" font-size="${fsAxis}" fill="var(--tx3)" font-family="DM Mono,monospace">${dates[i].slice(5)}</text>`;
+    lastLabelX=x;
   }
 
   // 互動模式：每條線加 class + data-key，圖例可點擊凸顯
