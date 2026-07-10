@@ -1617,7 +1617,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
         <input type="file" id="f-d1" accept=".xlsx,.xls">
         <div class="ib-body">
           <div class="ib-title">日別統計・第1個月（最近）</div>
-          <div class="ib-sub">例：2026年5月 810_3</div>
+          <div class="ib-sub" id="dailyEx1">例：2026年5月 810_3</div>
         </div>
         <div class="ib-st" id="s-d1">未匯入</div>
       </label>
@@ -1625,7 +1625,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
         <input type="file" id="f-d2" accept=".xlsx,.xls">
         <div class="ib-body">
           <div class="ib-title">日別統計・第2個月</div>
-          <div class="ib-sub">例：2026年4月 810_3</div>
+          <div class="ib-sub" id="dailyEx2">例：2026年4月 810_3</div>
         </div>
         <div class="ib-st" id="s-d2">未匯入</div>
       </label>
@@ -1633,7 +1633,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
         <input type="file" id="f-d3" accept=".xlsx,.xls">
         <div class="ib-body">
           <div class="ib-title">日別統計・第3個月</div>
-          <div class="ib-sub">例：2026年3月 810_3</div>
+          <div class="ib-sub" id="dailyEx3">例：2026年3月 810_3</div>
         </div>
         <div class="ib-st" id="s-d3">未匯入</div>
       </label>
@@ -7464,9 +7464,20 @@ function loadCfg(){
 }
 
 // ── 頁面啟動 ──────────────────────────────────────────────────
+// 日別統計上傳區的範例月份：放的是「未來」三個月的資料，第1個月＝當月，
+// 改成依「現在的日期」動態算，不再寫死固定月份
+function updateDailyExamples(){
+  const now=new Date();
+  for(let i=0;i<3;i++){
+    const d=new Date(now.getFullYear(), now.getMonth()+i, 1); // i=0→當月，i=1→下個月，i=2→下下個月
+    const el=document.getElementById('dailyEx'+(i+1));
+    if(el) el.textContent=`例：${d.getFullYear()}年${d.getMonth()+1}月 810_3`;
+  }
+}
 document.addEventListener('DOMContentLoaded',()=>{
   applyUnitMemory();
   initWithCloudSync();
+  updateDailyExamples();
 });
 
 // ── 從後台回到前台時自動重新整理資料（PWA 常駐後重開不會停在舊資料）──
