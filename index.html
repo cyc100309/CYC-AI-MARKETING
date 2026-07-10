@@ -6499,6 +6499,7 @@ function renderAllHistCharts(){
 }
 
 // 各飯店房價統計：記錄期間內的歷史最高價/日期、歷史最低價/日期、平均房價
+// 排版採直向卡片列表（非橫向表格）：手機寬度不夠時三項數據會自動換行，不需要左右滑動捲軸
 function buildHistStatsTable(){
   const box=document.getElementById('histStatsTbl');
   if(!box) return;
@@ -6521,20 +6522,17 @@ function buildHistStatsTable(){
     if(!cnt) return;
     const avg=Math.round(sum/cnt);
     const isSelf=(nm===self);
-    rows+=`<tr${isSelf?' style="color:var(--ac);font-weight:600;"':''}>
-      <td style="padding:6px 8px;">${nm}${isSelf?'（本中心）':''}</td>
-      <td style="padding:6px 8px;white-space:nowrap;">${hi.toLocaleString()}<span style="color:var(--tx3);font-size:var(--fs-tiny);"> ・${hiDate.slice(5)}</span></td>
-      <td style="padding:6px 8px;white-space:nowrap;">${lo.toLocaleString()}<span style="color:var(--tx3);font-size:var(--fs-tiny);"> ・${loDate.slice(5)}</span></td>
-      <td style="padding:6px 8px;">${avg.toLocaleString()}</td>
-    </tr>`;
+    rows+=`<div style="padding:10px 2px;border-bottom:1px solid var(--bd);">
+      <div style="font-size:var(--fs-label);font-weight:600;color:${isSelf?'var(--ac)':'var(--tx)'};margin-bottom:6px;">${nm}${isSelf?'（本中心）':''}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:var(--fs-tiny);color:var(--tx3);">
+        <div>最高　<span style="color:var(--red);font-weight:700;font-size:var(--fs-label);">${hi.toLocaleString()}</span>　${hiDate.slice(5)}</div>
+        <div>最低　<span style="color:var(--green);font-weight:700;font-size:var(--fs-label);">${lo.toLocaleString()}</span>　${loDate.slice(5)}</div>
+        <div>平均　<span style="color:var(--tx);font-weight:700;font-size:var(--fs-label);">${avg.toLocaleString()}</span></div>
+      </div>
+    </div>`;
   });
   if(!rows){ box.innerHTML='<div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;padding:14px;">尚無足夠資料</div>'; return; }
-  box.innerHTML=`<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:var(--fs-label);white-space:nowrap;">
-    <thead><tr style="color:var(--tx3);text-align:left;border-bottom:1px solid var(--bd);">
-      <th style="padding:6px 8px;">飯店</th><th style="padding:6px 8px;">歷史最高價</th><th style="padding:6px 8px;">歷史最低價</th><th style="padding:6px 8px;">期間平均房價</th>
-    </tr></thead>
-    <tbody>${rows}</tbody>
-  </table></div>`;
+  box.innerHTML=rows;
 }
 
 // 把指定的一組飯店畫進某個容器
