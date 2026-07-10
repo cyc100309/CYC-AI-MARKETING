@@ -1596,20 +1596,16 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <div class="import-body" id="importBody">
     <!-- 現有資料狀態列 -->
     <div id="currentDataBar" style="display:none;background:var(--sf2);border-radius:var(--rs);
-      padding:8px 10px;margin-bottom:8px;border:1px solid var(--bd);">
-      <div style="font-size:var(--fs-sub);color:var(--tx3);margin-bottom:2px;">目前使用中的資料</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <div style="font-size:var(--fs-sub);color:var(--green);font-family:'DM Mono',monospace;" id="currentDataDate">—</div>
-        <div style="font-size:var(--fs-sub);color:var(--tx3);">如需更新請重新上傳 ↓</div>
-      </div>
+      padding:8px 10px;margin-bottom:8px;border:1px solid var(--bd);
+      align-items:center;justify-content:space-between;gap:8px;">
+      <div style="font-size:var(--fs-sub);color:var(--tx3);white-space:nowrap;">目前使用的資料</div>
+      <div style="font-size:var(--fs-sub);color:var(--green);font-family:'DM Mono',monospace;" id="currentDataDate">—</div>
     </div>
     <div class="imp-list">
       <label class="imp-btn" id="ib1" for="f-twoyear">
         <input type="file" id="f-twoyear" accept=".xlsx,.xls">
-        <div class="ib-icon">📊</div>
         <div class="ib-body">
           <div class="ib-title">營運報表（805_6_P1）</div>
-          <div class="ib-sub">住宿＋餐飲＋場地三部門，自動讀取金門</div>
         </div>
         <div class="ib-st" id="s-twoyear">未匯入</div>
       </label>
@@ -1619,7 +1615,6 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       </div>
       <label class="imp-btn" id="ib-d1" for="f-d1">
         <input type="file" id="f-d1" accept=".xlsx,.xls">
-        <div class="ib-icon">📅</div>
         <div class="ib-body">
           <div class="ib-title">日別統計・第1個月（最近）</div>
           <div class="ib-sub">例：2026年5月 810_3</div>
@@ -1628,7 +1623,6 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       </label>
       <label class="imp-btn" id="ib-d2" for="f-d2">
         <input type="file" id="f-d2" accept=".xlsx,.xls">
-        <div class="ib-icon">📅</div>
         <div class="ib-body">
           <div class="ib-title">日別統計・第2個月</div>
           <div class="ib-sub">例：2026年4月 810_3</div>
@@ -1637,7 +1631,6 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       </label>
       <label class="imp-btn" id="ib-d3" for="f-d3">
         <input type="file" id="f-d3" accept=".xlsx,.xls">
-        <div class="ib-icon">📅</div>
         <div class="ib-body">
           <div class="ib-title">日別統計・第3個月</div>
           <div class="ib-sub">例：2026年3月 810_3</div>
@@ -7645,8 +7638,8 @@ function showDataDate(ts){
   // Import section - current data bar
   const cbar=document.getElementById('currentDataBar');
   const cdate=document.getElementById('currentDataDate');
-  if(cbar) cbar.style.display='block';
-  if(cdate) cdate.textContent='✓ '+ts+' 上傳';
+  if(cbar) cbar.style.display='flex';
+  if(cdate) cdate.textContent=ts.replace(/^\d{4}\//,'');
 }
 
 function refreshDisplay(){
@@ -7699,7 +7692,7 @@ function loadSavedOccData(){
 
     // Restore UI badges
     document.getElementById('ib1').classList.add('ok');
-    document.getElementById('s-twoyear').textContent='✓ 已儲存（'+ts+'）';
+    document.getElementById('s-twoyear').textContent='✓ 已儲存';
     document.getElementById('s-twoyear').className='ib-st ok';
     dailyMonths.forEach((m,i)=>{
       if(!m) return;
