@@ -441,6 +441,12 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   display:flex;align-items:center;gap:6px;}
 .section-dot{width:8px;height:8px;border-radius:50%;}
 
+/* 各飯店房價統計卡（統計數據+評分+訂房連結合併字卡）：手機固定2欄，桌面隨視窗寬度2-4欄 */
+.stat-card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+@media (min-width:768px){
+  .stat-card-grid{grid-template-columns:repeat(auto-fit,minmax(270px,1fr));}
+}
+
 .comp-item{background:var(--sf);border-radius:var(--rs);padding:10px 12px;
   border:1px solid var(--bd);margin-bottom:6px;}
 .comp-item.self{border-color:#FFE234;background:rgba(255,226,52,.1);}
@@ -2048,16 +2054,12 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <div id="histChartAll"></div>
 </div>
 
-<div class="chart-card" id="histCardStats">
-  <div class="chart-title"><span>各飯店房價統計</span><span style="font-size:var(--fs-tiny);color:var(--tx3);">記錄期間</span></div>
-  <div id="histStatsTbl"></div>
-</div>
-
 <div style="font-size:var(--fs-label);color:var(--tx3);line-height:1.9;padding:12px 16px 4px;">
   走勢圖說明：每次手動輸入或上傳房價，系統會以當天日期自動存為一筆紀錄（同一天多次輸入以最後一次為準）。走勢圖顯示最近 60 天。<span style="color:#E05C5C;">空心紅圈</span>表示該飯店當天客滿（售完、無房價），折線會在該處斷開。
 </div>
 
-<!-- 即時各家清單（保留，供查 Agoda 與當日明細） -->
+<!-- 各飯店房價統計（記錄期間內最高/最低/平均）與即時評分/訂房連結合併字卡 -->
+<div class="lbl" style="margin-top:18px;"><span>各飯店房價統計</span><span style="font-size:var(--fs-mini);color:var(--tx3);text-transform:none;letter-spacing:0;">記錄期間・即時評分</span></div>
 <div id="compLists"></div>
 </div><!-- /page-comp -->
 
@@ -5824,10 +5826,10 @@ function compSections(){
   if(u==='zengwen') return COMP_SECTIONS_ZENGWEN;
   return COMP_SECTIONS_KINMEN;
 }
-// 分類篩選頁籤（all + 各區塊）依單位
+// 分類篩選頁籤（all + 各區塊，不含本中心，本中心已併入主要對手分區）依單位
 function compCatTabs(){
   const base=[{cat:'all',label:'全部'}];
-  return base.concat(compSections().map(s=>({cat:s.cat,label:s.label.replace(/（.*?）/,'')})));
+  return base.concat(compSections().filter(s=>s.cat!=='self').map(s=>({cat:s.cat,label:s.label.replace(/（.*?）/,'')})));
 }
 // 長條圖配色（cat→色）依單位
 function compColorMap(){
@@ -5997,24 +5999,37 @@ function buildCompetitors(){
   });
 }
 
-// ── Competitor page full list（三欄精簡：名稱／星等／Agoda）──────
+// ── Competitor page full list（合併字卡：名稱／歷史最高低平均／星等／Agoda）──────
+// 2026-07-11：原「各飯店房價統計」(記錄期間最高/最低/平均) 與「即時各家清單」
+// (目前評分+Agoda連結) 兩個區塊合併為單一字卡，減少版面重複、資訊集中一處。
+// 2026-07-11（二次調整）：取消「本中心」獨立分區，本中心字卡直接併入
+// 主要對手分區（依單位而定：金門=高價位、劍潭/曾文=主要對手），固定排在該分區第一格（左上角）。
 function buildLists(){
   const container=document.getElementById('compLists');
   if(!container) return;
   container.innerHTML='';
-  const sections=compSections();
+  const allSections=compSections();
+  const sections=allSections.filter(s=>s.cat!=='self');   // 顯示用分區：不含本中心獨立分區
+  if(curCat!=='all' && !sections.some(s=>s.cat===curCat)) curCat='all';  // 防呆：舊的「本中心」篩選狀態自動回全部
+  const primaryCat=sections.length?sections[0].cat:null;   // 主要對手分區＝第一個非本中心分區
+  const selfHotel=COMPETITORS.find(h=>h.self);
   const today=new Date();
   const fmt=d=>`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+  const histDates=(HIST_DATA&&HIST_DATA.dates)||[];
 
   sections.forEach(sec=>{
-    const hotels=COMPETITORS.filter(h=>h.cat===sec.cat);
     if(curCat!=='all'&&curCat!==sec.cat) return;
-    if(!hotels.length) return;
+    const hotels=COMPETITORS.filter(h=>h.cat===sec.cat);
 
     const available = hotels.filter(h=>h.avail&&h.price>0).sort((a,b)=>a.price-b.price);
     const noPrice   = hotels.filter(h=>h.avail&&h.price===0);
     const soldOut   = hotels.filter(h=>!h.avail);
-    const sorted    = [...available, ...noPrice, ...soldOut];
+    let sorted    = [...available, ...noPrice, ...soldOut];
+
+    // 主要對手分區：本中心固定插在最前面（左上角第一格），不受價格排序影響
+    if(sec.cat===primaryCat && selfHotel) sorted = [selfHotel, ...sorted];
+
+    if(!sorted.length) return;
 
     let cells='';
     sorted.forEach(h=>{
@@ -6022,9 +6037,37 @@ function buildLists(){
       const agodaUrl=h.agoda+'?checkIn='+fmt(today)+'&los=1&adults=1&rooms=1&currencyCode=TWD';
       const nameCol=h.self?'#FFE234':'var(--tx)';
       const sold=h.avail?'':'<span style="color:var(--red);font-size:var(--fs-mini);margin-left:4px;">售完</span>';
-      cells+=`<div id="item-${idx}" class="cl-card" style="background:var(--sf2);border:1px solid ${h.self?'rgba(255,226,52,.35)':'var(--bd)'};border-radius:var(--rs);padding:8px 8px 9px;display:flex;flex-direction:column;gap:5px;min-width:0;">
+
+      // 記錄期間統計：最高/最低(含日期)/平均，資料來源與原 buildHistStatsTable 相同邏輯
+      const histKey=h.shortLabel||h.name;
+      const hd=(HIST_DATA&&HIST_DATA.hotels)?HIST_DATA.hotels[histKey]:null;
+      let statsHtml='';
+      if(hd){
+        let hi=-Infinity, hiDate='', lo=Infinity, loDate='', sum=0, cnt=0;
+        histDates.forEach(d=>{
+          const v=hd[d];
+          if(v===undefined||v===null||v<=0) return;
+          if(v>hi){ hi=v; hiDate=d; }
+          if(v<lo){ lo=v; loDate=d; }
+          sum+=v; cnt++;
+        });
+        if(cnt){
+          const avg=Math.round(sum/cnt);
+          statsHtml=`<div style="display:flex;flex-direction:column;gap:1px;font-size:var(--fs-tiny);color:var(--tx3);margin:3px 0 2px;">
+            <div>最高　<span style="color:var(--red);font-weight:700;font-size:var(--fs-label);">${hi.toLocaleString()}</span>　${hiDate.slice(5)}</div>
+            <div>最低　<span style="color:var(--green);font-weight:700;font-size:var(--fs-label);">${lo.toLocaleString()}</span>　${loDate.slice(5)}</div>
+            <div>平均　<span style="color:var(--tx);font-weight:700;font-size:var(--fs-label);">${avg.toLocaleString()}</span></div>
+          </div>`;
+        }
+      }
+      if(!statsHtml){
+        statsHtml=`<div style="font-size:var(--fs-mini);color:var(--tx3);margin:3px 0 2px;">尚無記錄資料</div>`;
+      }
+
+      cells+=`<div id="item-${idx}" class="cl-card" style="background:var(--sf2);border:1px solid ${h.self?'rgba(255,226,52,.35)':'var(--bd)'};border-radius:var(--rs);padding:9px 9px 10px;display:flex;flex-direction:column;gap:2px;min-width:0;">
         <div class="cl-name" style="font-size:var(--fs-label);font-weight:500;color:${nameCol};line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${h.shortLabel||h.name}${sold}</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:4px;">
+        ${statsHtml}
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:4px;margin-top:1px;">
           <span class="cl-rate" style="font-size:var(--fs-tiny);color:var(--tx3);white-space:nowrap;">★ ${h.rating||'—'}</span>
           <a href="${agodaUrl}" target="_blank" class="cl-link" style="font-size:var(--fs-mini);color:var(--ac2,#5BE3B3);text-decoration:none;white-space:nowrap;">Agoda</a>
         </div>
@@ -6035,9 +6078,9 @@ function buildLists(){
       <div class="section-hdr" style="display:flex;align-items:center;gap:6px;font-size:var(--fs-label);color:var(--tx);margin-bottom:8px;">
         <div class="section-dot" style="width:8px;height:8px;border-radius:50%;background:${sec.dot};"></div>
         ${sec.label}
-        <span style="font-size:var(--fs-tiny);color:var(--tx3);margin-left:auto;">${hotels.length} 家</span>
+        <span style="font-size:var(--fs-tiny);color:var(--tx3);margin-left:auto;">${sorted.length} 家</span>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;">${cells}</div>
+      <div class="stat-card-grid">${cells}</div>
     </div>`;
   });
 }
@@ -6492,40 +6535,11 @@ function renderAllHistCharts(){
 }
 
 // 各飯店房價統計：記錄期間內的歷史最高價/日期、歷史最低價/日期、平均房價
-// 排版採直向卡片列表（非橫向表格）：手機寬度不夠時三項數據會自動換行，不需要左右滑動捲軸
+// 2026-07-11：統計數據已併入 buildLists() 產生的合併字卡中顯示（不再有獨立的
+// histStatsTbl 表格區塊），此函式保留為呼叫入口，確保 HIST_DATA 更新後
+// 既有呼叫點（buildHistCharts 等）仍能觸發字卡重繪，不必逐一改動呼叫端。
 function buildHistStatsTable(){
-  const box=document.getElementById('histStatsTbl');
-  if(!box) return;
-  if(!HIST_DATA || !Object.keys(HIST_DATA.hotels||{}).length){ box.innerHTML=''; return; }
-  const dates=HIST_DATA.dates||[];
-  const self=selfHistName();
-  const names=COMPETITORS.map(c=>c.shortLabel||c.name);
-  let rows='';
-  names.forEach(nm=>{
-    const h=HIST_DATA.hotels[nm];
-    if(!h) return;
-    let hi=-Infinity, hiDate='', lo=Infinity, loDate='', sum=0, cnt=0;
-    dates.forEach(d=>{
-      const v=h[d];
-      if(v===undefined||v===null||v<=0) return;
-      if(v>hi){ hi=v; hiDate=d; }
-      if(v<lo){ lo=v; loDate=d; }
-      sum+=v; cnt++;
-    });
-    if(!cnt) return;
-    const avg=Math.round(sum/cnt);
-    const isSelf=(nm===self);
-    rows+=`<div style="padding:10px 2px;border-bottom:1px solid var(--bd);">
-      <div style="font-size:var(--fs-label);font-weight:600;color:${isSelf?'var(--ac)':'var(--tx)'};margin-bottom:6px;">${nm}${isSelf?'（本中心）':''}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px 18px;font-size:var(--fs-tiny);color:var(--tx3);">
-        <div>最高　<span style="color:var(--red);font-weight:700;font-size:var(--fs-label);">${hi.toLocaleString()}</span>　${hiDate.slice(5)}</div>
-        <div>最低　<span style="color:var(--green);font-weight:700;font-size:var(--fs-label);">${lo.toLocaleString()}</span>　${loDate.slice(5)}</div>
-        <div>平均　<span style="color:var(--tx);font-weight:700;font-size:var(--fs-label);">${avg.toLocaleString()}</span></div>
-      </div>
-    </div>`;
-  });
-  if(!rows){ box.innerHTML='<div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;padding:14px;">尚無足夠資料</div>'; return; }
-  box.innerHTML=rows;
+  buildLists();
 }
 
 // 把指定的一組飯店畫進某個容器
