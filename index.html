@@ -5829,7 +5829,22 @@ function compSections(){
 // 分類篩選頁籤（all + 各區塊，不含本中心，本中心已併入主要對手分區）依單位
 function compCatTabs(){
   const base=[{cat:'all',label:'全部'}];
-  return base.concat(compSections().filter(s=>s.cat!=='self').map(s=>({cat:s.cat,label:s.label.replace(/（.*?）/,'')})));
+  return base.concat(compCardSections().map(s=>({cat:s.key,label:s.label.replace(/（.*?）/,'')})));
+}
+
+// 字卡分區（僅供 buildLists 顯示用，與 compSections()/histNamesByCat 分開，
+// 不影響走勢圖三價位分類與長條圖配色）：
+// 金門：高價位+中價位合併為「旅館/飯店」，背包客棧改標「青年旅館」
+// 劍潭/曾文：維持原本主要對手／參考房價兩分區（不含本中心，本中心已併入主要對手）
+function compCardSections(){
+  const u=(typeof getUnit==='function')?getUnit():'kinmen';
+  if(u==='kinmen'){
+    return [
+      {key:'lodging', cats:['high','mid'], label:'旅館/飯店', dot:'#5B9BD5'},
+      {key:'hostel',  cats:['hostel'],     label:'青年旅館',   dot:'#4CAF82'},
+    ];
+  }
+  return compSections().filter(s=>s.cat!=='self').map(s=>({key:s.cat, cats:[s.cat], label:s.label, dot:s.dot}));
 }
 // 長條圖配色（cat→色）依單位
 function compColorMap(){
@@ -6008,18 +6023,17 @@ function buildLists(){
   const container=document.getElementById('compLists');
   if(!container) return;
   container.innerHTML='';
-  const allSections=compSections();
-  const sections=allSections.filter(s=>s.cat!=='self');   // 顯示用分區：不含本中心獨立分區
-  if(curCat!=='all' && !sections.some(s=>s.cat===curCat)) curCat='all';  // 防呆：舊的「本中心」篩選狀態自動回全部
-  const primaryCat=sections.length?sections[0].cat:null;   // 主要對手分區＝第一個非本中心分區
+  const sections=compCardSections();   // 顯示用分區：金門合併高/中價位；劍潭曾文維持主要對手/參考房價
+  if(curCat!=='all' && !sections.some(s=>s.key===curCat)) curCat='all';  // 防呆：舊的篩選狀態自動回全部
+  const primaryKey=sections.length?sections[0].key:null;   // 主要對手分區＝第一個分區
   const selfHotel=COMPETITORS.find(h=>h.self);
   const today=new Date();
   const fmt=d=>`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
   const histDates=(HIST_DATA&&HIST_DATA.dates)||[];
 
   sections.forEach(sec=>{
-    if(curCat!=='all'&&curCat!==sec.cat) return;
-    const hotels=COMPETITORS.filter(h=>h.cat===sec.cat);
+    if(curCat!=='all'&&curCat!==sec.key) return;
+    const hotels=COMPETITORS.filter(h=>sec.cats.includes(h.cat));
 
     const available = hotels.filter(h=>h.avail&&h.price>0).sort((a,b)=>a.price-b.price);
     const noPrice   = hotels.filter(h=>h.avail&&h.price===0);
@@ -6027,7 +6041,7 @@ function buildLists(){
     let sorted    = [...available, ...noPrice, ...soldOut];
 
     // 主要對手分區：本中心固定插在最前面（左上角第一格），不受價格排序影響
-    if(sec.cat===primaryCat && selfHotel) sorted = [selfHotel, ...sorted];
+    if(sec.key===primaryKey && selfHotel) sorted = [selfHotel, ...sorted];
 
     if(!sorted.length) return;
 
