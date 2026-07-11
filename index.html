@@ -8465,6 +8465,38 @@ function parseNewsDate(str){
   return new Date(parseInt(m[1]),parseInt(m[2])-1,m[3]?parseInt(m[3]):1);
 }
 
+// ── RSS 多代理容錯抓取：allorigins 是免費服務，已知會間歇性失敗
+// （CORS header 偶爾缺失、伺服器不穩），單靠它會讓「自動更新」變得時好時壞。
+// 這裡改成依序嘗試多個代理，其中一個失敗就自動換下一個，全部失敗才真的算失敗。
+async function fetchRssViaProxies(targetUrl, timeoutMs){
+  timeoutMs = timeoutMs || 8000;
+  const proxies = [
+    { url: 'https://api.allorigins.win/get?url=' + encodeURIComponent(targetUrl), json: true  },
+    { url: 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(targetUrl), json: false },
+    { url: 'https://corsproxy.io/?url=' + encodeURIComponent(targetUrl), json: false },
+  ];
+  let lastErr = null;
+  for (let i = 0; i < proxies.length; i++) {
+    const p = proxies[i];
+    try {
+      const resp = await fetch(p.url, { signal: AbortSignal.timeout(timeoutMs) });
+      if (!resp.ok) throw new Error('http ' + resp.status);
+      let text;
+      if (p.json) {
+        const data = await resp.json();
+        text = data && data.contents;
+      } else {
+        text = await resp.text();
+      }
+      if (!text || text.length < 20) throw new Error('empty body');
+      return text;
+    } catch (e) {
+      lastErr = e;   // 這個代理失敗，換下一個試
+    }
+  }
+  throw lastErr || new Error('all proxies failed');
+}
+
 // ── 觀光署最新消息（顯示3則，其餘收合，超過1年自動移除）─
 async function renderOfficialNews(){
   const el   = document.getElementById('officialNewsFeed');
@@ -8494,14 +8526,11 @@ async function renderOfficialNews(){
   // 1) 先用寫死備援立即顯示（不開天窗）
   paint(OFFICIAL_NEWS, '');
 
-  // 2) 嘗試抓觀光署官方 RSS（admin.taiwan.net.tw/fapi/rss/1）
+  // 2) 嘗試抓觀光署官方 RSS（admin.taiwan.net.tw/fapi/rss/1），依序試多個代理
   try{
     const rssUrl='https://admin.taiwan.net.tw/fapi/rss/1';
-    const proxyUrl=`https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`;
-    const resp=await fetch(proxyUrl,{signal:AbortSignal.timeout(8000)});
-    if(!resp.ok) throw new Error('fetch failed');
-    const data=await resp.json();
-    const xml=new DOMParser().parseFromString(data.contents,'text/xml');
+    const xmlText = await fetchRssViaProxies(rssUrl, 8000);
+    const xml=new DOMParser().parseFromString(xmlText,'text/xml');
     const raw=[...xml.querySelectorAll('item')];
     if(!raw.length) throw new Error('no items');
 
@@ -8568,15 +8597,12 @@ async function fetchTourNews(){
   renderWithCollapse(fallback.length ? fallback : FALLBACK_NEWS.slice(0,3));
   if(timeEl) timeEl.textContent='備援資料';
 
-  // 嘗試 RSS（7天內新聞）
+  // 嘗試 RSS（7天內新聞），依序試多個代理
   try{
     const q=encodeURIComponent('台灣旅遊 觀光 when:7d');
     const rssUrl=`https://news.google.com/rss/search?q=${q}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant`;
-    const proxyUrl=`https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`;
-    const resp=await fetch(proxyUrl,{signal:AbortSignal.timeout(8000)});
-    if(!resp.ok) throw new Error('fetch failed');
-    const data=await resp.json();
-    const xml=new DOMParser().parseFromString(data.contents,'text/xml');
+    const xmlText = await fetchRssViaProxies(rssUrl, 8000);
+    const xml=new DOMParser().parseFromString(xmlText,'text/xml');
     const raw=[...xml.querySelectorAll('item')];
     if(!raw.length) throw new Error('no items');
 
