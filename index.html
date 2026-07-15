@@ -2940,7 +2940,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 
 <div class="hdr">
   <div>
-    <div class="logo">全國總攬</div>
+    <div class="logo">單位績效</div>
     <div class="sub">12個營業據點・業績總覽</div>
   </div>
   <div style="text-align:right;">
@@ -2958,20 +2958,37 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
     <span class="import-arrow" id="hqImportArrow">▼</span>
   </div>
   <div id="hqImportBody" style="display:none;padding:12px;">
-    <div style="font-size:var(--fs-label);color:var(--tx3);line-height:1.7;margin-bottom:8px;">
-      在總攬 Excel 報表中，從「單位別」那一列開始整塊全選複製，直接貼到下面。程式會自動判斷月份、跳過空白（已結束營業）據點，不用手動刪資料。
+    <div style="font-size:var(--fs-label);color:var(--tx3);line-height:1.7;margin-bottom:10px;">
+      直接上傳從系統匯出的總攬 Excel 檔（.xlsx）即可，程式會自動判斷月份、跳過空白（已結束營業）據點，不用手動刪資料、也不用先開檔複製。
     </div>
-    <textarea id="hqPaste" rows="6" placeholder="從Excel全選複製，貼到這裡..."
-      style="width:100%;background:var(--sf3);border:1px solid var(--bd);border-radius:var(--rs);
-      padding:8px;font-size:var(--fs-label);color:var(--tx);font-family:'DM Mono',monospace;
-      resize:vertical;outline:none;line-height:1.5;"></textarea>
-    <button onclick="importHQPaste()"
-      style="width:100%;margin-top:8px;background:var(--ac);color:#0F1923;border:none;
-      border-radius:var(--rs);padding:9px;font-size:var(--fs-label);font-weight:700;cursor:pointer;
-      font-family:'Noto Sans TC',sans-serif;">
-      解析並儲存這個月資料
-    </button>
-    <div id="hqImportStatus" style="font-size:var(--fs-label);text-align:center;min-height:16px;margin-top:6px;"></div>
+
+    <!-- 方法① 上傳 Excel 檔案 -->
+    <label style="display:flex;align-items:center;gap:10px;background:var(--sf2);border:1px dashed var(--bd2);
+      border-radius:var(--rs);padding:14px;cursor:pointer;margin-bottom:10px;">
+      <span style="font-size:22px;">📄</span>
+      <div>
+        <div style="font-size:var(--fs-label);color:var(--tx);">點擊選擇 Excel 檔案</div>
+        <div style="font-size:var(--fs-tiny);color:var(--tx3);">總攬報表 .xlsx（第一個工作表）</div>
+      </div>
+      <input type="file" id="hqExcelFile" accept=".xlsx,.xls" style="display:none" onchange="importHQExcelFile(this)">
+    </label>
+
+    <!-- 方法② 貼上文字（備用） -->
+    <details style="background:var(--sf2);border-radius:var(--rs);padding:10px 12px;">
+      <summary style="font-size:var(--fs-label);color:var(--tx3);cursor:pointer;">方法② 貼上文字（備用，複製自 Excel）</summary>
+      <textarea id="hqPaste" rows="5" placeholder="從Excel全選複製，貼到這裡..."
+        style="width:100%;margin-top:8px;background:var(--sf3);border:1px solid var(--bd);border-radius:var(--rs);
+        padding:8px;font-size:var(--fs-label);color:var(--tx);font-family:'DM Mono',monospace;
+        resize:vertical;outline:none;line-height:1.5;"></textarea>
+      <button onclick="importHQPaste()"
+        style="width:100%;margin-top:8px;background:var(--sf3);color:var(--tx2);border:1px solid var(--bd);
+        border-radius:var(--rs);padding:8px;font-size:var(--fs-label);font-weight:500;cursor:pointer;
+        font-family:'Noto Sans TC',sans-serif;">
+        解析並儲存這個月資料
+      </button>
+    </details>
+
+    <div id="hqImportStatus" style="font-size:var(--fs-label);text-align:center;min-height:16px;margin-top:8px;"></div>
   </div>
 </div>
 
@@ -3014,7 +3031,7 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <div class="ni" id="nav-tri" onclick="switchPage('tri')"><div class="ni-l">交通<br>概況</div></div>
   <div class="ni" id="nav-edu" onclick="switchPage('edu')"><div class="ni-l">外在<br>環境</div></div>
   <div class="ni" id="nav-mkt" onclick="switchPage('mkt')"><div class="ni-l">產業<br>分析</div></div>
-  <div class="ni" id="nav-hq" onclick="switchPage('hq')"><div class="ni-l">全國<br>總攬</div></div>
+  <div class="ni" id="nav-hq" onclick="switchPage('hq')"><div class="ni-l">單位<br>績效</div></div>
 </div>
 
 <script>
@@ -7186,7 +7203,7 @@ function buildYoY(){
   });
 }
 
-// ── 全國總攬（跨單位，與 getUnit() 無關；資料獨立儲存在 localStorage，不隨單位切換而變）──
+// ── 單位績效（跨單位，與 getUnit() 無關；資料獨立儲存在 localStorage，不隨單位切換而變）──
 // 12個營業據點：劍潭/復興/日月潭/溪頭/阿里山/曾文/梅山/墾丁/天祥/觀雲山莊/金門/花蓮學苑
 // （金山/澄清湖活動中心/澄清湖水漾會館/澎湖目前無資料，視為已結束營業，貼上時會自動略過）
 const HQ_STORE_KEY='cyc_hq_overview_v1';
@@ -7204,21 +7221,22 @@ function saveHQStore(){
   try{ localStorage.setItem(HQ_STORE_KEY, JSON.stringify(HQ_STORE)); }catch(e){}
 }
 
-// 解析從 Excel 複製貼上的內容（Tab分隔）。欄位順序對應總攬報表：
+// 解析核心：輸入為「列陣列」（每列是一個儲存格值陣列），貼上文字與上傳 Excel 都轉成
+// 這個格式後共用同一套判斷邏輯。欄位順序對應總攬報表：
 // A=單位名稱 B-E=住宿(組織/一般/收入/人次) F-I=餐飲 J-M=研習 N-Q=活動 R-T=代辦(無人次)
 // U-W=服務合計(無人次) X=住宿人次平均餐數
-function parseHQPasteText(text){
-  const lines=text.split(/\r?\n/).map(l=>l.split('\t'));
+function parseHQRows(rows){
   let month=null;
-  for(let i=0;i<lines.length;i++){
-    const joined=lines[i].join(' ');
+  for(let i=0;i<rows.length;i++){
+    const joined=(rows[i]||[]).join(' ');
     const m=joined.match(/(\d{4})\s*年\s*(\d{1,2})\s*月/);
     if(m){ month=m[1]+'-'+String(m[2]).padStart(2,'0'); break; }
   }
   const num=v=>{ const n=parseFloat(String(v==null?'':v).replace(/[^\d.\-]/g,'')); return isNaN(n)?0:n; };
   const data={};
-  lines.forEach(line=>{
-    const name=(line[0]||'').trim();
+  rows.forEach(line=>{
+    line=line||[];
+    const name=String(line[0]==null?'':line[0]).trim();
     if(!name) return;
     if(name==='單位別' || name.indexOf('合計')>=0 || name.indexOf('報表編號')>=0) return;
     const rest=line.slice(1,24);
@@ -7237,6 +7255,30 @@ function parseHQPasteText(text){
   return {month, data};
 }
 
+// 貼上文字（Tab分隔）解析
+function parseHQPasteText(text){
+  const rows=text.split(/\r?\n/).map(l=>l.split('\t'));
+  return parseHQRows(rows);
+}
+
+// 上傳 Excel 檔案解析（用已載入的 SheetJS/XLSX 讀取第一個工作表）
+function parseHQExcelFile(file, callback){
+  if(typeof XLSX==='undefined'){ callback(new Error('XLSX 函式庫尚未載入，請重新整理頁面再試一次')); return; }
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=new Uint8Array(e.target.result);
+      const wb=XLSX.read(data,{type:'array'});
+      const wsName=wb.SheetNames[0];
+      const ws=wb.Sheets[wsName];
+      const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''});
+      callback(null, parseHQRows(rows));
+    }catch(err){ callback(err); }
+  };
+  reader.onerror=function(){ callback(new Error('讀取檔案失敗')); };
+  reader.readAsArrayBuffer(file);
+}
+
 function toggleHQImport(){
   const body=document.getElementById('hqImportBody');
   const arrow=document.getElementById('hqImportArrow');
@@ -7246,24 +7288,43 @@ function toggleHQImport(){
   if(arrow) arrow.textContent=show?'▲':'▼';
 }
 
+function applyHQImportResult(month, data, status){
+  const cnt=Object.keys(data).length;
+  if(!month || !cnt){
+    if(status){ status.textContent='解析失敗，請確認檔案／貼上內容是否包含「單位別」那一列與各據點資料列'; status.style.color='var(--red)'; }
+    return false;
+  }
+  HQ_STORE.months[month]=data;
+  saveHQStore();
+  hqCurMonth=month;
+  if(status){ status.textContent='已儲存 '+month+'，共 '+cnt+' 個據點'; status.style.color='var(--green)'; }
+  buildHQMonthSelector();
+  renderHQPage();
+  return true;
+}
+
+function importHQExcelFile(input){
+  const f=input.files[0];
+  if(!f) return;
+  const status=document.getElementById('hqImportStatus');
+  if(status){ status.textContent='讀取中...'; status.style.color='var(--tx3)'; }
+  parseHQExcelFile(f, function(err, result){
+    if(err){
+      if(status){ status.textContent='讀取失敗：'+err.message; status.style.color='var(--red)'; }
+      return;
+    }
+    applyHQImportResult(result.month, result.data, status);
+    input.value='';   // 清空，允許重複選同一檔案再上傳一次
+  });
+}
+
 function importHQPaste(){
   const ta=document.getElementById('hqPaste');
   const status=document.getElementById('hqImportStatus');
   const text=ta?ta.value.trim():'';
   if(!text){ if(status){status.textContent='請先貼上資料';status.style.color='var(--red)';} return; }
   const {month,data}=parseHQPasteText(text);
-  const cnt=Object.keys(data).length;
-  if(!month || !cnt){
-    if(status){ status.textContent='解析失敗，請確認貼上範圍是否包含「單位別」那一列與各據點資料列'; status.style.color='var(--red)'; }
-    return;
-  }
-  HQ_STORE.months[month]=data;
-  saveHQStore();
-  hqCurMonth=month;
-  if(status){ status.textContent='已儲存 '+month+'，共 '+cnt+' 個據點'; status.style.color='var(--green)'; }
-  if(ta) ta.value='';
-  buildHQMonthSelector();
-  renderHQPage();
+  if(applyHQImportResult(month, data, status) && ta) ta.value='';
 }
 
 function buildHQMonthSelector(){
