@@ -2936,12 +2936,85 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
 <div style="height:80px;"></div>
 </div><!-- /page-mkt -->
 
+<div id="page-hq" class="page">
+
+<div class="hdr">
+  <div>
+    <div class="logo">全國總攬</div>
+    <div class="sub">12個營業據點・業績總覽</div>
+  </div>
+  <div style="text-align:right;">
+    <div class="date-badge" id="hqMonthBadge">尚無資料</div>
+    <div style="font-size:var(--fs-note);color:var(--tx3);margin-top:4px;">組織／一般客戶訂單分析</div>
+  </div>
+</div>
+
+<!-- 匯入區：貼上總攬 Excel 月報 -->
+<div class="import-wrap">
+  <div class="import-toggle" onclick="toggleHQImport()">
+    <div class="import-toggle-title">匯入本月資料
+      <span id="hqImportSummary" style="font-weight:400;color:var(--tx3);font-size:var(--fs-sub);margin-left:6px;"></span>
+    </div>
+    <span class="import-arrow" id="hqImportArrow">▼</span>
+  </div>
+  <div id="hqImportBody" style="display:none;padding:12px;">
+    <div style="font-size:var(--fs-label);color:var(--tx3);line-height:1.7;margin-bottom:8px;">
+      在總攬 Excel 報表中，從「單位別」那一列開始整塊全選複製，直接貼到下面。程式會自動判斷月份、跳過空白（已結束營業）據點，不用手動刪資料。
+    </div>
+    <textarea id="hqPaste" rows="6" placeholder="從Excel全選複製，貼到這裡..."
+      style="width:100%;background:var(--sf3);border:1px solid var(--bd);border-radius:var(--rs);
+      padding:8px;font-size:var(--fs-label);color:var(--tx);font-family:'DM Mono',monospace;
+      resize:vertical;outline:none;line-height:1.5;"></textarea>
+    <button onclick="importHQPaste()"
+      style="width:100%;margin-top:8px;background:var(--ac);color:#0F1923;border:none;
+      border-radius:var(--rs);padding:9px;font-size:var(--fs-label);font-weight:700;cursor:pointer;
+      font-family:'Noto Sans TC',sans-serif;">
+      解析並儲存這個月資料
+    </button>
+    <div id="hqImportStatus" style="font-size:var(--fs-label);text-align:center;min-height:16px;margin-top:6px;"></div>
+  </div>
+</div>
+
+<!-- 月份選擇 -->
+<div class="lbl" style="padding:14px 18px 6px;display:flex;align-items:center;justify-content:space-between;">
+  <span>檢視月份</span>
+  <select id="hqMonthSel" onchange="onHQMonthChange()" style="background:var(--sf2);border:1px solid var(--bd);
+    border-radius:var(--rs);color:var(--tx);font-size:var(--fs-label);padding:4px 8px;font-family:'DM Mono',monospace;">
+    <option value="">尚無資料</option>
+  </select>
+</div>
+
+<!-- KPI 總覽 -->
+<div class="kg" id="hqKpiGrid"></div>
+
+<!-- 據點排名 -->
+<div class="lbl" style="padding:14px 18px 6px;display:flex;align-items:center;justify-content:space-between;">
+  <span>各據點業績排名</span>
+  <span style="font-size:var(--fs-mini);color:var(--tx3);text-transform:none;letter-spacing:0;">點名稱可展開明細</span>
+</div>
+<div id="hqRankList" style="margin:0 18px;display:flex;flex-direction:column;gap:6px;"></div>
+
+<!-- 多月趨勢 -->
+<div class="lbl" style="padding:14px 18px 6px;">
+  <span>全網服務合計趨勢</span>
+</div>
+<div class="tc-card">
+  <div class="t-wrap" style="overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;">
+    <svg id="hqTrendSvg" viewBox="0 0 640 180" style="display:block;"></svg>
+  </div>
+</div>
+
+<div style="height:80px;"></div>
+</div><!-- /page-hq -->
+
+
 <div class="bnav">
   <div class="ni on" id="nav-occ" onclick="switchPage('occ')"><div class="ni-l">營運<br>分析</div></div>
   <div class="ni" id="nav-comp" onclick="switchPage('comp')"><div class="ni-l">競爭<br>房價</div></div>
   <div class="ni" id="nav-tri" onclick="switchPage('tri')"><div class="ni-l">交通<br>概況</div></div>
   <div class="ni" id="nav-edu" onclick="switchPage('edu')"><div class="ni-l">外在<br>環境</div></div>
   <div class="ni" id="nav-mkt" onclick="switchPage('mkt')"><div class="ni-l">產業<br>分析</div></div>
+  <div class="ni" id="nav-hq" onclick="switchPage('hq')"><div class="ni-l">全國<br>總攬</div></div>
 </div>
 
 <script>
@@ -7113,7 +7186,241 @@ function buildYoY(){
   });
 }
 
-// ── AI ────────────────────────────────────────────────────────
+// ── 全國總攬（跨單位，與 getUnit() 無關；資料獨立儲存在 localStorage，不隨單位切換而變）──
+// 12個營業據點：劍潭/復興/日月潭/溪頭/阿里山/曾文/梅山/墾丁/天祥/觀雲山莊/金門/花蓮學苑
+// （金山/澄清湖活動中心/澄清湖水漾會館/澎湖目前無資料，視為已結束營業，貼上時會自動略過）
+const HQ_STORE_KEY='cyc_hq_overview_v1';
+let HQ_STORE={months:{}};
+let hqCurMonth=null;
+
+function loadHQStore(){
+  try{
+    const raw=localStorage.getItem(HQ_STORE_KEY);
+    if(raw) HQ_STORE=JSON.parse(raw);
+  }catch(e){ HQ_STORE={months:{}}; }
+  if(!HQ_STORE || !HQ_STORE.months) HQ_STORE={months:{}};
+}
+function saveHQStore(){
+  try{ localStorage.setItem(HQ_STORE_KEY, JSON.stringify(HQ_STORE)); }catch(e){}
+}
+
+// 解析從 Excel 複製貼上的內容（Tab分隔）。欄位順序對應總攬報表：
+// A=單位名稱 B-E=住宿(組織/一般/收入/人次) F-I=餐飲 J-M=研習 N-Q=活動 R-T=代辦(無人次)
+// U-W=服務合計(無人次) X=住宿人次平均餐數
+function parseHQPasteText(text){
+  const lines=text.split(/\r?\n/).map(l=>l.split('\t'));
+  let month=null;
+  for(let i=0;i<lines.length;i++){
+    const joined=lines[i].join(' ');
+    const m=joined.match(/(\d{4})\s*年\s*(\d{1,2})\s*月/);
+    if(m){ month=m[1]+'-'+String(m[2]).padStart(2,'0'); break; }
+  }
+  const num=v=>{ const n=parseFloat(String(v==null?'':v).replace(/[^\d.\-]/g,'')); return isNaN(n)?0:n; };
+  const data={};
+  lines.forEach(line=>{
+    const name=(line[0]||'').trim();
+    if(!name) return;
+    if(name==='單位別' || name.indexOf('合計')>=0 || name.indexOf('報表編號')>=0) return;
+    const rest=line.slice(1,24);
+    const hasData=rest.some(v=>num(v)!==0);
+    if(!hasData) return;   // 空白（已結束營業）據點自動跳過，不用手動刪
+    data[name]={
+      lodging:{org:num(line[1]),gen:num(line[2]),rev:num(line[3]),guests:num(line[4])},
+      dining: {org:num(line[5]),gen:num(line[6]),rev:num(line[7]),guests:num(line[8])},
+      study:  {org:num(line[9]),gen:num(line[10]),rev:num(line[11]),guests:num(line[12])},
+      event:  {org:num(line[13]),gen:num(line[14]),rev:num(line[15]),guests:num(line[16])},
+      agency: {org:num(line[17]),gen:num(line[18]),rev:num(line[19])},
+      total:  {org:num(line[20]),gen:num(line[21]),rev:num(line[22])},
+      avgMeals:num(line[23]),
+    };
+  });
+  return {month, data};
+}
+
+function toggleHQImport(){
+  const body=document.getElementById('hqImportBody');
+  const arrow=document.getElementById('hqImportArrow');
+  if(!body) return;
+  const show=body.style.display==='none';
+  body.style.display=show?'block':'none';
+  if(arrow) arrow.textContent=show?'▲':'▼';
+}
+
+function importHQPaste(){
+  const ta=document.getElementById('hqPaste');
+  const status=document.getElementById('hqImportStatus');
+  const text=ta?ta.value.trim():'';
+  if(!text){ if(status){status.textContent='請先貼上資料';status.style.color='var(--red)';} return; }
+  const {month,data}=parseHQPasteText(text);
+  const cnt=Object.keys(data).length;
+  if(!month || !cnt){
+    if(status){ status.textContent='解析失敗，請確認貼上範圍是否包含「單位別」那一列與各據點資料列'; status.style.color='var(--red)'; }
+    return;
+  }
+  HQ_STORE.months[month]=data;
+  saveHQStore();
+  hqCurMonth=month;
+  if(status){ status.textContent='已儲存 '+month+'，共 '+cnt+' 個據點'; status.style.color='var(--green)'; }
+  if(ta) ta.value='';
+  buildHQMonthSelector();
+  renderHQPage();
+}
+
+function buildHQMonthSelector(){
+  const sel=document.getElementById('hqMonthSel');
+  if(!sel) return;
+  const months=Object.keys(HQ_STORE.months).sort();
+  if(!months.length){ sel.innerHTML='<option value="">尚無資料</option>'; return; }
+  if(!hqCurMonth || !HQ_STORE.months[hqCurMonth]) hqCurMonth=months[months.length-1];
+  sel.innerHTML=months.map(m=>'<option value="'+m+'"'+(m===hqCurMonth?' selected':'')+'>'+m+'</option>').join('');
+}
+function onHQMonthChange(){
+  const sel=document.getElementById('hqMonthSel');
+  hqCurMonth=sel?sel.value:null;
+  renderHQPage();
+}
+
+function hqFmtMoney(n){ return Math.round(n||0).toLocaleString(); }
+function hqFmtShort(n){
+  n=Math.round(n||0);
+  return n>=10000 ? (n/10000).toFixed(1)+'萬' : String(n);
+}
+
+function renderHQKpis(){
+  const grid=document.getElementById('hqKpiGrid');
+  if(!grid) return;
+  const monthData=HQ_STORE.months[hqCurMonth]||{};
+  const locs=Object.keys(monthData);
+  let totalRev=0, totalOrg=0, totalGen=0, totalGuests=0;
+  locs.forEach(name=>{
+    const d=monthData[name];
+    totalRev+=d.total.rev; totalOrg+=d.total.org; totalGen+=d.total.gen;
+    totalGuests+=d.lodging.guests;
+  });
+  const orgPct=totalRev>0?Math.round(totalOrg/totalRev*1000)/10:0;
+  const genPct=totalRev>0?Math.round(totalGen/totalRev*1000)/10:0;
+  if(!locs.length){
+    grid.innerHTML='<div class="kpi wide"><div class="kl">尚無資料</div><div class="kv" style="font-size:var(--fs-label);color:var(--tx3);">請先在上方匯入本月報表</div></div>';
+    return;
+  }
+  grid.innerHTML=
+    '<div class="kpi r wide"><div class="kl">全網服務合計</div><div class="kv">'+hqFmtMoney(totalRev)+'<span class="ku"> 元</span></div></div>'+
+    '<div class="kpi b"><div class="kl">營運據點數</div><div class="kv">'+locs.length+'<span class="ku"> 處</span></div></div>'+
+    '<div class="kpi g"><div class="kl">住宿人次(全網)</div><div class="kv">'+Math.round(totalGuests).toLocaleString()+'<span class="ku"> 人</span></div></div>'+
+    '<div class="kpi p"><div class="kl">組織客戶佔比</div><div class="kv">'+orgPct+'<span class="ku">%</span></div></div>'+
+    '<div class="kpi am"><div class="kl">一般客戶佔比</div><div class="kv">'+genPct+'<span class="ku">%</span></div></div>';
+}
+
+function toggleHQRow(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.style.display=(el.style.display==='none')?'block':'none';
+}
+
+function renderHQRanking(){
+  const box=document.getElementById('hqRankList');
+  if(!box) return;
+  const monthData=HQ_STORE.months[hqCurMonth]||{};
+  const rows=Object.keys(monthData).map(name=>Object.assign({name:name}, monthData[name]))
+    .sort((a,b)=>b.total.rev-a.total.rev);
+  if(!rows.length){
+    box.innerHTML='<div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;padding:20px;">尚無資料，請先在上方匯入本月報表</div>';
+    return;
+  }
+  const maxRev=rows[0].total.rev||1;
+  const catLabel={lodging:'住宿',dining:'餐飲',study:'研習',event:'活動',agency:'代辦'};
+  box.innerHTML=rows.map((r,i)=>{
+    const pct=Math.max(2,Math.round(r.total.rev/maxRev*100));
+    const orgPct=r.total.rev>0?Math.round(r.total.org/r.total.rev*100):0;
+    const rid='hqrow'+i;
+    const catRows=['lodging','dining','study','event','agency'].map(cat=>{
+      const c=r[cat];
+      if(!c || !c.rev) return '';
+      return '<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);font-size:var(--fs-label);">'+
+        '<span style="color:var(--tx3);">'+catLabel[cat]+'</span>'+
+        '<span style="color:var(--tx);font-family:\'DM Mono\',monospace;">'+hqFmtMoney(c.rev)+' 元</span></div>';
+    }).join('');
+    return '<div style="background:var(--sf);border-radius:var(--rs);padding:10px 12px;">'+
+      '<div style="display:flex;align-items:center;gap:8px;cursor:pointer;" onclick="toggleHQRow(\''+rid+'\')">'+
+        '<span style="font-size:var(--fs-label);color:var(--tx3);width:18px;flex-shrink:0;font-family:\'DM Mono\',monospace;">'+(i+1)+'</span>'+
+        '<div style="flex:1;min-width:0;">'+
+          '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;">'+
+            '<span style="font-size:var(--fs-label);color:var(--tx);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+r.name+'</span>'+
+            '<span style="font-size:var(--fs-label);font-weight:700;color:var(--ac2);font-family:\'DM Mono\',monospace;white-space:nowrap;">'+hqFmtMoney(r.total.rev)+'</span>'+
+          '</div>'+
+          '<div style="height:6px;background:var(--sf2);border-radius:3px;margin-top:5px;overflow:hidden;">'+
+            '<div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,#C8963E,#E8B86D);border-radius:3px;"></div>'+
+          '</div>'+
+          '<div style="font-size:var(--fs-mini);color:var(--tx3);margin-top:3px;">組織 '+orgPct+'%・一般 '+(100-orgPct)+'%</div>'+
+        '</div>'+
+      '</div>'+
+      '<div id="'+rid+'" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--bd);">'+(catRows||'<div style="font-size:var(--fs-label);color:var(--tx3);">無分類明細</div>')+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+function renderHQTrend(){
+  const svg=document.getElementById('hqTrendSvg');
+  if(!svg) return;
+  svg.innerHTML='';
+  const months=Object.keys(HQ_STORE.months).sort();
+  const W=640, H=180, pt={t:16,b:26,l:44,r:10};
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+  if(!months.length){
+    svg.innerHTML='<text x="'+(W/2)+'" y="'+(H/2)+'" text-anchor="middle" fill="#6A7E92" font-size="12" font-family="DM Mono">尚無資料，累積多個月份後這裡會畫出趨勢線</text>';
+    return;
+  }
+  const totals=months.map(m=>{
+    const md=HQ_STORE.months[m]||{};
+    return Object.keys(md).reduce((s,name)=>s+(md[name].total.rev||0),0);
+  });
+  const iW=W-pt.l-pt.r, iH=H-pt.t-pt.b;
+  const maxV=Math.max.apply(null,totals.concat([1]));
+  const yp=v=>pt.t+(1-v/maxV)*iH;
+  const xp=i=> months.length>1 ? pt.l+(iW/(months.length-1))*i : pt.l+iW/2;
+  [0,0.25,0.5,0.75,1].forEach(f=>{
+    const y=pt.t+(1-f)*iH;
+    svg.innerHTML+='<line x1="'+pt.l+'" y1="'+y+'" x2="'+(W-pt.r)+'" y2="'+y+'" stroke="rgba(255,255,255,.05)" stroke-width="1"/>';
+    svg.innerHTML+='<text x="'+(pt.l-5)+'" y="'+(y+3)+'" text-anchor="end" fill="#4A6070" font-size="9" font-family="DM Mono">'+hqFmtShort(maxV*f)+'</text>';
+  });
+  if(months.length>1){
+    let path='';
+    totals.forEach((v,i)=>{
+      const x=xp(i), y=yp(v);
+      path+=(i===0?'M':'L')+x.toFixed(1)+' '+y.toFixed(1)+' ';
+    });
+    svg.innerHTML+='<path d="'+path+'" fill="none" stroke="#C8963E" stroke-width="2"/>';
+  }
+  totals.forEach((v,i)=>{
+    const x=xp(i), y=yp(v);
+    svg.innerHTML+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3.5" fill="#E8B86D"/>';
+    svg.innerHTML+='<text x="'+x.toFixed(1)+'" y="'+(y-9).toFixed(1)+'" text-anchor="middle" fill="#E8B86D" font-size="10" font-weight="700" font-family="DM Mono">'+hqFmtShort(v)+'</text>';
+    svg.innerHTML+='<text x="'+x.toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" fill="#6A7E92" font-size="10" font-family="DM Mono">'+months[i]+'</text>';
+  });
+}
+
+function renderHQPage(){
+  if(!hqCurMonth){
+    const months=Object.keys(HQ_STORE.months).sort();
+    hqCurMonth=months.length?months[months.length-1]:null;
+  }
+  const badge=document.getElementById('hqMonthBadge');
+  if(badge) badge.textContent=hqCurMonth?(hqCurMonth+' 資料'):'尚無資料';
+  const summary=document.getElementById('hqImportSummary');
+  if(summary){
+    const n=Object.keys(HQ_STORE.months).length;
+    summary.textContent=n?('已累積 '+n+' 個月份'):'';
+  }
+  renderHQKpis();
+  renderHQRanking();
+  renderHQTrend();
+}
+
+function initHQPage(){
+  loadHQStore();
+  buildHQMonthSelector();
+  renderHQPage();
+}
 const DEMO_AI=[
   {n:'01',t:'<strong>搭配石蚵文化季（4/1–5/30），推出聯合套餐</strong><br>金寧鄉石蚵文化季持續至5月底，建議推出「金門石蚵美食住宿套餐」，含接駁服務，鎖定親子/小團體客。對比IN99（1,800元）和海福（1,500元），本中心可主打差異化體驗而非價格競爭。'},
   {n:'02',t:'<strong>YoY 下滑28%，針對5月下旬低谷快速促銷</strong><br>5/20–24出現多日低住宿率。建議於5/15前推出「平日特惠900元起」限時方案，並在Booking.com設定限時標籤。浯江大飯店（2,000元含早餐）定位較高，本中心可主打CP值優勢。'},
@@ -7481,6 +7788,7 @@ function switchPage(id){
   if(id==='tri'){ setTimeout(()=>{ loadTriData(); buildTriMonthChart(); buildTriChart(); fetchTriNews(); },80); }
   if(id==='mkt'){ setTimeout(()=>{ loadIntelPage(); },80); }
   if(id==='edu'){ setTimeout(()=>{ buildTourCharts(); buildCountyGrid(); loadAITourResult(); fetchTourNews(); },100); }
+  if(id==='hq'){ setTimeout(()=>{ initHQPage(); },50); }
   window.scrollTo(0,0);
 }
 
