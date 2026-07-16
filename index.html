@@ -2967,10 +2967,10 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
       border-radius:var(--rs);padding:14px;cursor:pointer;margin-bottom:10px;">
       <span style="font-size:22px;">📄</span>
       <div>
-        <div style="font-size:var(--fs-label);color:var(--tx);">點擊選擇 Excel 檔案</div>
-        <div style="font-size:var(--fs-tiny);color:var(--tx3);">總攬報表 .xlsx（第一個工作表）</div>
+        <div style="font-size:var(--fs-label);color:var(--tx);">點擊選擇 Excel 檔案（可一次選多個）</div>
+        <div style="font-size:var(--fs-tiny);color:var(--tx3);">總攬報表 .xlsx，例如兩年份共24個月，一次全選上傳</div>
       </div>
-      <input type="file" id="hqExcelFile" accept=".xlsx,.xls" style="display:none" onchange="importHQExcelFile(this)">
+      <input type="file" id="hqExcelFile" accept=".xlsx,.xls" multiple style="display:none" onchange="importHQExcelFiles(this)">
     </label>
 
     <!-- 方法② 貼上文字（備用） -->
@@ -3010,6 +3010,12 @@ body{background:var(--bg);color:var(--tx);font-family:'Noto Sans TC',sans-serif;
   <span style="font-size:var(--fs-mini);color:var(--tx3);text-transform:none;letter-spacing:0;">點名稱可展開明細</span>
 </div>
 <div id="hqRankList" style="margin:0 18px;display:flex;flex-direction:column;gap:6px;"></div>
+
+<!-- YoY 比較（跟去年同月） -->
+<div class="lbl" style="padding:14px 18px 6px;">
+  <span>YoY 比較（跟去年同月）</span>
+</div>
+<div id="hqYoyBox" style="margin:0 18px;"></div>
 
 <!-- 多月趨勢 -->
 <div class="lbl" style="padding:14px 18px 6px;">
@@ -7303,19 +7309,42 @@ function applyHQImportResult(month, data, status){
   return true;
 }
 
-function importHQExcelFile(input){
-  const f=input.files[0];
-  if(!f) return;
+function importHQExcelFiles(input){
+  const files=Array.prototype.slice.call(input.files||[]);
+  if(!files.length) return;
   const status=document.getElementById('hqImportStatus');
-  if(status){ status.textContent='讀取中...'; status.style.color='var(--tx3)'; }
-  parseHQExcelFile(f, function(err, result){
-    if(err){
-      if(status){ status.textContent='讀取失敗：'+err.message; status.style.color='var(--red)'; }
+  if(status){ status.textContent='讀取中...(0/'+files.length+')'; status.style.color='var(--tx3)'; }
+  const okList=[], failList=[];
+  let done=0;
+  function next(i){
+    if(i>=files.length){
+      saveHQStore();
+      buildHQMonthSelector();
+      renderHQPage();
+      if(status){
+        let msg='完成：成功 '+okList.length+' 個月份';
+        if(okList.length) msg+='（'+okList.sort().join('、')+'）';
+        if(failList.length) msg+='；失敗 '+failList.length+' 個：'+failList.join('、');
+        status.textContent=msg;
+        status.style.color=failList.length?'#F59E0B':'var(--green)';
+      }
+      input.value='';
       return;
     }
-    applyHQImportResult(result.month, result.data, status);
-    input.value='';   // 清空，允許重複選同一檔案再上傳一次
-  });
+    const f=files[i];
+    parseHQExcelFile(f, function(err, result){
+      done++;
+      if(status) status.textContent='讀取中...('+done+'/'+files.length+')';
+      if(err || !result.month || !Object.keys(result.data).length){
+        failList.push(f.name);
+      }else{
+        HQ_STORE.months[result.month]=result.data;
+        okList.push(result.month);
+      }
+      next(i+1);
+    });
+  }
+  next(0);
 }
 
 function importHQPaste(){
@@ -7460,6 +7489,108 @@ function renderHQTrend(){
   });
 }
 
+function hqPrevYearKey(monthKey){
+  const m=monthKey?monthKey.match(/^(\d{4})-(\d{2})$/):null;
+  if(!m) return null;
+  return (parseInt(m[1],10)-1)+'-'+m[2];
+}
+
+// YoY 比較：本中心加總、各服務類別加總、各中心逐項明細，三個層次一次呈現
+function renderHQYoY(){
+  const box=document.getElementById('hqYoyBox');
+  if(!box) return;
+  const curKey=hqCurMonth;
+  const prevKey=hqPrevYearKey(curKey);
+  const curData=curKey?(HQ_STORE.months[curKey]||{}):{};
+  const prevData=prevKey?(HQ_STORE.months[prevKey]||{}):{};
+  const curLocs=Object.keys(curData);
+  const prevLocs=Object.keys(prevData);
+
+  if(!curLocs.length || !prevKey || !prevLocs.length){
+    box.innerHTML='<div style="font-size:var(--fs-label);color:var(--tx3);text-align:center;padding:16px;background:var(--sf);border-radius:var(--rs);">'+
+      '尚無 '+(prevKey||'去年同月')+' 的資料可比較，上傳去年同月份的報表後這裡會自動顯示 YoY</div>';
+    return;
+  }
+
+  const cats=['lodging','dining','study','event','agency'];
+  const catLabel={lodging:'住宿',dining:'餐飲',study:'研習',event:'活動',agency:'代辦'};
+
+  // 1) 全部金額加總 YoY
+  let curTotal=0, prevTotal=0;
+  curLocs.forEach(n=>curTotal+=curData[n].total.rev);
+  prevLocs.forEach(n=>prevTotal+=prevData[n].total.rev);
+
+  // 2) 全中心各服務類別加總 YoY
+  const catTotals=cats.map(cat=>{
+    let cur=0, prev=0;
+    curLocs.forEach(n=>cur+=(curData[n][cat]?curData[n][cat].rev:0));
+    prevLocs.forEach(n=>prev+=(prevData[n][cat]?prevData[n][cat].rev:0));
+    return {cat:cat, label:catLabel[cat], cur:cur, prev:prev};
+  });
+
+  let html='';
+
+  // 全部金額加總卡
+  html+='<div class="kpi r wide" style="margin-bottom:10px;">'+
+    '<div class="kl">全部金額加總（'+curKey+' vs '+prevKey+'）</div>'+
+    '<div class="kv">'+hqFmtMoney(curTotal)+'<span class="ku"> 元</span></div>'+
+    '<div style="margin-top:4px;font-size:var(--fs-label);">'+deltaStr(curTotal,prevTotal,'元',false,false)+
+    ' <span style="color:var(--tx3);font-size:var(--fs-tiny);">（去年同月 '+hqFmtMoney(prevTotal)+' 元）</span></div>'+
+    '</div>';
+
+  // 各服務類別加總 YoY 小卡
+  html+='<div style="font-size:var(--fs-label);color:var(--tx3);margin:2px 0 6px;">全中心各服務加總 YoY</div>';
+  html+='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;">';
+  catTotals.forEach(c=>{
+    html+='<div style="background:var(--sf);border-radius:var(--rs);padding:10px;">'+
+      '<div style="font-size:var(--fs-label);color:var(--tx3);margin-bottom:2px;">'+c.label+'服務</div>'+
+      '<div style="font-size:calc(16px * var(--fs));font-weight:700;color:var(--tx);font-family:\'DM Mono\',monospace;">'+hqFmtMoney(c.cur)+'</div>'+
+      '<div style="margin-top:2px;font-size:var(--fs-tiny);">'+deltaStr(c.cur,c.prev,'元',false,true)+'</div>'+
+      '</div>';
+  });
+  html+='</div>';
+
+  // 各中心逐項明細 YoY（僅列兩年都有資料的中心，點名稱展開）
+  const bothLocs=curLocs.filter(n=>prevLocs.indexOf(n)>=0);
+  if(bothLocs.length){
+    html+='<div style="font-size:var(--fs-label);color:var(--tx3);margin:2px 0 8px;">各中心明細（點名稱展開各服務 YoY）</div>';
+    html+=bothLocs.map((name,i)=>{
+      const cd=curData[name], pd=prevData[name];
+      const rid='hqyoy'+i;
+      const catRows=cats.map(cat=>{
+        const cRev=cd[cat]?cd[cat].rev:0, pRev=pd[cat]?pd[cat].rev:0;
+        if(!cRev && !pRev) return '';
+        return '<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bd);font-size:var(--fs-label);">'+
+          '<span style="color:var(--tx3);">'+catLabel[cat]+'</span>'+
+          '<span style="display:flex;gap:10px;align-items:center;">'+
+            '<span style="color:var(--tx);font-family:\'DM Mono\',monospace;">'+hqFmtMoney(cRev)+'</span>'+
+            deltaStr(cRev,pRev,'元',false,true)+
+          '</span></div>';
+      }).join('');
+      return '<div style="background:var(--sf);border-radius:var(--rs);padding:10px 12px;margin-bottom:6px;">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;" onclick="toggleHQRow(\''+rid+'\')">'+
+          '<span style="font-size:var(--fs-label);color:var(--tx);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+name+'</span>'+
+          '<span style="display:flex;gap:10px;align-items:center;flex-shrink:0;">'+
+            '<span style="font-family:\'DM Mono\',monospace;color:var(--ac2);font-weight:700;">'+hqFmtMoney(cd.total.rev)+'</span>'+
+            deltaStr(cd.total.rev,pd.total.rev,'元',false,true)+
+          '</span></div>'+
+        '<div id="'+rid+'" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--bd);">'+(catRows||'<div style="font-size:var(--fs-label);color:var(--tx3);">無分類明細</div>')+'</div>'+
+      '</div>';
+    }).join('');
+  }
+
+  const missingCur=curLocs.filter(n=>prevLocs.indexOf(n)<0);
+  const missingPrev=prevLocs.filter(n=>curLocs.indexOf(n)<0);
+  if(missingCur.length || missingPrev.length){
+    html+='<div style="font-size:var(--fs-tiny);color:var(--tx3);margin-top:6px;">';
+    if(missingCur.length) html+='僅'+curKey+'有資料（無去年同月對照）：'+missingCur.join('、')+'　';
+    if(missingPrev.length) html+='僅'+prevKey+'有資料（無今年對照）：'+missingPrev.join('、');
+    html+='</div>';
+  }
+
+  box.innerHTML=html;
+}
+
 function renderHQPage(){
   if(!hqCurMonth){
     const months=Object.keys(HQ_STORE.months).sort();
@@ -7475,6 +7606,7 @@ function renderHQPage(){
   renderHQKpis();
   renderHQRanking();
   renderHQTrend();
+  renderHQYoY();
 }
 
 function initHQPage(){
