@@ -8164,10 +8164,11 @@ function saveOccData(){
 
 // 推送雲端＋在畫面上顯示清楚的成功/失敗提示（給實際按下上傳/儲存的那台裝置看）
 function pushToCloudWithFeedback(){
+  const diag=' ['+getUnit()+'/'+getCloudUrl().slice(-6)+']';
   pushToCloud().then(ok=>{
-    showRefreshToast(ok?'✓ 已同步到雲端，其他裝置開啟/回到前景會自動更新':'✗ 雲端推送失敗，其他裝置不會看到這次的更新', ok);
+    showRefreshToast((ok?'✓ 已同步到雲端，其他裝置開啟/回到前景會自動更新':'✗ 雲端推送失敗，其他裝置不會看到這次的更新')+diag, ok);
   }).catch(e=>{
-    showRefreshToast('✗ 雲端推送失敗：'+(e&&e.message?e.message:'未知錯誤'), false);
+    showRefreshToast('✗ 雲端推送失敗：'+(e&&e.message?e.message:'未知錯誤')+diag, false);
   });
 }
 
@@ -8208,22 +8209,25 @@ function refreshDisplay(){
   // 隱藏的雲端設定視窗裡）。現在改成直接在畫面上跳出浮動提示，按下去馬上看得到結果。
   if(getCloudUrl() && typeof forceSyncFromCloud==='function'){
     forceSyncFromCloud(true).then(ok=>{
+      // 2026-07：加上單位＋網址後6碼的診斷資訊，直接印在提示裡——
+      // 這樣兩台裝置各自截圖一比，馬上看得出是不是連到不同後端，不用再靠猜。
+      const diag=' ['+getUnit()+'/'+getCloudUrl().slice(-6)+']';
       let msg;
       if(ok){
-        msg='✓ 已更新為雲端最新資料';
+        msg='✓ 已更新為雲端最新資料'+diag;
       }else if(lastCloudSyncReason==='empty'){
-        msg='✗ 雲端目前沒有這個單位的資料，請先在電腦上傳一次';
+        msg='✗ 雲端目前沒有這個單位的資料，請先在電腦上傳一次'+diag;
       }else if(lastCloudSyncReason==='nourl'){
-        msg='✗ 尚未設定雲端網址';
+        msg='✗ 尚未設定雲端網址'+diag;
       }else if(lastCloudSyncReason && lastCloudSyncReason.indexOf('error:')===0){
-        msg='✗ 連線失敗：'+lastCloudSyncReason.slice(6);
+        msg='✗ 連線失敗：'+lastCloudSyncReason.slice(6)+diag;
       }else{
-        msg='✗ 更新失敗，請稍後再試';
+        msg='✗ 更新失敗，請稍後再試'+diag;
       }
       showRefreshToast(msg, ok);
       done();
     }).catch(e=>{
-      showRefreshToast('✗ 更新失敗：'+(e&&e.message?e.message:'未知錯誤'), false);
+      showRefreshToast('✗ 更新失敗：'+(e&&e.message?e.message:'未知錯誤')+' ['+getUnit()+']', false);
       try{ init(); }catch(e2){} done();
     });
   }else{
