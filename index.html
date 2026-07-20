@@ -7639,7 +7639,18 @@ function aiDataSig(d,p){
           (d.venue?d.venue.total:0),(p?p.stays:0),'bg'+bgLen].join('|');
 }
 async function genAI(force){
-  const d=curRows[curIdx], p=prevRows[curIdx];
+  let d=curRows[curIdx], p=prevRows[curIdx];
+  let fallbackMonth=false;
+  // 2026-07：若目前選的月份還沒有住宿報表（本月尚未上傳），改用最近一個「已有資料」的
+  // 月份繼續生成分析，不要整個卡住顯示「待資料」——只要曾經上傳過任何一個月，AI建議
+  // 都能正常運作，不必每個月都先確認本月上傳完才有結果。
+  if((!d||d.stays===undefined) && Array.isArray(curRows)){
+    for(let i=curRows.length-1;i>=0;i--){
+      if(curRows[i] && curRows[i].stays!==undefined){
+        d=curRows[i]; p=prevRows[i]; fallbackMonth=true; break;
+      }
+    }
+  }
   const sig=(d&&d.stays!==undefined)?aiDataSig(d,p):null;
   const today=new Date().toISOString().slice(0,10);
   // 先嘗試沿用快取：即使營運資料尚未載入（開啟當下、雲端延遲），
@@ -7659,7 +7670,7 @@ async function genAI(force){
     }catch(e){}
   }
   if(!d||d.stays===undefined){
-    renderAI(false); // 無營運資料且無快取 → 待資料提示
+    renderAI(false); // 完全沒有任何一個月的資料、也無快取 → 待資料提示
     return;
   }
   const cacheKey='aiCache_'+getUnit()+'_'+curYear+'_'+d.m;
@@ -7802,6 +7813,13 @@ ${compInfo}
     const data=await res.json();
     if(data.error) throw new Error(data.error.message||'AI 錯誤');
     text=data.choices?.[0]?.message?.content||'';
+    // 2026-07：後端有回應、也沒有 data.error，但內容是空的（例如 Groq 回傳空 completion、
+    // 或回應格式跟預期的 choices[0].message.content 對不上）。以前這種情況會被當成
+    // 「成功」存進快取，畫面只剩一個 💡 圖示、底下完全沒有建議文字，看起來像壞掉但又
+    // 顯示✓AI，很誤導。現在直接視為失敗，丟出明確錯誤，不會誤存空白快取。
+    if(!text || !text.trim()){
+      throw new Error('AI 回應內容是空的（後端可能沒有正確回傳，請檢查 Apps Script 執行紀錄）');
+    }
     const paras=text.split(/\n\n+/).filter(p=>p.trim().length>10);
     let html='',num=1;
     paras.slice(0,4).forEach(p=>{
@@ -7812,7 +7830,7 @@ ${compInfo}
     const finalHtml=html||`<div class="ai-item"><div class="ai-num">💡</div><div class="ai-text">${text.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</div></div>`;
     document.getElementById('aiContent').innerHTML=finalHtml;
     const now=new Date();
-    const ts=`${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')} 更新`;
+    const ts=`${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')} 更新`+(fallbackMonth?`（本月尚無資料，使用${d.m}資料分析）`:'');
     document.getElementById('aiBadge').textContent='✓ AI';
     document.getElementById('aiLastUpdate').textContent=ts;
     // 存快取（資料指紋＋日期），下次資料沒變或同一天就沿用
@@ -7952,6 +7970,14 @@ function switchPage(id){
   const nav=document.getElementById('nav-'+id);
   if(pg) pg.classList.add('active');
   if(nav) nav.classList.add('on');
+  if(id==='occ'){
+    // 2026-07：之前只有 comp 頁每次切換會自動拉雲端，occ 沒有——
+    // 導致手機在 App 內切回營運分析頁，不會自動更新，只能整個關掉重開才會看到新資料。
+    // 現在比照 comp，切到這頁就靜默拉一次雲端最新資料（背景更新，不跳提示，不打斷畫面）。
+    if(getCloudUrl() && typeof forceSyncFromCloud==='function'){
+      forceSyncFromCloud(true).catch(()=>{});
+    }
+  }
   if(id==='comp'){ 
     buildCatTabs();
     loadCompData();
@@ -8016,6 +8042,15 @@ document.addEventListener('visibilitychange',()=>{
     }
   }
 });
+// 2026-07：手機瀏覽器（尤其部分機型/系統）不一定會可靠觸發 visibilitychange，
+// 導致「切回App、以為會自動更新，結果還是舊資料，非得整個關掉重開才有用」。
+// 加一道保險：只要頁面還開著、在前景，每 90 秒就靜默同步一次雲端最新資料，
+// 不跳提示、不打斷操作，純粹當背景保險，確保最多 90 秒內資料一定會跟上雲端。
+setInterval(()=>{
+  if(document.visibilityState==='visible'){
+    try{ refreshActivePage(); }catch(e){}
+  }
+}, 90000);
 // 依目前所在分頁，重新抓該頁最新資料
 function refreshActivePage(){
   try{
