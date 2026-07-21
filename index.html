@@ -7905,21 +7905,31 @@ function showSyncStatus(msg,ok){
   el.style.color=ok?'var(--green)':'var(--red)';
 }
 
+// 2026-07 修正：以前每個欄位都用 ||'' 補空字串，等於「本機沒有的欄位，就送一個空值上去」。
+// 後端 doPost 是整列覆蓋，所以只要有任何一台裝置在 occ_* 是空的情況下推送（例如那台
+// 只存過競品房價、從沒上傳過營運 Excel），就會把雲端上四份 Excel 的資料整包洗掉。
+// 這正是「iOS 正常、其他裝置全空」的原因：iOS 本機還留著，雲端已經被別台清掉了。
+// 現在改成「本機是空的欄位就完全不放進 payload」，後端沿用雲端既有值，不會被覆蓋。
 function buildSyncPayload(){
-  return JSON.stringify({
-    unit:getUnit(),                          // 標記來源單位
-    occ_cur:uGet('occ_cur')||'',
-    occ_prev:uGet('occ_prev')||'',
-    occ_curY:uGet('occ_curY')||'',
-    occ_prevY:uGet('occ_prevY')||'',
-    occ_idx:uGet('occ_idx')||'',
-    occ_daily:uGet('occ_daily')||'',
-    occ_savedAt:uGet('occ_savedAt')||'',
-    comp_prices:uGet('comp_prices')||'',
-    comp_names:JSON.stringify(COMPETITORS.map(c=>c.shortLabel||c.name)),
-    comp_savedAt:uGet('comp_savedAt')||'',
-    pushedAt:Date.now()
-  });
+  const p={ unit:getUnit(), pushedAt:Date.now() };
+  const put=(k,v)=>{ if(v!==undefined && v!==null && String(v)!=='') p[k]=v; };
+
+  put('occ_cur',    uGet('occ_cur'));
+  put('occ_prev',   uGet('occ_prev'));
+  put('occ_curY',   uGet('occ_curY'));
+  put('occ_prevY',  uGet('occ_prevY'));
+  put('occ_idx',    uGet('occ_idx'));
+  put('occ_daily',  uGet('occ_daily'));
+  put('occ_savedAt',uGet('occ_savedAt'));
+
+  put('comp_prices',  uGet('comp_prices'));
+  put('comp_savedAt', uGet('comp_savedAt'));
+  // comp_names 是後端寫歷史表時對照用的，只有真的要送房價才一起帶
+  if(p.comp_prices){
+    try{ put('comp_names', JSON.stringify(COMPETITORS.map(c=>c.shortLabel||c.name))); }catch(e){}
+  }
+
+  return JSON.stringify(p);
 }
 
 async function pushToCloud(){
